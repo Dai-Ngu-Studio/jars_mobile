@@ -1,11 +1,27 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:jars_mobile/google_sign_in.dart';
+import 'package:flutter/services.dart';
+import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/routes.dart';
+import 'package:jars_mobile/screens/splash/splash_screen.dart';
+
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  print(message.notification!.title);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+    ),
+  );
   runApp(const MyApp());
 }
 
@@ -16,48 +32,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'JARS',
+      theme: ThemeData(primarySwatch: jarsColor),
       debugShowCheckedModeBanner: false,
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    GoogleSignInProvider googleSignIn = GoogleSignInProvider();
-
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 83, 83, 83),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            ElevatedButton.icon(
-              onPressed: () {
-                googleSignIn.googleLogin();
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                onPrimary: Colors.black,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16,
-                ),
-              ),
-              icon: SvgPicture.asset("assets/icons/google.svg", height: 30),
-              label: const Text("Login with Google"),
-            ),
-          ],
-        ),
-      ),
+      home: const SplashScreen(),
+      routes: routes,
     );
   }
 }
