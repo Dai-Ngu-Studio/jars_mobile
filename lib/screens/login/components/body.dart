@@ -1,3 +1,7 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
@@ -41,7 +45,9 @@ class Body extends StatelessWidget {
                           Hero(
                             tag: 'SplashScreen',
                             child: Assets.images.jarsLogo.image(
-                              width: MediaQuery.of(context).size.width * 0.25,
+                              width: kIsWeb
+                                  ? 200
+                                  : MediaQuery.of(context).size.width * 0.25,
                             ),
                           ),
                           const SizedBox(height: 32),
@@ -99,7 +105,18 @@ class Body extends StatelessWidget {
                             Navigator.of(context).pushReplacementNamed(
                               HomeScreen.routeName,
                             );
-                          });
+                          }).catchError(
+                            (error) {
+                              final snackBar = SnackBar(
+                                content: Text(error.toString()),
+                                duration: const Duration(seconds: 5),
+                              );
+                              log(error.toString());
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                snackBar,
+                              );
+                            },
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.white,

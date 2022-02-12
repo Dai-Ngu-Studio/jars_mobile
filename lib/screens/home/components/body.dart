@@ -11,7 +11,11 @@ class Body extends StatelessWidget {
     return Container(
       child: Center(
         child: ElevatedButton(
-          onPressed: () => _auth.signOut(context),
+          onPressed: () => _auth.signOut(context: context).catchError((err) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(err.toString())),
+            );
+          }),
           child: Text('Log out'),
         ),
       ),

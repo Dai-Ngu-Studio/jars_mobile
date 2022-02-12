@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/constant.dart';
 import 'dart:math' as math;
@@ -279,7 +280,8 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                     widget.tabIconData!.isSelected
                         ? widget.tabIconData!.selectedImagePath
                         : widget.tabIconData!.imagePath,
-                    height: MediaQuery.of(context).size.width * 0.08,
+                    height:
+                        kIsWeb ? 40 : MediaQuery.of(context).size.width * 0.08,
                   ),
                 ),
                 Positioned(
