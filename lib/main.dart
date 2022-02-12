@@ -3,8 +3,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/firebase_options.dart';
 import 'package:jars_mobile/routes.dart';
 import 'package:jars_mobile/screens/splash/splash_screen.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
@@ -13,7 +15,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(
@@ -22,6 +24,7 @@ void main() async {
       statusBarIconBrightness: Brightness.light,
     ),
   );
+  setPathUrlStrategy();
   runApp(const MyApp());
 }
 

@@ -1,43 +1,90 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jars_mobile/screens/login/login_screen.dart';
 
 class AuthService extends ChangeNotifier {
-  final googleSignIn = GoogleSignIn();
+  final googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
 
   GoogleSignInAccount? _user;
 
   GoogleSignInAccount get user => _user!;
 
   Future googleLogin() async {
-    final firebaseAuth = FirebaseAuth.instance;
-    final googleUser = await googleSignIn.signIn();
+    try {
+      final firebaseAuth = FirebaseAuth.instance;
+      User? user;
 
-    if (googleUser == null) return;
+      if (kIsWeb) {
+        GoogleAuthProvider authProvider = GoogleAuthProvider();
 
-    _user = googleUser;
+        try {
+          final UserCredential userCredential =
+              await firebaseAuth.signInWithPopup(authProvider);
 
-    final googleAuth = await googleUser.authentication;
+          user = userCredential.user;
+        } catch (e) {
+          print(e);
+        }
+      } else {
+        final googleUser = await googleSignIn.signIn();
 
-    print(googleAuth.accessToken);
-    print(googleAuth.idToken);
+        if (googleUser == null) return;
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+        _user = googleUser;
 
-    await firebaseAuth.signInWithCredential(credential);
+        final googleAuth = await googleUser.authentication;
 
-    final currentUser = firebaseAuth.currentUser;
-    currentUser?.getIdToken().then((value) => log(value));
+        print(googleAuth.accessToken);
+        print(googleAuth.idToken);
+
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        try {
+          await firebaseAuth.signInWithCredential(credential);
+
+          final currentUser = firebaseAuth.currentUser;
+
+          currentUser?.getIdToken().then((value) => log(value));
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'account-exists-with-different-credential') {
+            throw Exception('This email already has an account');
+          } else if (e.code == 'invalid-credential') {
+            throw Exception('Invalid Credential');
+          } else if (e.code == 'user-disabled') {
+            throw Exception('User Disabled');
+          }
+        } catch (e) {
+          throw Exception('Error occurred using Google Sign-In. Try again.');
+        }
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
-  void signOut(BuildContext context) {
-    FirebaseAuth.instance.signOut();
+  Future<void> signOut({required BuildContext context}) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
 
-    Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
+    try {
+      if (!kIsWeb) {
+        await googleSignIn.signOut();
+      }
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      throw Exception(e.toString());
+    } finally {
+      Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
+    }
   }
 }
