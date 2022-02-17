@@ -53,6 +53,12 @@ dependencies:
 
   page_transition: ^2.0.5
 
+  http: ^0.13.4
+
+  provider: ^6.0.2
+
+  flutter_native_splash: ^2.0.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -74,11 +80,22 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+# cli: fluttergen -c
 flutter_icons:
   image_path: "assets/images/jars_logo.png"
   android: true
   ios: true
   remove_alpha_ios: true
+
+# cli: flutter pub run flutter_native_splash:create
+flutter_native_splash:
+  background_image: assets/images/splash_screen_background.png
+  branding: assets/images/jars_logo.png
+  android_gravity: fill
+  ios_content_mode: scaleAspectFill
+  android: true
+  ios: true
 
 # The following section is specific to Flutter.
 flutter:
