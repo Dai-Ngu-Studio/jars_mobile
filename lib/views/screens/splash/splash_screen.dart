@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
-import 'package:jars_mobile/screens/login/init_widget.dart';
+import 'package:jars_mobile/views/screens/login/init_widget.dart';
 import 'package:page_transition/page_transition.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,17 +14,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _checkLogin();
+    _splashScreen();
   }
 
-  _checkLogin() async {
-    await Future.delayed(const Duration(seconds: 3));
+  _splashScreen() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
     Navigator.pushReplacement(
       context,
       PageTransition(
         child: const InitializerWidget(),
         type: PageTransitionType.fade,
-        duration: const Duration(milliseconds: 1000),
+        duration: const Duration(milliseconds: 1500),
       ),
     );
   }
@@ -50,7 +50,8 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Assets.images.jarsLogo.image(
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
-                width: MediaQuery.of(context).size.width * 0.3,
+                // width: MediaQuery.of(context).size.width * 0.3,
+                width: 128,
               ),
             ),
           ),

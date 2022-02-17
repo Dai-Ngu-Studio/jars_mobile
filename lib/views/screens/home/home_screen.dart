@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jars_mobile/models/tab_icon_data.dart';
-import 'package:jars_mobile/screens/home/bottom_bar_view.dart';
-import 'package:jars_mobile/screens/home/components/body.dart';
+import 'package:jars_mobile/data/models/tab_icon_data.dart';
+import 'package:jars_mobile/views/screens/home/bottom_bar_view.dart';
+import 'package:jars_mobile/views/screens/home/components/body.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

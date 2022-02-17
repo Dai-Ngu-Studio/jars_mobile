@@ -1,6 +1,6 @@
-import 'package:jars_mobile/models/bill.dart';
-import 'package:jars_mobile/models/note.dart';
-import 'package:jars_mobile/models/schedule_type.dart';
+import 'package:jars_mobile/data/models/bill.dart';
+import 'package:jars_mobile/data/models/note.dart';
+import 'package:jars_mobile/data/models/schedule_type.dart';
 
 class Contracts {
   int? id;

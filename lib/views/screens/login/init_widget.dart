@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/screens/home/home_screen.dart';
-import 'package:jars_mobile/screens/login/login_screen.dart';
+import 'package:jars_mobile/views/screens/home/home_screen.dart';
+import 'package:jars_mobile/views/screens/login/login_screen.dart';
 import 'package:jars_mobile/service/local_notification/local_notification_service.dart';
 
 class InitializerWidget extends StatefulWidget {

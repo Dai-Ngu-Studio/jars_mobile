@@ -1,11 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:jars_mobile/constant.dart';
 import 'package:jars_mobile/firebase_options.dart';
 import 'package:jars_mobile/routes.dart';
-import 'package:jars_mobile/screens/splash/splash_screen.dart';
+import 'package:jars_mobile/views/screens/splash/splash_screen.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
@@ -14,7 +16,8 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  if (!kIsWeb) FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -34,6 +37,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    if (!kIsWeb) FlutterNativeSplash.remove();
+
     return MaterialApp(
       title: 'JARS',
       theme: ThemeData(primarySwatch: jarsColor),

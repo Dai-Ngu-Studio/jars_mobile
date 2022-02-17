@@ -1,11 +1,9 @@
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
-import 'package:jars_mobile/screens/home/home_screen.dart';
+import 'package:jars_mobile/views/screens/home/home_screen.dart';
 import 'package:jars_mobile/service/firebase/auth_service.dart';
 
 class Body extends StatelessWidget {

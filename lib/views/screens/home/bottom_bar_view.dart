@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/constant.dart';
 import 'dart:math' as math;
-import 'package:jars_mobile/models/tab_icon_data.dart';
+
+import 'package:jars_mobile/data/models/tab_icon_data.dart';
 
 class BottomBarView extends StatefulWidget {
   const BottomBarView({

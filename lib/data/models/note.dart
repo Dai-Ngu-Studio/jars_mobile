@@ -1,4 +1,4 @@
-import 'package:jars_mobile/models/transaction.dart';
+import 'package:jars_mobile/data/models/transaction.dart';
 
 class Note {
   int? id;

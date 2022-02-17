@@ -1,6 +1,6 @@
-import 'package:jars_mobile/models/bill_details.dart';
-import 'package:jars_mobile/models/category.dart';
-import 'package:jars_mobile/models/transaction.dart';
+import 'package:jars_mobile/data/models/bill_details.dart';
+import 'package:jars_mobile/data/models/category.dart';
+import 'package:jars_mobile/data/models/transaction.dart';
 
 class Bills {
   int? id;
@@ -58,7 +58,7 @@ class Bills {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['date'] = date;
     data['name'] = name;

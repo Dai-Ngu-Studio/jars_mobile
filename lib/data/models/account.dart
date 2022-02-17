@@ -1,6 +1,6 @@
-import 'package:jars_mobile/models/account_type.dart';
-import 'package:jars_mobile/models/contract.dart';
-import 'package:jars_mobile/models/wallet.dart';
+import 'package:jars_mobile/data/models/account_type.dart';
+import 'package:jars_mobile/data/models/contract.dart';
+import 'package:jars_mobile/data/models/wallet.dart';
 
 class Account {
   String? id;
