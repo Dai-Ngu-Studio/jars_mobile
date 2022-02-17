@@ -1,3 +1,6 @@
+import 'package:jars_mobile/data/models/note.dart';
+import 'package:jars_mobile/data/models/wallet.dart';
+
 class Transactions {
   int? id;
   int? walletId;
@@ -6,8 +9,8 @@ class Transactions {
   int? billId;
   int? amount;
   String? bill;
-  String? note;
-  String? wallet;
+  Note? note;
+  Wallet? wallet;
 
   Transactions({
     this.id,
@@ -29,8 +32,8 @@ class Transactions {
     billId = json['billId'];
     amount = json['amount'];
     bill = json['bill'];
-    note = json['note'];
-    wallet = json['wallet'];
+    note = json['note'] != null ? Note.fromJson(json['note']) : null;
+    wallet = json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -42,8 +45,12 @@ class Transactions {
     data['billId'] = billId;
     data['amount'] = amount;
     data['bill'] = bill;
-    data['note'] = note;
-    data['wallet'] = wallet;
+    if (note != null) {
+      data['note'] = note!.toJson();
+    }
+    if (wallet != null) {
+      data['wallet'] = wallet!.toJson();
+    }
     return data;
   }
 }

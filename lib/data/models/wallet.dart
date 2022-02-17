@@ -1,18 +1,18 @@
+import 'package:jars_mobile/data/models/account.dart';
 import 'package:jars_mobile/data/models/category_wallet.dart';
-import 'package:jars_mobile/data/models/transaction.dart';
 
-class Wallets {
+class Wallet {
   int? id;
   String? name;
   String? startDate;
   int? walletAmount;
   int? percentage;
   String? accountId;
-  String? account;
+  Account? account;
   List<CategoryWallets>? categoryWallets;
-  List<Transactions>? transactions;
+  List<String>? transactions;
 
-  Wallets({
+  Wallet({
     this.id,
     this.name,
     this.startDate,
@@ -24,26 +24,22 @@ class Wallets {
     this.transactions,
   });
 
-  Wallets.fromJson(Map<String, dynamic> json) {
+  Wallet.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     startDate = json['startDate'];
     walletAmount = json['walletAmount'];
     percentage = json['percentage'];
     accountId = json['accountId'];
-    account = json['account'];
+    account =
+        json['account'] != null ? Account.fromJson(json['account']) : null;
     if (json['categoryWallets'] != null) {
       categoryWallets = <CategoryWallets>[];
       json['categoryWallets'].forEach((v) {
         categoryWallets!.add(CategoryWallets.fromJson(v));
       });
     }
-    if (json['transactions'] != null) {
-      transactions = <Transactions>[];
-      json['transactions'].forEach((v) {
-        transactions!.add(Transactions.fromJson(v));
-      });
-    }
+    transactions = json['transactions'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -54,14 +50,14 @@ class Wallets {
     data['walletAmount'] = walletAmount;
     data['percentage'] = percentage;
     data['accountId'] = accountId;
-    data['account'] = account;
+    if (account != null) {
+      data['account'] = account!.toJson();
+    }
     if (categoryWallets != null) {
       data['categoryWallets'] =
           categoryWallets!.map((v) => v.toJson()).toList();
     }
-    if (transactions != null) {
-      data['transactions'] = transactions!.map((v) => v.toJson()).toList();
-    }
+    data['transactions'] = transactions;
     return data;
   }
 }

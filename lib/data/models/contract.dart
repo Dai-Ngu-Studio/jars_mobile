@@ -1,8 +1,8 @@
-import 'package:jars_mobile/data/models/bill.dart';
+import 'package:jars_mobile/data/models/account.dart';
 import 'package:jars_mobile/data/models/note.dart';
 import 'package:jars_mobile/data/models/schedule_type.dart';
 
-class Contracts {
+class Contract {
   int? id;
   String? accountId;
   int? scheduleTypeId;
@@ -11,12 +11,11 @@ class Contracts {
   String? startDate;
   String? endDate;
   int? amount;
-  String? account;
+  Account? account;
   Note? note;
   ScheduleType? scheduleType;
-  List<Bills>? bills;
 
-  Contracts({
+  Contract({
     this.id,
     this.accountId,
     this.scheduleTypeId,
@@ -28,10 +27,9 @@ class Contracts {
     this.account,
     this.note,
     this.scheduleType,
-    this.bills,
   });
 
-  Contracts.fromJson(Map<String, dynamic> json) {
+  Contract.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     accountId = json['accountId'];
     scheduleTypeId = json['scheduleTypeId'];
@@ -40,17 +38,12 @@ class Contracts {
     startDate = json['startDate'];
     endDate = json['endDate'];
     amount = json['amount'];
-    account = json['account'];
+    account =
+        json['account'] != null ? Account.fromJson(json['account']) : null;
     note = json['note'] != null ? Note.fromJson(json['note']) : null;
     scheduleType = json['scheduleType'] != null
         ? ScheduleType.fromJson(json['scheduleType'])
         : null;
-    if (json['bills'] != null) {
-      bills = <Bills>[];
-      json['bills'].forEach((v) {
-        bills!.add(Bills.fromJson(v));
-      });
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -63,15 +56,14 @@ class Contracts {
     data['startDate'] = startDate;
     data['endDate'] = endDate;
     data['amount'] = amount;
-    data['account'] = account;
+    if (account != null) {
+      data['account'] = account!.toJson();
+    }
     if (note != null) {
       data['note'] = note!.toJson();
     }
     if (scheduleType != null) {
       data['scheduleType'] = scheduleType!.toJson();
-    }
-    if (bills != null) {
-      data['bills'] = bills!.map((v) => v.toJson()).toList();
     }
     return data;
   }

@@ -4,16 +4,8 @@ class BillDetails {
   int? price;
   int? quantity;
   int? billId;
-  String? bill;
 
-  BillDetails({
-    this.id,
-    this.itemName,
-    this.price,
-    this.quantity,
-    this.billId,
-    this.bill,
-  });
+  BillDetails({this.id, this.itemName, this.price, this.quantity, this.billId});
 
   BillDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -21,7 +13,6 @@ class BillDetails {
     price = json['price'];
     quantity = json['quantity'];
     billId = json['billId'];
-    bill = json['bill'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,7 +22,6 @@ class BillDetails {
     data['price'] = price;
     data['quantity'] = quantity;
     data['billId'] = billId;
-    data['bill'] = bill;
     return data;
   }
 }
