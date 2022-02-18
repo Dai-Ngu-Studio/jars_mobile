@@ -10,6 +10,12 @@ class AccountRepositoryImpl implements AccountRepository {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
+  Future<void> login(String idToken) {
+    // TODO: implement deleteAccount
+    throw UnimplementedError();
+  }
+
+  @override
   Future<Account> getAccount(String accountId) async {
     try {
       dynamic response = await _apiService.getResponse(
@@ -24,5 +30,11 @@ class AccountRepositoryImpl implements AccountRepository {
     } catch (e) {
       throw Exception(e.toString());
     }
+  }
+
+  @override
+  Future<void> deleteAccount(String accountId) {
+    // TODO: implement deleteAccount
+    throw UnimplementedError();
   }
 }
