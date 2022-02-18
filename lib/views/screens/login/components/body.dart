@@ -1,18 +1,26 @@
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/views/screens/home/home_screen.dart';
 import 'package:jars_mobile/service/firebase/auth_service.dart';
+import 'package:jars_mobile/views/widgets/adaptive_button.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    AuthService googleSignIn = AuthService();
+  State<Body> createState() => _BodyState();
+}
 
+class _BodyState extends State<Body> {
+  final AuthService _googleSignIn = AuthService();
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
@@ -97,43 +105,47 @@ class Body extends StatelessWidget {
                           ),
                         ],
                       ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          googleSignIn.googleLogin().then((value) {
-                            Navigator.of(context).pushReplacementNamed(
-                              HomeScreen.routeName,
-                            );
-                          }).catchError(
-                            (error) {
-                              final snackBar = SnackBar(
-                                content: Text(error.toString()),
-                                duration: const Duration(seconds: 5),
-                              );
-                              log(error.toString());
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                snackBar,
-                              );
-                            },
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          onPrimary: Colors.black,
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 16,
+                      Center(
+                        child: AdaptiveButton(
+                          text: "Login with Google",
+                          enabled: !_isLoading,
+                          icon: SvgPicture.asset(
+                            Assets.icons.google,
+                            height: 30,
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                        ),
-                        icon: SvgPicture.asset(Assets.icons.google, height: 30),
-                        label: const Text(
-                          "Login with Google",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
+                          widthWeb: MediaQuery.of(context).size.width < 800
+                              ? MediaQuery.of(context).size.width * 0.8
+                              : MediaQuery.of(context).size.width * 0.5,
+                          height: 45,
+                          borderRadius: 40,
+                          backgroundColor: Colors.white,
+                          textStyle: const TextStyle(
+                            color: Colors.black,
                             fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
+                          isLoading: _isLoading,
+                          onPressed: () {
+                            setState(() => _isLoading = true);
+                            _googleSignIn.googleLogin().then((_) {
+                              if (FirebaseAuth.instance.currentUser != null) {
+                                Navigator.of(context).pushReplacementNamed(
+                                  HomeScreen.routeName,
+                                );
+                              }
+                            }).catchError(
+                              (error) {
+                                final snackBar = SnackBar(
+                                  content: Text(error.toString()),
+                                  duration: const Duration(seconds: 5),
+                                );
+                                log(error.toString());
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  snackBar,
+                                );
+                              },
+                            ).then((_) => setState(() => _isLoading = false));
+                          },
                         ),
                       ),
                     ],
