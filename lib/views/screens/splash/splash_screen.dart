@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
       PageTransition(
         child: const InitializerWidget(),
         type: PageTransitionType.fade,
-        duration: const Duration(milliseconds: 1500),
+        duration: const Duration(milliseconds: 500),
       ),
     );
   }
@@ -50,7 +50,6 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Assets.images.jarsLogo.image(
                 fit: BoxFit.cover,
                 alignment: Alignment.center,
-                // width: MediaQuery.of(context).size.width * 0.3,
                 width: 128,
               ),
             ),
