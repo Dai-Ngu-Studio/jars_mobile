@@ -63,6 +63,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       final routeFromMessage = message.data["route"];
       Navigator.of(context).pushNamed(routeFromMessage);
     });
+
+    getFCMToken();
   }
 
   @override
@@ -132,5 +134,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
       ],
     );
+  }
+
+  void getFCMToken() async {
+    var token = await FirebaseMessaging.instance.getToken();
+    print("FCM Token: $token");
   }
 }
