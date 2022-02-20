@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:jars_mobile/data/local/app_shared_preference.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/views/screens/home/home_screen.dart';
 import 'package:jars_mobile/service/firebase/auth_service.dart';
@@ -18,6 +18,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final AuthService _googleSignIn = AuthService();
   bool _isLoading = false;
+  final _prefs = AppSharedPreference();
 
   @override
   Widget build(BuildContext context) {
@@ -109,10 +110,7 @@ class _BodyState extends State<Body> {
                         child: AdaptiveButton(
                           text: "Login with Google",
                           enabled: !_isLoading,
-                          icon: SvgPicture.asset(
-                            Assets.icons.google,
-                            height: 30,
-                          ),
+                          icon: Assets.svgs.google.svg(height: 30),
                           widthWeb: MediaQuery.of(context).size.width < 800
                               ? MediaQuery.of(context).size.width * 0.8
                               : MediaQuery.of(context).size.width * 0.5,
@@ -126,25 +124,7 @@ class _BodyState extends State<Body> {
                           ),
                           isLoading: _isLoading,
                           onPressed: () {
-                            setState(() => _isLoading = true);
-                            _googleSignIn.googleLogin().then((_) {
-                              if (FirebaseAuth.instance.currentUser != null) {
-                                Navigator.of(context).pushReplacementNamed(
-                                  HomeScreen.routeName,
-                                );
-                              }
-                            }).catchError(
-                              (error) {
-                                final snackBar = SnackBar(
-                                  content: Text(error.toString()),
-                                  duration: const Duration(seconds: 5),
-                                );
-                                log(error.toString());
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  snackBar,
-                                );
-                              },
-                            ).then((_) => setState(() => _isLoading = false));
+                            _login();
                           },
                         ),
                       ),
@@ -157,5 +137,28 @@ class _BodyState extends State<Body> {
         ),
       ],
     );
+  }
+
+  void _login() {
+    setState(() => _isLoading = true);
+    _googleSignIn.googleLogin().then((_) {
+      if (FirebaseAuth.instance.currentUser != null) {
+        _prefs.setBool(key: "isSkipIntro", value: true);
+        Navigator.of(context).pushReplacementNamed(
+          HomeScreen.routeName,
+        );
+      }
+    }).catchError(
+      (error) {
+        final snackBar = SnackBar(
+          content: Text(error.toString()),
+          duration: const Duration(seconds: 5),
+        );
+        log(error.toString());
+        ScaffoldMessenger.of(context).showSnackBar(
+          snackBar,
+        );
+      },
+    ).then((_) => setState(() => _isLoading = false));
   }
 }
