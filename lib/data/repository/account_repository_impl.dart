@@ -10,30 +10,40 @@ class AccountRepositoryImpl implements AccountRepository {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
-  Future<void> login(String idToken) {
-    // TODO: implement deleteAccount
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Account> getAccount(String accountId) async {
+  Future<void> login({required String idToken, String? fcmToken}) async {
     try {
-      dynamic response = await _apiService.getResponse(
-        ApiEndPoint().getAccount,
+      dynamic response = await _apiService.postResponse(
+        ApiEndPoint().account,
+        function: "login",
+        header: Map<String, String>.from({
+          "Authorization": "Bearer $idToken",
+          "FcmToken": fcmToken,
+        }),
       );
 
-      log('response: $response');
-
-      final json = Account.fromJson(response);
-
-      return json;
+      log('AccountRepositoryImpl :: login :: response: $response');
     } catch (e) {
       throw Exception(e.toString());
     }
   }
 
   @override
-  Future<void> deleteAccount(String accountId) {
+  Future<Account> getAccount({
+    required token,
+    required String accountId,
+  }) async {
+    // TODO: implement updateAccount
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Account> updateAccount({required token, required Account account}) {
+    // TODO: implement updateAccount
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> deleteAccount({required token, required String accountId}) {
     // TODO: implement deleteAccount
     throw UnimplementedError();
   }
