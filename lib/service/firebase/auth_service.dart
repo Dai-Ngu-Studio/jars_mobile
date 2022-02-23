@@ -42,8 +42,8 @@ class AuthService extends ChangeNotifier {
 
         final googleAuth = await googleUser.authentication;
 
-        print(googleAuth.accessToken);
-        print(googleAuth.idToken);
+        log("AuthService :: google access token: ${googleAuth.accessToken}");
+        log("AuthService :: google id token: ${googleAuth.idToken}");
 
         final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
@@ -55,7 +55,9 @@ class AuthService extends ChangeNotifier {
 
           final currentUser = firebaseAuth.currentUser;
 
-          currentUser?.getIdToken().then((value) => log(value));
+          currentUser?.getIdToken().then((value) {
+            log("AuthService :: firebase idToken: $value");
+          });
         } on FirebaseAuthException catch (e) {
           if (e.code == 'account-exists-with-different-credential') {
             throw Exception('This email already has an account');
