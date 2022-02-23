@@ -27,8 +27,8 @@ class _InitializerWidgetState extends State<InitializerWidget> {
     _isSkipIntro();
   }
 
-  Future<void> _isSkipIntro() {
-    return _prefs
+  Future _isSkipIntro() async {
+    return await _prefs
         .getBool(key: "isSkipIntro")
         .then((value) => setState(() => _skipIntro = value));
   }
