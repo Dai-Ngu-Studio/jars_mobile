@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +17,15 @@ Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.notification!.title);
 }
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -28,6 +39,7 @@ void main() async {
     ),
   );
   setPathUrlStrategy();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
