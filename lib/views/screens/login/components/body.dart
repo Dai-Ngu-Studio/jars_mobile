@@ -1,9 +1,11 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/data/local/app_shared_preference.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
+import 'package:jars_mobile/view_model/account_view_model.dart';
 import 'package:jars_mobile/views/screens/home/home_screen.dart';
 import 'package:jars_mobile/service/firebase/auth_service.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
@@ -19,6 +21,8 @@ class _BodyState extends State<Body> {
   final AuthService _googleSignIn = AuthService();
   bool _isLoading = false;
   final _prefs = AppSharedPreference();
+  final accountViewModel = AccountViewModel();
+  String? fcmToken;
 
   @override
   Widget build(BuildContext context) {
@@ -140,13 +144,25 @@ class _BodyState extends State<Body> {
   }
 
   void _login() {
+    final _firebaseAuth = FirebaseAuth.instance;
+
     setState(() => _isLoading = true);
     _googleSignIn.googleLogin().then((_) {
-      if (FirebaseAuth.instance.currentUser != null) {
+      if (_firebaseAuth.currentUser != null) {
         _prefs.setBool(key: "isSkipIntro", value: true);
-        Navigator.of(context).pushReplacementNamed(
-          HomeScreen.routeName,
-        );
+
+        _firebaseAuth.currentUser!.getIdToken().then((idToken) {
+          getFCMToken().then((value) {
+            accountViewModel.login(
+              idToken: idToken,
+              fcmToken: fcmToken,
+            );
+          });
+
+          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+        }).catchError((error) {
+          log(error.toString());
+        });
       }
     }).catchError(
       (error) {
@@ -160,5 +176,13 @@ class _BodyState extends State<Body> {
         );
       },
     ).then((_) => setState(() => _isLoading = false));
+  }
+
+  Future<String?> getFCMToken() async {
+    await FirebaseMessaging.instance
+        .getToken()
+        .then((value) => setState(() => fcmToken = value!));
+    print("LoginScreen Body :: FCM Token: $fcmToken");
+    return fcmToken;
   }
 }
