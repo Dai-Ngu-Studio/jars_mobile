@@ -1,11 +1,12 @@
 class ApiEndPoint {
-  final String getAccount = "Accounts";
-  final String getBill = "Bills";
-  final String getBillDetail = "BillDetails";
-  final String getCategory = "Categories";
-  final String getCategoryWallet = "CategoryWallets";
-  final String getContract = "Contracts";
-  final String getNote = "Notes";
-  final String getTransaction = "Transactions";
-  final String getWallet = "Wallets";
+  String get account => "accounts";
+  String get bill => "bills";
+  String get billDetail => "bill-details";
+  String get category => "categories";
+  String get categoryWallet => "category-wallets";
+  String get contract => "contracts";
+  String get note => "notes";
+  String get scheduleType => "schedule-types";
+  String get transaction => "transactions";
+  String get wallet => "wallets";
 }
