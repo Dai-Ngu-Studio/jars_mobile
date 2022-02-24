@@ -1,1 +1,2 @@
-* Test CHANGELOG.md
+* Implement API  
+* Add intro screen  
