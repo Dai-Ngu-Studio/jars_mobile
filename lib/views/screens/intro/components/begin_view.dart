@@ -14,7 +14,7 @@ class BeginScreen extends StatefulWidget {
 }
 
 class _BeginScreenState extends State<BeginScreen> {
-  final _privacyPolicyUrl = "https://jars-c19f8.web.app/privacy-policy";
+  final _privacyPolicyUrl = "https://jars-c19f8.web.app/privacy-policy.html";
 
   @override
   Widget build(BuildContext context) {
