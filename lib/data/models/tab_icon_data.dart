@@ -26,8 +26,8 @@ class TabIconData {
       animationController: null,
     ),
     TabIconData(
-      imagePath: Assets.images.wallet.path,
-      selectedImagePath: Assets.images.walletSelected.path,
+      imagePath: Assets.images.jar.path,
+      selectedImagePath: Assets.images.jarSelected.path,
       index: 1,
       isSelected: false,
       animationController: null,
