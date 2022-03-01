@@ -76,7 +76,7 @@ class AutoSplitView extends StatelessWidget {
         position: _secondHalfAnimation,
         child: Container(
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(bottom: 100),
+          padding: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -119,7 +119,11 @@ class AutoSplitView extends StatelessWidget {
                       maxWidth: 350,
                       maxHeight: 250,
                     ),
-                    child: Assets.svgs.autoSplit.svg(),
+                    child: Assets.svgs.autoSplit.svg(
+                      width: MediaQuery.of(context).size.width < 350
+                          ? 200
+                          : MediaQuery.of(context).size.width,
+                    ),
                   ),
                 ),
               ),
