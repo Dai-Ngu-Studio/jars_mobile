@@ -7,7 +7,7 @@ import 'package:jars_mobile/constant.dart';
 import 'package:jars_mobile/data/local/app_shared_preference.dart';
 import 'package:jars_mobile/service/firebase/auth_service.dart';
 import 'package:jars_mobile/view_model/account_view_model.dart';
-import 'package:jars_mobile/views/screens/home/home_screen.dart';
+import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/views/screens/intro/components/auto_split_view.dart';
 import 'package:jars_mobile/views/screens/intro/components/back_skip_widget.dart';
 import 'package:jars_mobile/views/screens/intro/components/begin_view.dart';
@@ -145,7 +145,6 @@ class _IntroScreenState extends State<IntroScreen>
 
     _googleSignIn.googleLogin().whenComplete(() {
       if (_firebaseAuth.currentUser != null) {
-        _prefs.setBool(key: "isSkipIntro", value: true);
         _firebaseAuth.currentUser!.getIdToken().then((idToken) {
           getFCMToken().then((value) {
             accountViewModel.login(
@@ -154,7 +153,9 @@ class _IntroScreenState extends State<IntroScreen>
             );
           });
 
-          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+          _prefs.setBool(key: "isSkipIntro", value: true);
+
+          Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
         }).catchError((error) {
           log(error.toString());
         });
