@@ -56,8 +56,14 @@ class $AssetsSvgsGen {
   /// File path: assets/svgs/auto_split.svg
   SvgGenImage get autoSplit => const SvgGenImage('assets/svgs/auto_split.svg');
 
+  /// File path: assets/svgs/excel.svg
+  SvgGenImage get excel => const SvgGenImage('assets/svgs/excel.svg');
+
   /// File path: assets/svgs/google.svg
   SvgGenImage get google => const SvgGenImage('assets/svgs/google.svg');
+
+  /// File path: assets/svgs/jar.svg
+  SvgGenImage get jar => const SvgGenImage('assets/svgs/jar.svg');
 
   /// File path: assets/svgs/jar_education.svg
   SvgGenImage get jarEducation =>
