@@ -73,13 +73,13 @@ class AdaptiveButton extends StatelessWidget {
             ? Opacity(
                 opacity: 0.5,
                 child: Container(
-                  height: height ?? 40,
+                  height: height ?? 35,
                   width: kIsWeb
                       ? widthWeb ?? double.infinity
                       : widthMobile ?? double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(borderRadius ?? 20),
+                    borderRadius: BorderRadius.circular(borderRadius ?? 8),
                   ),
                   child: const Center(
                     child: CircularProgressIndicator(color: Colors.grey),
@@ -87,6 +87,19 @@ class AdaptiveButton extends StatelessWidget {
                 ),
               )
             : const SizedBox.shrink(),
+        enabled
+            ? const SizedBox.shrink()
+            : Opacity(
+                opacity: 0.4,
+                child: Container(
+                  height: height ?? 35,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(borderRadius ?? 8),
+                  ),
+                ),
+              ),
       ],
     );
   }
