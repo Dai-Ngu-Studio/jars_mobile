@@ -22,7 +22,6 @@ class _BodyState extends State<Body> {
   bool _isLoading = false;
   final _prefs = AppSharedPreference();
   final accountViewModel = AccountViewModel();
-  String? fcmToken;
 
   @override
   Widget build(BuildContext context) {
@@ -147,19 +146,26 @@ class _BodyState extends State<Body> {
     final _firebaseAuth = FirebaseAuth.instance;
 
     setState(() => _isLoading = true);
-    _googleSignIn.googleLogin().then((_) {
+
+    _googleSignIn.googleLogin().whenComplete(() {
       if (_firebaseAuth.currentUser != null) {
         _firebaseAuth.currentUser!.getIdToken().then((idToken) {
-          getFCMToken().then((value) {
-            accountViewModel.login(
-              idToken: idToken,
-              fcmToken: fcmToken,
-            );
+          fcmToken.then((fcmToken) {
+            accountViewModel
+                .login(idToken: idToken, fcmToken: fcmToken)
+                .whenComplete(() {
+              _prefs.setBool(key: "isSkipIntro", value: true);
+
+              Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
+            }).catchError((error) {
+              final snackBar = SnackBar(
+                content: Text(error.toString()),
+                duration: const Duration(seconds: 5),
+              );
+              log(error.toString());
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            });
           });
-
-          _prefs.setBool(key: "isSkipIntro", value: true);
-
-          Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
         }).catchError((error) {
           log(error.toString());
         });
@@ -178,11 +184,7 @@ class _BodyState extends State<Body> {
     ).then((_) => setState(() => _isLoading = false));
   }
 
-  Future<String?> getFCMToken() async {
-    await FirebaseMessaging.instance
-        .getToken()
-        .then((value) => setState(() => fcmToken = value!));
-    print("LoginScreen Body :: FCM Token: $fcmToken");
-    return fcmToken;
+  Future<String?> get fcmToken async {
+    return await FirebaseMessaging.instance.getToken();
   }
 }

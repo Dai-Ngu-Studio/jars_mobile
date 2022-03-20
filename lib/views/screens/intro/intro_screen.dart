@@ -29,7 +29,6 @@ class _IntroScreenState extends State<IntroScreen>
   final AuthService _googleSignIn = AuthService();
   final _prefs = AppSharedPreference();
   final accountViewModel = AccountViewModel();
-  String? fcmToken;
   bool isLoading = false;
 
   @override
@@ -146,16 +145,24 @@ class _IntroScreenState extends State<IntroScreen>
     _googleSignIn.googleLogin().whenComplete(() {
       if (_firebaseAuth.currentUser != null) {
         _firebaseAuth.currentUser!.getIdToken().then((idToken) {
-          getFCMToken().then((value) {
-            accountViewModel.login(
-              idToken: idToken,
-              fcmToken: fcmToken,
-            );
+          fcmToken.then((fcmToken) {
+            accountViewModel
+                .login(idToken: idToken, fcmToken: fcmToken)
+                .whenComplete(() {
+              _prefs.setBool(key: "isSkipIntro", value: true);
+
+              Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
+            }).catchError((error) {
+              final snackBar = SnackBar(
+                content: Text(error.toString()),
+                duration: const Duration(seconds: 5),
+              );
+              log(error.toString());
+              ScaffoldMessenger.of(context).showSnackBar(
+                snackBar,
+              );
+            });
           });
-
-          _prefs.setBool(key: "isSkipIntro", value: true);
-
-          Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
         }).catchError((error) {
           log(error.toString());
         });
@@ -174,11 +181,7 @@ class _IntroScreenState extends State<IntroScreen>
     ).then((_) => setState(() => isLoading = false));
   }
 
-  Future<String?> getFCMToken() async {
-    await FirebaseMessaging.instance
-        .getToken()
-        .then((value) => setState(() => fcmToken = value!));
-    print("LoginScreen Body :: FCM Token: $fcmToken");
-    return fcmToken;
+  Future<String?> get fcmToken async {
+    return await FirebaseMessaging.instance.getToken();
   }
 }
