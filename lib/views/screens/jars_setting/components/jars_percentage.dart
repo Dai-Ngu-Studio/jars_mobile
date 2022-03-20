@@ -36,10 +36,9 @@ class _JarsPercentageState extends State<JarsPercentage>
   @override
   void initState() {
     super.initState();
-    // addAllListWidget();
 
     animationController = AnimationController(
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
 
@@ -93,6 +92,7 @@ class _JarsPercentageState extends State<JarsPercentage>
     _playController!.dispose();
     _investmentController!.dispose();
     _giveController!.dispose();
+    animationController?.dispose();
     super.dispose();
   }
 
@@ -104,124 +104,6 @@ class _JarsPercentageState extends State<JarsPercentage>
         int.parse(_investmentController!.text) +
         int.parse(_giveController!.text);
   }
-
-  // void addAllListWidget() {
-  //   const int count = 6;
-
-  //   listViews.add(
-  //     JarsPercentageBox(
-  //       controller: _necessitiesController!,
-  //       jarImage: Assets.svgs.jarNecessities.path,
-  //       jarName: 'Necessities',
-  //       animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-  //         CurvedAnimation(
-  //           parent: widget.animationController!,
-  //           curve: const Interval(
-  //             (1 / count) * 0,
-  //             1.0,
-  //             curve: Curves.fastOutSlowIn,
-  //           ),
-  //         ),
-  //       ),
-  //       animationController: widget.animationController!,
-  //     ),
-  //   );
-
-  //   listViews.add(
-  //     JarsPercentageBox(
-  //       controller: _educationController!,
-  //       jarImage: Assets.svgs.jarEducation.path,
-  //       jarName: 'Education',
-  //       animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-  //         CurvedAnimation(
-  //           parent: widget.animationController!,
-  //           curve: const Interval(
-  //             (1 / count) * 1,
-  //             1.0,
-  //             curve: Curves.fastOutSlowIn,
-  //           ),
-  //         ),
-  //       ),
-  //       animationController: widget.animationController!,
-  //     ),
-  //   );
-
-  //   listViews.add(
-  //     JarsPercentageBox(
-  //       controller: _savingController!,
-  //       jarImage: Assets.svgs.jarSaving.path,
-  //       jarName: 'Saving',
-  //       animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-  //         CurvedAnimation(
-  //           parent: widget.animationController!,
-  //           curve: const Interval(
-  //             (1 / count) * 2,
-  //             1.0,
-  //             curve: Curves.fastOutSlowIn,
-  //           ),
-  //         ),
-  //       ),
-  //       animationController: widget.animationController!,
-  //     ),
-  //   );
-
-  //   listViews.add(
-  //     JarsPercentageBox(
-  //       controller: _playController!,
-  //       jarImage: Assets.svgs.jarPlay.path,
-  //       jarName: 'Play',
-  //       animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-  //         CurvedAnimation(
-  //           parent: widget.animationController!,
-  //           curve: const Interval(
-  //             (1 / count) * 3,
-  //             1.0,
-  //             curve: Curves.fastOutSlowIn,
-  //           ),
-  //         ),
-  //       ),
-  //       animationController: widget.animationController!,
-  //     ),
-  //   );
-
-  //   listViews.add(
-  //     JarsPercentageBox(
-  //       controller: _investmentController!,
-  //       jarImage: Assets.svgs.jarInvestment.path,
-  //       jarName: 'Investment',
-  //       animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-  //         CurvedAnimation(
-  //           parent: widget.animationController!,
-  //           curve: const Interval(
-  //             (1 / count) * 4,
-  //             1.0,
-  //             curve: Curves.fastOutSlowIn,
-  //           ),
-  //         ),
-  //       ),
-  //       animationController: widget.animationController!,
-  //     ),
-  //   );
-
-  //   listViews.add(
-  //     JarsPercentageBox(
-  //       controller: _giveController!,
-  //       jarImage: Assets.svgs.jarGive.path,
-  //       jarName: 'Give',
-  //       animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-  //         CurvedAnimation(
-  //           parent: widget.animationController!,
-  //           curve: const Interval(
-  //             (1 / count) * 5,
-  //             1.0,
-  //             curve: Curves.fastOutSlowIn,
-  //           ),
-  //         ),
-  //       ),
-  //       animationController: widget.animationController!,
-  //     ),
-  //   );
-  // }
 
   Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
@@ -337,7 +219,7 @@ class _JarsPercentageState extends State<JarsPercentage>
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
-                          childAspectRatio: 5,
+                          mainAxisExtent: 80,
                         ),
                       ),
                     ],
