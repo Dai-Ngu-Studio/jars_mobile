@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/views/add_transaction/add_transaction_screen.dart';
 import 'package:jars_mobile/views/widgets/curve_painter.dart';
 
 class TotalIncomeExpense extends StatelessWidget {
@@ -167,107 +168,129 @@ class TotalIncomeExpense extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Stack(
-                            children: [
-                              Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 2 - 50,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                  horizontal: 16,
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                AddTransactionScreen.routeName,
+                                arguments: AddTransactionScreenArguments(
+                                  tabIndex: 0,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade100,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 2.0),
-                                      child: Text(
-                                        'Income',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 10,
+                              );
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 2 -
+                                      50,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                    horizontal: 16,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade100,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 2.0),
+                                        child: Text(
+                                          'Income',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 10,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Text(
-                                      NumberFormat.currency(
-                                        locale: 'vi_VN',
-                                        symbol: 'đ',
-                                      ).format((12000000 * animation!.value)
-                                          .toInt()),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    )
-                                  ],
+                                      Text(
+                                        NumberFormat.currency(
+                                          locale: 'vi_VN',
+                                          symbol: 'đ',
+                                        ).format((12000000 * animation!.value)
+                                            .toInt()),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const Positioned(
-                                top: 4,
-                                right: 8,
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.green,
-                                  size: 16,
-                                ),
-                              )
-                            ],
+                                const Positioned(
+                                  top: 4,
+                                  right: 8,
+                                  child: Icon(
+                                    Icons.add,
+                                    color: Colors.green,
+                                    size: 16,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                          Stack(
-                            children: [
-                              Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 2 - 50,
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                  horizontal: 16,
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                AddTransactionScreen.routeName,
+                                arguments: AddTransactionScreenArguments(
+                                  tabIndex: 1,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade100,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 2.0),
-                                      child: Text(
-                                        'Expense',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 10,
+                              );
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 2 -
+                                      50,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                    horizontal: 16,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade100,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 2.0),
+                                        child: Text(
+                                          'Expense',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 10,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Text(
-                                      NumberFormat.currency(
-                                        locale: 'vi_VN',
-                                        symbol: 'đ',
-                                      ).format(
-                                          (3600000 * animation!.value).toInt()),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    )
-                                  ],
+                                      Text(
+                                        NumberFormat.currency(
+                                          locale: 'vi_VN',
+                                          symbol: 'đ',
+                                        ).format((3600000 * animation!.value)
+                                            .toInt()),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              const Positioned(
-                                top: 4,
-                                right: 8,
-                                child: Icon(
-                                  Icons.remove,
-                                  color: Colors.red,
-                                  size: 16,
-                                ),
-                              )
-                            ],
+                                const Positioned(
+                                  top: 4,
+                                  right: 8,
+                                  child: Icon(
+                                    Icons.remove,
+                                    color: Colors.red,
+                                    size: 16,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       )

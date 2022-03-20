@@ -6,7 +6,9 @@ import 'package:jars_mobile/views/add_transaction/components/add_transaction_mov
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 class AddTransactionBody extends StatefulWidget {
-  const AddTransactionBody({Key? key}) : super(key: key);
+  const AddTransactionBody({Key? key, this.tabIndex}) : super(key: key);
+
+  final int? tabIndex;
 
   @override
   State<AddTransactionBody> createState() => _AddTransactionBodyState();
@@ -20,7 +22,11 @@ class _AddTransactionBodyState extends State<AddTransactionBody>
   @override
   void initState() {
     super.initState();
-    _controller = TabController(length: 3, vsync: this, initialIndex: 1);
+    _controller = TabController(
+      length: 3,
+      vsync: this,
+      initialIndex: widget.tabIndex ?? 1,
+    );
 
     jars = [
       {

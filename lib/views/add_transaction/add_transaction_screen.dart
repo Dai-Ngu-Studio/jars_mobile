@@ -12,20 +12,11 @@ class AddTransactionScreen extends StatefulWidget {
 }
 
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
-  //   with SingleTickerProviderStateMixin {
-  // late final TabController _controller;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _controller = TabController(length: 3, vsync: this, initialIndex: 1);
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // AddTransactionScreenArguments args = ModalRoute.of(context)!
-    //     .settings
-    //     .arguments as AddTransactionScreenArguments;
+    AddTransactionScreenArguments args = ModalRoute.of(context)!
+        .settings
+        .arguments as AddTransactionScreenArguments;
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
@@ -38,7 +29,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: const AddTransactionBody(),
+      body: AddTransactionBody(tabIndex: args.tabIndex),
     );
   }
+}
+
+class AddTransactionScreenArguments {
+  final int? tabIndex;
+
+  AddTransactionScreenArguments({this.tabIndex});
 }
