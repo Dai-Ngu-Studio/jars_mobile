@@ -83,6 +83,7 @@ class AuthService {
         await googleSignIn.signOut();
       }
       await FirebaseAuth.instance.signOut();
+      await googleSignIn.signOut();
     } catch (e) {
       throw Exception(e.toString());
     } finally {
