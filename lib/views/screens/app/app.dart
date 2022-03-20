@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jars_mobile/data/models/tab_icon_data.dart';
 import 'package:jars_mobile/service/local_notification/local_notification_service.dart';
+import 'package:jars_mobile/views/add_transaction/add_transaction_screen.dart';
 import 'package:jars_mobile/views/screens/app/components/bottom_bar_view.dart';
 import 'package:jars_mobile/views/screens/home/home_body.dart';
 import 'package:jars_mobile/views/screens/jars_setting/jars_setting_body.dart';
@@ -38,7 +39,7 @@ class _JarsAppState extends State<JarsApp> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    tabBody = const HomeBody();
+    tabBody = HomeBody(animationController: animationController);
 
     LocalNotificationService.initialize(context);
 
@@ -98,12 +99,18 @@ class _JarsAppState extends State<JarsApp> with TickerProviderStateMixin {
         const Expanded(child: SizedBox()),
         BottomBarView(
           tabIconsList: tabIconsList,
-          addClick: () {},
+          addClick: () {
+            Navigator.of(context).pushNamed(AddTransactionScreen.routeName);
+          },
           changeIndex: (int index) {
             if (index == 0) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
-                setState(() => tabBody = const HomeBody());
+                setState(() {
+                  tabBody = HomeBody(
+                    animationController: animationController,
+                  );
+                });
               });
             } else if (index == 1) {
               animationController?.reverse().then<dynamic>((data) {
@@ -124,7 +131,11 @@ class _JarsAppState extends State<JarsApp> with TickerProviderStateMixin {
             } else if (index == 3) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
-                setState(() => tabBody = const SettingsBody());
+                setState(() {
+                  tabBody = SettingsBody(
+                    animationController: animationController,
+                  );
+                });
               });
             }
           },
