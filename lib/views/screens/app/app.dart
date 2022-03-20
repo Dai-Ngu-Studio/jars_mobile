@@ -100,7 +100,10 @@ class _JarsAppState extends State<JarsApp> with TickerProviderStateMixin {
         BottomBarView(
           tabIconsList: tabIconsList,
           addClick: () {
-            Navigator.of(context).pushNamed(AddTransactionScreen.routeName);
+            Navigator.of(context).pushNamed(
+              AddTransactionScreen.routeName,
+              arguments: AddTransactionScreenArguments(tabIndex: 1),
+            );
           },
           changeIndex: (int index) {
             if (index == 0) {

@@ -14,10 +14,6 @@ class TotalIncomeExpense extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
-  // final int total;
-  // final int income;
-  // final int expense;
-
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(

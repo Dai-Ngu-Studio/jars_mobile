@@ -35,7 +35,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 }
 
 class AddTransactionScreenArguments {
-  final int? tabIndex;
+  final int tabIndex;
 
-  AddTransactionScreenArguments({this.tabIndex});
+  AddTransactionScreenArguments({required this.tabIndex});
 }

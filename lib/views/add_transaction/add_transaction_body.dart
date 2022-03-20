@@ -25,7 +25,7 @@ class _AddTransactionBodyState extends State<AddTransactionBody>
     _controller = TabController(
       length: 3,
       vsync: this,
-      initialIndex: widget.tabIndex ?? 1,
+      initialIndex: widget.tabIndex!,
     );
 
     jars = [
