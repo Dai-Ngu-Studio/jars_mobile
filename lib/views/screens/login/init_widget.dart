@@ -36,7 +36,7 @@ class _InitializerWidgetState extends State<InitializerWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _skipIntro ?? false
+      body: _skipIntro ?? true
           ? _user != null
               ? const JarsApp()
               : const LoginScreen()
