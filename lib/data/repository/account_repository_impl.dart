@@ -28,10 +28,7 @@ class AccountRepositoryImpl implements AccountRepository {
   }
 
   @override
-  Future<Account> getAccount({
-    required token,
-    required String accountId,
-  }) async {
+  Future<Account> getAccount({required token}) async {
     // TODO: implement updateAccount
     throw UnimplementedError();
   }
