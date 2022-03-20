@@ -1,6 +1,3 @@
-import 'package:jars_mobile/data/models/account.dart';
-import 'package:jars_mobile/data/models/category_wallet.dart';
-
 class Wallet {
   int? id;
   String? name;
@@ -8,9 +5,7 @@ class Wallet {
   int? walletAmount;
   int? percentage;
   String? accountId;
-  Account? account;
-  List<CategoryWallets>? categoryWallets;
-  List<String>? transactions;
+  int? categoryWalletId;
 
   Wallet({
     this.id,
@@ -19,9 +14,7 @@ class Wallet {
     this.walletAmount,
     this.percentage,
     this.accountId,
-    this.account,
-    this.categoryWallets,
-    this.transactions,
+    this.categoryWalletId,
   });
 
   Wallet.fromJson(Map<String, dynamic> json) {
@@ -31,15 +24,7 @@ class Wallet {
     walletAmount = json['walletAmount'];
     percentage = json['percentage'];
     accountId = json['accountId'];
-    account =
-        json['account'] != null ? Account.fromJson(json['account']) : null;
-    if (json['categoryWallets'] != null) {
-      categoryWallets = <CategoryWallets>[];
-      json['categoryWallets'].forEach((v) {
-        categoryWallets!.add(CategoryWallets.fromJson(v));
-      });
-    }
-    transactions = json['transactions'].cast<String>();
+    categoryWalletId = json['categoryWalletId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -50,14 +35,7 @@ class Wallet {
     data['walletAmount'] = walletAmount;
     data['percentage'] = percentage;
     data['accountId'] = accountId;
-    if (account != null) {
-      data['account'] = account!.toJson();
-    }
-    if (categoryWallets != null) {
-      data['categoryWallets'] =
-          categoryWallets!.map((v) => v.toJson()).toList();
-    }
-    data['transactions'] = transactions;
+    data['categoryWalletId'] = categoryWalletId;
     return data;
   }
 }
