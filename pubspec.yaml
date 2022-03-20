@@ -48,7 +48,17 @@ dependencies:
 
   url_launcher: ^6.0.20
 
-  fl_chart: ^0.45.0
+  fl_chart: ^0.46.0
+
+  d_chart: ^0.0.4
+
+  flutter_email_sender: ^5.1.0
+
+  tab_indicator_styler: ^2.0.0
+
+  image_picker: ^0.8.4+11
+
+  mime: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -99,6 +109,8 @@ flutter:
     - assets/svgs/jar_play.svg
     - assets/svgs/jar_saving.svg
     - assets/svgs/jar_give.svg
+    - assets/svgs/excel.svg
+    - assets/svgs/jar.svg
 
     # images
     - assets/images/jars_logo.png
