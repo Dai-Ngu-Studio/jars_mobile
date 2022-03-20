@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
       PageTransition(
         child: const InitializerWidget(),
         type: PageTransitionType.fade,
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 1000),
       ),
     );
   }
