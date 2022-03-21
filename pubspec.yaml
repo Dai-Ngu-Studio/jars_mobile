@@ -36,7 +36,7 @@ dependencies:
 
   http: ^0.13.4
 
-  # provider: ^6.0.2
+  provider: ^6.0.2
 
   flutter_native_splash: ^2.0.5
 
@@ -59,6 +59,8 @@ dependencies:
   image_picker: ^0.8.4+11
 
   mime: ^1.0.1
+
+  fluttertoast: ^8.0.9
 
 dev_dependencies:
   flutter_test:
