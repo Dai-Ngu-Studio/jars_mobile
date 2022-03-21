@@ -2,7 +2,7 @@ class Wallet {
   int? id;
   String? name;
   String? startDate;
-  int? walletAmount;
+  num? walletAmount;
   int? percentage;
   String? accountId;
   int? categoryWalletId;
