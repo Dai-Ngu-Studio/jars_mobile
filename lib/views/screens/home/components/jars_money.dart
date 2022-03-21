@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
-import 'package:jars_mobile/gen/assets.gen.dart';
+import 'package:jars_mobile/data/remote/response/status.dart';
+import 'package:jars_mobile/utils/utilities.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/home/components/jar_money_box.dart';
+import 'package:jars_mobile/views/widgets/loading.dart';
+import 'package:provider/provider.dart';
 
 class JarsMoney extends StatefulWidget {
   const JarsMoney({
@@ -21,10 +24,9 @@ class JarsMoney extends StatefulWidget {
 class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
   AnimationController? animationController;
   final walletVM = WalletViewModel();
+  final _firebaseAuth = FirebaseAuth.instance;
 
   List<Widget> listViews = [];
-
-  List<Map<String, dynamic>> listData = [];
 
   @override
   void initState() {
@@ -35,51 +37,9 @@ class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
       vsync: this,
     );
 
-    // TODO: implement wallet api
-    listData = [
-      {
-        'jarName': 'Necessities',
-        'jarImage': Assets.svgs.jarNecessities.path,
-        'jarColor': kNecessitiesColor,
-        'totalMoney': 6600000,
-        'spendMoney': 3000000,
-      },
-      {
-        'jarName': 'Education',
-        'jarImage': Assets.svgs.jarEducation.path,
-        'jarColor': kEducationColor,
-        'totalMoney': 1200000,
-        'spendMoney': 200000,
-      },
-      {
-        'jarName': 'Saving',
-        'jarImage': Assets.svgs.jarSaving.path,
-        'jarColor': kSavingColor,
-        'totalMoney': 1200000,
-        'spendMoney': 650000,
-      },
-      {
-        'jarName': 'Play',
-        'jarImage': Assets.svgs.jarPlay.path,
-        'jarColor': kPlayColor,
-        'totalMoney': 1200000,
-        'spendMoney': 800000,
-      },
-      {
-        'jarName': 'Investment',
-        'jarImage': Assets.svgs.jarInvestment.path,
-        'jarColor': kInvestmentColor,
-        'totalMoney': 1200000,
-        'spendMoney': 300000,
-      },
-      {
-        'jarName': 'Give',
-        'jarImage': Assets.svgs.jarGive.path,
-        'jarColor': kGiveColor,
-        'totalMoney': 600000,
-        'spendMoney': 100000,
-      },
-    ];
+    _firebaseAuth.currentUser!.getIdToken().then((idToken) {
+      walletVM.getWallet(idToken: idToken);
+    });
   }
 
   @override
@@ -127,43 +87,66 @@ class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    itemCount: listData.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      final int count = listData.length;
+                  child: ChangeNotifierProvider<WalletViewModel>(
+                    create: (BuildContext context) => walletVM,
+                    child: Consumer<WalletViewModel>(
+                      builder: (context, viewModel, _) {
+                        switch (viewModel.wallet.status) {
+                          case Status.LOADING:
+                            return LoadingWidget();
+                          case Status.ERROR:
+                            return ErrorWidget(
+                              viewModel.wallet.message ??
+                                  "Something went wrong",
+                            );
+                          case Status.COMPLETED:
+                            return GridView.builder(
+                              shrinkWrap: true,
+                              itemCount: viewModel.wallet.data!.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                final int count = viewModel.wallet.data!.length;
 
-                      final Animation<double> animation = Tween<double>(
-                        begin: 0.0,
-                        end: 1.0,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: animationController!,
-                          curve: Interval(
-                            (1 / count) * index,
-                            1.0,
-                            curve: Curves.fastOutSlowIn,
-                          ),
-                        ),
-                      );
+                                final Animation<double> animation =
+                                    Tween<double>(begin: 0.0, end: 1.0).animate(
+                                  CurvedAnimation(
+                                    parent: animationController!,
+                                    curve: Interval(
+                                      (1 / count) * index,
+                                      1.0,
+                                      curve: Curves.fastOutSlowIn,
+                                    ),
+                                  ),
+                                );
 
-                      animationController?.forward();
+                                animationController?.forward();
 
-                      return JarMoneyBox(
-                        jarName: listData[index]['jarName'],
-                        jarImage: listData[index]['jarImage'],
-                        jarColor: listData[index]['jarColor'],
-                        totalMoney: listData[index]['totalMoney'],
-                        spendMoney: listData[index]['spendMoney'],
-                        animation: animation,
-                        animationController: animationController!,
-                      );
-                    },
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      mainAxisExtent: 65,
+                                return JarMoneyBox(
+                                  jarName: viewModel.wallet.data![index].name!,
+                                  jarImage: Utilities.getJarImageByName(
+                                    viewModel.wallet.data![index].name!,
+                                  ),
+                                  jarColor: Utilities.getJarColorByName(
+                                    viewModel.wallet.data![index].name!,
+                                  ),
+                                  totalMoney: viewModel
+                                      .wallet.data![index].walletAmount!
+                                      .toInt(),
+                                  spendMoney: 0,
+                                  animation: animation,
+                                  animationController: animationController!,
+                                );
+                              },
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 1,
+                                mainAxisExtent: 65,
+                              ),
+                            );
+                          default:
+                        }
+                        return Container();
+                      },
                     ),
                   ),
                 ),
