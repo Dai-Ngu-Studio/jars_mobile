@@ -87,7 +87,8 @@ class JarMoneyBox extends StatelessWidget {
                           child: Row(
                             children: [
                               Container(
-                                width: (
+                                width: totalMoney != 0
+                                    ?
                                     // VD: có 12tr và tiêu 3tr
                                     // 12tr : tổng tiền
                                     // 3tr : tiền tiêu
@@ -110,10 +111,9 @@ class JarMoneyBox extends StatelessWidget {
                                                         .size
                                                         .width -
                                                     115) /
-                                                totalMoney))
-                                        //
-                                        *
-                                        animation!.value),
+                                                totalMoney)) *
+                                        animation!.value
+                                    : 0,
                                 height: 4,
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
