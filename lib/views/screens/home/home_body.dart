@@ -5,7 +5,6 @@ import 'package:jars_mobile/views/screens/home/components/jars_money.dart';
 import 'package:jars_mobile/views/screens/home/components/report.dart';
 import 'package:jars_mobile/views/screens/home/components/total_income_expense.dart';
 import 'package:jars_mobile/views/screens/home/components/transaction_history.dart';
-import 'package:jars_mobile/views/screens/jars_setting/components/jars_structure_donut_chart.dart';
 import 'package:jars_mobile/views/widgets/title_button_widet.dart';
 
 class HomeBody extends StatefulWidget {
@@ -60,7 +59,7 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
   }
 
   void addAllListData() {
-    const int count = 9;
+    const int count = 7;
 
     listViews.add(
       TotalIncomeExpense(
@@ -174,42 +173,6 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
           ),
         ),
         animationController: widget.animationController!,
-      ),
-    );
-
-    listViews.add(
-      TitleView(
-        titleTxt: 'Jars Structure',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 7,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
-          ),
-        ),
-        animationController: widget.animationController!,
-      ),
-    );
-
-    listViews.add(
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: JarsStructureDonutChart(
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-              parent: widget.animationController!,
-              curve: const Interval(
-                (1 / count) * 8,
-                1.0,
-                curve: Curves.fastOutSlowIn,
-              ),
-            ),
-          ),
-          animationController: widget.animationController!,
-        ),
       ),
     );
   }
