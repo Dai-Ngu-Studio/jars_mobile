@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:jars_mobile/data/local/app_shared_preference.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/view_model/account_view_model.dart';
+import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/service/firebase/auth_service.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
+import 'package:jars_mobile/views/widgets/error_snackbar.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -21,7 +23,8 @@ class _BodyState extends State<Body> {
   final AuthService _googleSignIn = AuthService();
   bool _isLoading = false;
   final _prefs = AppSharedPreference();
-  final accountViewModel = AccountViewModel();
+  final _accountViewModel = AccountViewModel();
+  final _walletViewModel = WalletViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -151,35 +154,40 @@ class _BodyState extends State<Body> {
       if (_firebaseAuth.currentUser != null) {
         _firebaseAuth.currentUser!.getIdToken().then((idToken) {
           fcmToken.then((fcmToken) {
-            accountViewModel
+            _accountViewModel
                 .login(idToken: idToken, fcmToken: fcmToken)
                 .whenComplete(() {
-              _prefs.setBool(key: "isSkipIntro", value: true);
+              Future.delayed(const Duration(seconds: 3)).whenComplete(() {
+                _walletViewModel
+                    .generateSixJars(idToken: idToken)
+                    .whenComplete(() {
+                  _prefs.setBool(key: "isSkipIntro", value: true);
 
-              Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
+                  Navigator.of(context).pushReplacementNamed(
+                    JarsApp.routeName,
+                  );
+                }).onError((error, stackTrace) {
+                  log(error.toString());
+                  showErrorSnackbar(
+                    context: context,
+                    message: error.toString(),
+                  );
+                });
+              });
             }).catchError((error) {
-              final snackBar = SnackBar(
-                content: Text(error.toString()),
-                duration: const Duration(seconds: 5),
-              );
               log(error.toString());
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              showErrorSnackbar(context: context, message: error.toString());
             });
           });
         }).catchError((error) {
           log(error.toString());
+          showErrorSnackbar(context: context, message: error.toString());
         });
       }
     }).catchError(
       (error) {
-        final snackBar = SnackBar(
-          content: Text(error.toString()),
-          duration: const Duration(seconds: 5),
-        );
         log(error.toString());
-        ScaffoldMessenger.of(context).showSnackBar(
-          snackBar,
-        );
+        showErrorSnackbar(context: context, message: error.toString());
       },
     ).then((_) => setState(() => _isLoading = false));
   }

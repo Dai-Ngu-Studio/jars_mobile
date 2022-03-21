@@ -7,6 +7,7 @@ import 'package:jars_mobile/constant.dart';
 import 'package:jars_mobile/data/local/app_shared_preference.dart';
 import 'package:jars_mobile/service/firebase/auth_service.dart';
 import 'package:jars_mobile/view_model/account_view_model.dart';
+import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/views/screens/intro/components/auto_split_view.dart';
 import 'package:jars_mobile/views/screens/intro/components/back_skip_widget.dart';
@@ -15,6 +16,7 @@ import 'package:jars_mobile/views/screens/intro/components/next_login_button.dar
 import 'package:jars_mobile/views/screens/intro/components/six_jars_principle_view.dart';
 import 'package:jars_mobile/views/screens/intro/components/use_app_time_view.dart';
 import 'package:jars_mobile/views/screens/intro/components/welcome_view.dart';
+import 'package:jars_mobile/views/widgets/error_snackbar.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);
@@ -28,7 +30,8 @@ class _IntroScreenState extends State<IntroScreen>
   late AnimationController? _animationController;
   final AuthService _googleSignIn = AuthService();
   final _prefs = AppSharedPreference();
-  final accountViewModel = AccountViewModel();
+  final _accountViewModel = AccountViewModel();
+  final _walletViewModel = WalletViewModel();
   bool isLoading = false;
 
   @override
@@ -146,37 +149,36 @@ class _IntroScreenState extends State<IntroScreen>
       if (_firebaseAuth.currentUser != null) {
         _firebaseAuth.currentUser!.getIdToken().then((idToken) {
           fcmToken.then((fcmToken) {
-            accountViewModel
+            _accountViewModel
                 .login(idToken: idToken, fcmToken: fcmToken)
                 .whenComplete(() {
-              _prefs.setBool(key: "isSkipIntro", value: true);
+              Future.delayed(const Duration(seconds: 3)).whenComplete(() {
+                _walletViewModel
+                    .generateSixJars(idToken: idToken)
+                    .whenComplete(() {
+                  _prefs.setBool(key: "isSkipIntro", value: true);
 
-              Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
+                  Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
+                }).onError((error, stackTrace) {
+                  log(error.toString());
+                  showErrorSnackbar(
+                      context: context, message: error.toString());
+                });
+              });
             }).catchError((error) {
-              final snackBar = SnackBar(
-                content: Text(error.toString()),
-                duration: const Duration(seconds: 5),
-              );
               log(error.toString());
-              ScaffoldMessenger.of(context).showSnackBar(
-                snackBar,
-              );
+              showErrorSnackbar(context: context, message: error.toString());
             });
           });
         }).catchError((error) {
           log(error.toString());
+          showErrorSnackbar(context: context, message: error.toString());
         });
       }
     }).catchError(
       (error) {
-        final snackBar = SnackBar(
-          content: Text(error.toString()),
-          duration: const Duration(seconds: 5),
-        );
         log(error.toString());
-        ScaffoldMessenger.of(context).showSnackBar(
-          snackBar,
-        );
+        showErrorSnackbar(context: context, message: error.toString());
       },
     ).then((_) => setState(() => isLoading = false));
   }
