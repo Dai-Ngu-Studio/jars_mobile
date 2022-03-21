@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:jars_mobile/constant.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 
 class Utilities {
@@ -17,6 +19,25 @@ class Utilities {
         return Assets.svgs.jarGive.path;
       default:
         return Assets.svgs.jarNecessities.path;
+    }
+  }
+
+  static Color getJarColorByName(String jarName) {
+    switch (jarName) {
+      case 'Necessities':
+        return kNecessitiesColor;
+      case 'Education':
+        return kEducationColor;
+      case 'Saving':
+        return kSavingColor;
+      case 'Play':
+        return kPlayColor;
+      case 'Investment':
+        return kInvestmentColor;
+      case 'Give':
+        return kGiveColor;
+      default:
+        return jarsColor;
     }
   }
 }
