@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/views/screens/jars_setting/components/jars_percentage_box.dart';
 
@@ -7,10 +8,26 @@ class JarsPercentage extends StatefulWidget {
     Key? key,
     this.animationController,
     this.animation,
+    required this.onPressed,
+    required this.necessitiesWallet,
+    required this.educationWallet,
+    required this.savingWallet,
+    required this.playWallet,
+    required this.investmentWallet,
+    required this.giveWallet,
   }) : super(key: key);
 
   final AnimationController? animationController;
   final Animation<double>? animation;
+
+  final Wallet necessitiesWallet;
+  final Wallet educationWallet;
+  final Wallet savingWallet;
+  final Wallet playWallet;
+  final Wallet investmentWallet;
+  final Wallet giveWallet;
+
+  final Function onPressed;
 
   @override
   State<JarsPercentage> createState() => _JarsPercentageState();
@@ -18,14 +35,13 @@ class JarsPercentage extends StatefulWidget {
 
 class _JarsPercentageState extends State<JarsPercentage>
     with TickerProviderStateMixin {
+  final _necessitiesController = TextEditingController();
+  final _educationController = TextEditingController();
+  final _savingController = TextEditingController();
+  final _playController = TextEditingController();
+  final _investmentController = TextEditingController();
+  final _giveController = TextEditingController();
   AnimationController? animationController;
-
-  final TextEditingController? _necessitiesController = TextEditingController();
-  final TextEditingController? _educationController = TextEditingController();
-  final TextEditingController? _savingController = TextEditingController();
-  final TextEditingController? _playController = TextEditingController();
-  final TextEditingController? _investmentController = TextEditingController();
-  final TextEditingController? _giveController = TextEditingController();
 
   List<Widget> listViews = [];
 
@@ -42,42 +58,42 @@ class _JarsPercentageState extends State<JarsPercentage>
       vsync: this,
     );
 
-    // TODO: implement wallet API
-    _necessitiesController!.text = '55';
-    _educationController!.text = '10';
-    _savingController!.text = '10';
-    _playController!.text = '10';
-    _investmentController!.text = '10';
-    _giveController!.text = '5';
+    _necessitiesController.text =
+        widget.necessitiesWallet.percentage.toString();
+    _educationController.text = widget.educationWallet.percentage.toString();
+    _savingController.text = widget.savingWallet.percentage.toString();
+    _playController.text = widget.playWallet.percentage.toString();
+    _investmentController.text = widget.investmentWallet.percentage.toString();
+    _giveController.text = widget.giveWallet.percentage.toString();
 
     listData = [
       {
-        'jarName': 'Necessities',
+        'jar': widget.necessitiesWallet,
         'controller': _necessitiesController,
         'image': Assets.svgs.jarNecessities.path,
       },
       {
-        'jarName': 'Education',
+        'jar': widget.educationWallet,
         'controller': _educationController,
         'image': Assets.svgs.jarEducation.path,
       },
       {
-        'jarName': 'Saving',
+        'jar': widget.savingWallet,
         'controller': _savingController,
         'image': Assets.svgs.jarSaving.path,
       },
       {
-        'jarName': 'Play',
+        'jar': widget.playWallet,
         'controller': _playController,
         'image': Assets.svgs.jarPlay.path,
       },
       {
-        'jarName': 'Investment',
+        'jar': widget.investmentWallet,
         'controller': _investmentController,
         'image': Assets.svgs.jarInvestment.path,
       },
       {
-        'jarName': 'Give',
+        'jar': widget.giveWallet,
         'controller': _giveController,
         'image': Assets.svgs.jarGive.path,
       },
@@ -86,23 +102,23 @@ class _JarsPercentageState extends State<JarsPercentage>
 
   @override
   void dispose() {
-    _necessitiesController!.dispose();
-    _educationController!.dispose();
-    _savingController!.dispose();
-    _playController!.dispose();
-    _investmentController!.dispose();
-    _giveController!.dispose();
+    _necessitiesController.dispose();
+    _educationController.dispose();
+    _savingController.dispose();
+    _playController.dispose();
+    _investmentController.dispose();
+    _giveController.dispose();
     animationController?.dispose();
     super.dispose();
   }
 
   int get totalPercentage {
-    return int.parse(_necessitiesController!.text) +
-        int.parse(_educationController!.text) +
-        int.parse(_savingController!.text) +
-        int.parse(_playController!.text) +
-        int.parse(_investmentController!.text) +
-        int.parse(_giveController!.text);
+    return int.parse(_necessitiesController.text) +
+        int.parse(_educationController.text) +
+        int.parse(_savingController.text) +
+        int.parse(_playController.text) +
+        int.parse(_investmentController.text) +
+        int.parse(_giveController.text);
   }
 
   Future<bool> getData() async {
@@ -203,7 +219,7 @@ class _JarsPercentageState extends State<JarsPercentage>
                             animationController: animationController!,
                             controller: listData[index]['controller'],
                             jarImage: listData[index]['image'],
-                            jarName: listData[index]['jarName'],
+                            jarName: listData[index]['jar'].toJson()['name'],
                             onChanged: () {
                               setState(() {
                                 total = 0;
@@ -212,6 +228,12 @@ class _JarsPercentageState extends State<JarsPercentage>
                                     listData[i]['controller'].text,
                                   );
                                 }
+                                widget.onPressed(
+                                  wallet: listData[index]['jar'],
+                                  percentage: int.parse(
+                                    listData[index]['controller'].text,
+                                  ),
+                                );
                               });
                             },
                           );

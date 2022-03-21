@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/views/widgets/indicator.dart';
 import 'package:jars_mobile/views/widgets/pie_chart_badge.dart';
@@ -9,10 +10,23 @@ class JarsStructureDonutChart extends StatefulWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
 
+  final Wallet necessitiesWallet;
+  final Wallet educationWallet;
+  final Wallet savingWallet;
+  final Wallet playWallet;
+  final Wallet investmentWallet;
+  final Wallet giveWallet;
+
   const JarsStructureDonutChart({
     Key? key,
     this.animationController,
     this.animation,
+    required this.necessitiesWallet,
+    required this.educationWallet,
+    required this.savingWallet,
+    required this.playWallet,
+    required this.investmentWallet,
+    required this.giveWallet,
   }) : super(key: key);
 
   @override
@@ -197,8 +211,9 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 0:
           return PieChartSectionData(
             color: kNecessitiesColor,
-            value: 55,
-            title: '${(55 * animation!.value).toInt()}',
+            value: double.parse(widget.necessitiesWallet.percentage.toString()),
+            title:
+                '${(int.parse(widget.necessitiesWallet.percentage.toString()) * animation!.value).toInt()}',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -218,8 +233,10 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 1:
           return PieChartSectionData(
             color: kEducationColor,
-            value: (10 * animation!.value).toDouble(),
-            title: '${(10 * animation.value).toInt()}',
+            value: int.parse(widget.educationWallet.percentage.toString()) *
+                animation!.value,
+            title:
+                '${(int.parse(widget.educationWallet.percentage.toString()) * animation.value).toInt()}',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -239,8 +256,10 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 2:
           return PieChartSectionData(
             color: kSavingColor,
-            value: (10 * animation!.value).toDouble(),
-            title: '${(10 * animation.value).toInt()}',
+            value: int.parse(widget.savingWallet.percentage.toString()) *
+                animation!.value,
+            title:
+                '${(int.parse(widget.savingWallet.percentage.toString()) * animation.value).toInt()}',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -260,8 +279,10 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 3:
           return PieChartSectionData(
             color: kPlayColor,
-            value: (10 * animation!.value).toDouble(),
-            title: '${(10 * animation.value).toInt()}',
+            value: int.parse(widget.playWallet.percentage.toString()) *
+                animation!.value,
+            title:
+                '${(int.parse(widget.playWallet.percentage.toString()) * animation.value).toInt()}',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -281,8 +302,10 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 4:
           return PieChartSectionData(
             color: kInvestmentColor,
-            value: (10 * animation!.value).toDouble(),
-            title: '${(10 * animation.value).toInt()}',
+            value: int.parse(widget.investmentWallet.percentage.toString()) *
+                animation!.value,
+            title:
+                '${(int.parse(widget.investmentWallet.percentage.toString()) * animation.value).toInt()}',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -302,8 +325,10 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 5:
           return PieChartSectionData(
             color: kGiveColor,
-            value: (5 * animation!.value).toDouble(),
-            title: '${(5 * animation.value).toInt()}',
+            value: int.parse(widget.giveWallet.percentage.toString()) *
+                animation!.value,
+            title:
+                '${(int.parse(widget.giveWallet.percentage.toString()) * animation.value).toInt()}',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
