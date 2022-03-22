@@ -76,4 +76,50 @@ class WalletRepositoryImpl extends WalletRepository {
       throw Exception(e.toString());
     }
   }
+
+  @override
+  Future getWalletSpent({
+    required String idToken,
+    required String walletId,
+  }) async {
+    try {
+      dynamic response = await _apiService.getResponseByID(
+        ApiEndPoint().wallet,
+        function: "wallet-spend",
+        id: walletId,
+        header: Map<String, String>.from({
+          "Authorization": "Bearer $idToken",
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }),
+      );
+
+      return Wallet.fromJson(response);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future getWalletsSpent({required String idToken}) async {
+    try {
+      dynamic response = await _apiService.getResponse(
+        ApiEndPoint().wallet,
+        function: "six-wallets-spend",
+        header: Map<String, String>.from({
+          "Authorization": "Bearer $idToken",
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }),
+      );
+      final json = [];
+
+      for (var item in response) {
+        json.add(Wallet.fromJson(item));
+      }
+      return json;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

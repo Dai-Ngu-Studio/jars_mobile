@@ -8,4 +8,11 @@ abstract class WalletRepository {
   Future<void> updateWallet({required String idToken, required Wallet wallet});
 
   Future<void> generateSixJars({required String idToken});
+
+  Future<void> getWalletSpent({
+    required String idToken,
+    required String walletId,
+  });
+
+  Future<void> getWalletsSpent({required String idToken});
 }
