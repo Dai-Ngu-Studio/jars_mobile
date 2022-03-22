@@ -1,6 +1,7 @@
 import 'package:d_chart/d_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:jars_mobile/utils/utilities.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
 
 class ReportBarChart extends StatefulWidget {
@@ -20,7 +21,7 @@ class ReportBarChartState extends State<ReportBarChart> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          DateFormat('M/yyyy').format(DateTime.now()),
+          "From week ${(Utilities.getWeekNumberOfYear(DateTime.now()) - 4)} to ${Utilities.getWeekNumberOfYear(DateTime.now())} 2022",
           style: const TextStyle(
             fontSize: 12,
             color: Colors.black38,
