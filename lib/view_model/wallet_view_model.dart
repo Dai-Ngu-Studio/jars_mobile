@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/data/remote/response/api_response.dart';
@@ -16,14 +18,33 @@ class WalletViewModel extends ChangeNotifier {
 
   Future getWallet({required String idToken}) async {
     _setWallet(ApiResponse.loading());
-    await _walletRepo
-        .getWallets(idToken: idToken)
-        .then((value) => _setWallet(ApiResponse.completed(value)))
-        .onError(
-          (error, stackTrace) => _setWallet(
-            ApiResponse.error(error.toString()),
+    try {
+      List wallets = await _walletRepo.getWallets(idToken: idToken);
+      List walletsSpent = await _walletRepo.getWalletsSpent(idToken: idToken);
+      List<Wallet> walletFullProps = [];
+      for (var wallet in wallets) {
+        final walletSpent = walletsSpent.firstWhere(
+          (walletSpent) => walletSpent.id == wallet.id,
+        );
+        walletFullProps.add(
+          Wallet(
+            id: wallet.id,
+            accountId: wallet.accountId,
+            categoryWalletId: wallet.categoryWalletId,
+            name: wallet.name,
+            percentage: wallet.percentage,
+            startDate: wallet.startDate,
+            walletAmount: wallet.walletAmount,
+            ammountLeft: walletSpent.ammountLeft,
+            totalSpend: -walletSpent.totalSpend,
+            totalAdded: walletSpent.totalAdded,
           ),
         );
+      }
+      _setWallet(ApiResponse.completed(walletFullProps));
+    } catch (e) {
+      _setWallet(ApiResponse.error(e.toString()));
+    }
   }
 
   Future putWallet({required String idToken, required Wallet wallet}) async {
@@ -42,6 +63,33 @@ class WalletViewModel extends ChangeNotifier {
     _setWallet(ApiResponse.loading());
     _walletRepo
         .generateSixJars(idToken: idToken)
+        .whenComplete(() => _setWallet(ApiResponse.completed(null)))
+        .onError(
+          (error, stackTrace) => _setWallet(
+            ApiResponse.error(error.toString()),
+          ),
+        );
+  }
+
+  Future getWalletSpent({
+    required String idToken,
+    required String walletId,
+  }) async {
+    _setWallet(ApiResponse.loading());
+    _walletRepo
+        .getWalletSpent(idToken: idToken, walletId: walletId)
+        .whenComplete(() => _setWallet(ApiResponse.completed(null)))
+        .onError(
+          (error, stackTrace) => _setWallet(
+            ApiResponse.error(error.toString()),
+          ),
+        );
+  }
+
+  Future getWalletsSpent({required String idToken}) async {
+    _setWallet(ApiResponse.loading());
+    _walletRepo
+        .getWalletsSpent(idToken: idToken)
         .whenComplete(() => _setWallet(ApiResponse.completed(null)))
         .onError(
           (error, stackTrace) => _setWallet(
