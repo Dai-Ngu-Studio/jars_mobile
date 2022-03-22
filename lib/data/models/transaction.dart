@@ -4,7 +4,7 @@ class Transactions {
   String? transactionDate;
   int? noteId;
   int? billId;
-  int? amount;
+  num? amount;
 
   Transactions({
     this.id,

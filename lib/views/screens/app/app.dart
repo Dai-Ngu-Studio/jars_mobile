@@ -5,6 +5,7 @@ import 'package:jars_mobile/data/models/tab_icon_data.dart';
 import 'package:jars_mobile/service/local_notification/local_notification_service.dart';
 import 'package:jars_mobile/views/screens/add_transaction/add_transaction_screen.dart';
 import 'package:jars_mobile/views/screens/app/components/bottom_bar_view.dart';
+import 'package:jars_mobile/views/screens/history/history_body.dart';
 import 'package:jars_mobile/views/screens/home/home_body.dart';
 import 'package:jars_mobile/views/screens/jars_setting/jars_setting_body.dart';
 import 'package:jars_mobile/views/screens/settings/settings_body.dart';
@@ -128,7 +129,9 @@ class _JarsAppState extends State<JarsApp> with TickerProviderStateMixin {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
                 setState(() {
-                  // tabBody =
+                  tabBody = HistoryBody(
+                    animationController: animationController,
+                  );
                 });
               });
             } else if (index == 3) {
