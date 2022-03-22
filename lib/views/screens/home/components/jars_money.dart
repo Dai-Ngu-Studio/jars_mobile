@@ -130,9 +130,11 @@ class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
                                     viewModel.wallet.data![index].name!,
                                   ),
                                   totalMoney: viewModel
-                                      .wallet.data![index].walletAmount!
+                                      .wallet.data![index].totalAdded!
                                       .toInt(),
-                                  spendMoney: 0,
+                                  spendMoney: viewModel
+                                      .wallet.data![index].totalSpend
+                                      .toInt(),
                                   animation: animation,
                                   animationController: animationController!,
                                 );
