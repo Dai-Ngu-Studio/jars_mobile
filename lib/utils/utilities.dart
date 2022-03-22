@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:jars_mobile/constant.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 
@@ -39,5 +40,10 @@ class Utilities {
       default:
         return jarsColor;
     }
+  }
+
+  static int getWeekNumberOfYear(DateTime date) {
+    int dayOfYear = int.parse(DateFormat("D").format(date));
+    return ((dayOfYear - date.weekday + 10) / 7).floor();
   }
 }
