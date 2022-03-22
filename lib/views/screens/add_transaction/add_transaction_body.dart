@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/constant.dart';
-import 'package:jars_mobile/views/add_transaction/components/add_transaction_expense.dart';
-import 'package:jars_mobile/views/add_transaction/components/add_transaction_income.dart';
-import 'package:jars_mobile/views/add_transaction/components/add_transaction_move_money.dart';
+import 'package:jars_mobile/views/screens/add_transaction/components/add_transaction_expense.dart';
+import 'package:jars_mobile/views/screens/add_transaction/components/add_transaction_income.dart';
+import 'package:jars_mobile/views/screens/add_transaction/components/add_transaction_move_money.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 class AddTransactionBody extends StatefulWidget {

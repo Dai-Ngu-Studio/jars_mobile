@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/views/add_transaction/add_transaction_screen.dart';
+import 'package:jars_mobile/views/screens/add_transaction/add_transaction_screen.dart';
 import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/views/screens/app_info/app_info_screen.dart';
 import 'package:jars_mobile/views/screens/factory_reset/factory_reset_screen.dart';

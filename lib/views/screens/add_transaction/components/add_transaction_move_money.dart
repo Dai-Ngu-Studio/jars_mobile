@@ -50,11 +50,13 @@ class _AddTransactionMoveMoneyState extends State<AddTransactionMoveMoney> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'MOVE JAR',
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        const Padding(
+                          padding: EdgeInsets.only(right: 30.0),
+                          child: Text(
+                            'MOVE JAR',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
                         ),
                         const SizedBox(height: 10),
                         InkWell(
@@ -92,11 +94,13 @@ class _AddTransactionMoveMoneyState extends State<AddTransactionMoveMoney> {
                     ),
                     const Icon(Icons.arrow_forward, color: jarsColor),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'RECEIVE JAR',
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        const Padding(
+                          padding: EdgeInsets.only(right: 26.0),
+                          child: Text(
+                            'RECEIVE JAR',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
                         ),
                         const SizedBox(height: 10),
                         InkWell(

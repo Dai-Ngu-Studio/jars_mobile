@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/constant.dart';
-import 'package:jars_mobile/views/add_transaction/add_transaction_body.dart';
+import 'package:jars_mobile/views/screens/add_transaction/add_transaction_body.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   const AddTransactionScreen({Key? key}) : super(key: key);

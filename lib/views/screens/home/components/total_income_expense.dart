@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jars_mobile/constant.dart';
-import 'package:jars_mobile/views/add_transaction/add_transaction_screen.dart';
+import 'package:jars_mobile/views/screens/add_transaction/add_transaction_screen.dart';
 import 'package:jars_mobile/views/widgets/curve_painter.dart';
 
 class TotalIncomeExpense extends StatelessWidget {
