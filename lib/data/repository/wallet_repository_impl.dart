@@ -35,10 +35,21 @@ class WalletRepositoryImpl extends WalletRepository {
   @override
   Future<Wallet> getWallet({
     required String idToken,
-    required String walletId,
-  }) {
-    // TODO: implement getWallet
-    throw UnimplementedError();
+    required int walletId,
+  }) async {
+    try {
+      dynamic response = await _apiService.getResponse(
+        '${ApiEndPoint().wallet}/$walletId',
+        header: Map<String, String>.from({
+          "Authorization": "Bearer $idToken",
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }),
+      );
+      return Wallet.fromJson(response);
+    } catch (_) {
+      rethrow;
+    }
   }
 
   @override

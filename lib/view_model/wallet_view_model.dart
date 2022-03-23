@@ -95,4 +95,15 @@ class WalletViewModel extends ChangeNotifier {
           ),
         );
   }
+
+  Future<Wallet> getAWallet({
+    required String idToken,
+    required int walletId,
+  }) async {
+    _setWallet(ApiResponse.loading());
+    return await _walletRepo.getWallet(
+      idToken: idToken,
+      walletId: walletId,
+    );
+  }
 }
