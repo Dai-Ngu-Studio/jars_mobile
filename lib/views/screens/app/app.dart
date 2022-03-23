@@ -103,7 +103,7 @@ class _JarsAppState extends State<JarsApp> with TickerProviderStateMixin {
           addClick: () {
             Navigator.of(context).pushNamed(
               AddTransactionScreen.routeName,
-              arguments: AddTransactionScreenArguments(tabIndex: 1),
+              arguments: AddTransactionScreenArguments(tabIndex: 0),
             );
           },
           changeIndex: (int index) {

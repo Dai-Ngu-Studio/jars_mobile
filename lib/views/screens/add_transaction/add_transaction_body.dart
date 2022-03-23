@@ -23,7 +23,7 @@ class _AddTransactionBodyState extends State<AddTransactionBody>
   void initState() {
     super.initState();
     _controller = TabController(
-      length: 3,
+      length: 1,
       vsync: this,
       initialIndex: widget.tabIndex!,
     );
@@ -82,8 +82,6 @@ class _AddTransactionBodyState extends State<AddTransactionBody>
               child: TabBar(
                 tabs: const [
                   Tab(text: "INCOME"),
-                  Tab(text: "EXPENSE"),
-                  Tab(text: "MOVE MONEY"),
                 ],
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.white,
@@ -111,10 +109,10 @@ class _AddTransactionBodyState extends State<AddTransactionBody>
           Expanded(
             child: TabBarView(
               controller: _controller,
-              children: [
-                const AddTransactionIncome(),
-                AddTransactionExpense(jars: jars),
-                AddTransactionMoveMoney(jars: jars),
+              children: const [
+                AddTransactionIncome(),
+                // AddTransactionExpense(jars: jars),
+                // AddTransactionMoveMoney(jars: jars),
               ],
             ),
           ),

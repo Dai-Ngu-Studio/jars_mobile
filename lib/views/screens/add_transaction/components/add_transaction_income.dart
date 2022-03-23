@@ -3,10 +3,15 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:jars_mobile/data/remote/app_exception.dart';
+import 'package:jars_mobile/view_model/cloud_view_model.dart';
+import 'package:jars_mobile/view_model/transaction_view_model.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
+import 'package:jars_mobile/views/widgets/error_snackbar.dart';
 import 'package:mime/mime.dart';
 
 class AddTransactionIncome extends StatefulWidget {
@@ -20,24 +25,26 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
   DateTime selectedDate = DateTime.now();
   final _amountController = TextEditingController();
   final _descriptionController = TextEditingController();
-  String dropdownValue = 'None-recurring';
+  final _cloudVM = CloudViewModel();
+  final _transactionVM = TransactionViewModel();
+  final _firebaseAuth = FirebaseAuth.instance;
+  // String dropdownValue = 'None-recurring';
 
   File? _image;
-  String? _fileName;
   String? _base64Image;
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //       context: context,
+  //       initialDate: selectedDate,
+  //       firstDate: DateTime(2015, 8),
+  //       lastDate: DateTime(2101));
+  //   if (picked != null && picked != selectedDate) {
+  //     setState(() {
+  //       selectedDate = picked;
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -97,56 +104,56 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
                     )
                   ],
                 ),
-                const Divider(thickness: 1, height: 8),
-                Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
-                      child: Icon(Icons.edit_calendar_rounded),
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () => _selectDate(context),
-                            child: Text(
-                              DateFormat("EE dd, MMMM, yyyy")
-                                  .format(selectedDate),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              child: DropdownButton(
-                                value: dropdownValue,
-                                elevation: 4,
-                                onChanged: (String? newValue) {
-                                  setState(() => dropdownValue = newValue!);
-                                },
-                                items: [
-                                  'None-recurring',
-                                  'Daily',
-                                  'Weekly',
-                                  'Monthly',
-                                ].map<DropdownMenuItem<String>>((value) {
-                                  return DropdownMenuItem(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                // const Divider(thickness: 1, height: 8),
+                // Row(
+                //   children: [
+                //     const Padding(
+                //       padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
+                //       child: Icon(Icons.edit_calendar_rounded),
+                //     ),
+                //     Expanded(
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: [
+                // InkWell(
+                //   onTap: () => _selectDate(context),
+                //   child: Text(
+                //     DateFormat("EE dd, MMMM, yyyy")
+                //         .format(selectedDate),
+                //     style: const TextStyle(
+                //       fontSize: 16,
+                //       fontWeight: FontWeight.w600,
+                //     ),
+                //   ),
+                // ),
+                // Material(
+                //   color: Colors.transparent,
+                //   child: InkWell(
+                //     child: DropdownButton(
+                //       value: dropdownValue,
+                //       elevation: 4,
+                //       onChanged: (String? newValue) {
+                //         setState(() => dropdownValue = newValue!);
+                //       },
+                //       items: [
+                //         'None-recurring',
+                //         'Daily',
+                //         'Weekly',
+                //         'Monthly',
+                //       ].map<DropdownMenuItem<String>>((value) {
+                //         return DropdownMenuItem(
+                //           value: value,
+                //           child: Text(value),
+                //         );
+                //       }).toList(),
+                //     ),
+                //   ),
+                // )
+                // ],
+                // ),
+                // ),
+                // ],
+                // ),
                 const Divider(thickness: 1, height: 8),
                 Row(
                   children: [
@@ -202,12 +209,53 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
             AdaptiveButton(
               text: "Save",
               enabled: true,
-              onPressed: () {},
+              onPressed: () async {
+                String? imageUrl;
+                if (_base64Image != null) {
+                  imageUrl = await uploadImage(base64: _base64Image!);
+                }
+                int? amount = int.tryParse(_amountController.text);
+                if (amount == null) {
+                  showErrorSnackbar(
+                      context: context, message: "Amount should be numberic.");
+                  return;
+                }
+
+                if (await addIncome(
+                  amount: amount,
+                  imageUrl: imageUrl,
+                )) {
+                  Navigator.of(context).pop();
+                } else {
+                  showErrorSnackbar(
+                    context: context,
+                    message: "Something went wrong! Please try again.",
+                  );
+                }
+              },
             )
           ],
         ),
       ),
     );
+  }
+
+  Future<bool> addIncome({
+    required num amount,
+    String? imageUrl,
+  }) async {
+    var idToken = await _firebaseAuth.currentUser!.getIdToken();
+    return await _transactionVM.addIncome(
+      idToken: idToken,
+      amount: amount,
+      noteComment: _descriptionController.text,
+      noteImage: imageUrl,
+    );
+  }
+
+  Future<String> uploadImage({required String base64}) async {
+    var idToken = await _firebaseAuth.currentUser!.getIdToken();
+    return await _cloudVM.uploadImage(idToken: idToken, base64: base64);
   }
 
   void _handleImageSelection() async {
@@ -226,7 +274,6 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
 
       setState(() {
         _image = File(result.path);
-        _fileName = result.name;
         _base64Image =
             "data:image/${lookupMimeType(result.path)!.split("/")[1]};base64,${base64Encode(bytes)}";
       });
