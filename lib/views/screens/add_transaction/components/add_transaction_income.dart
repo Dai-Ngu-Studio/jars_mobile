@@ -245,10 +245,16 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
     String? imageUrl,
   }) async {
     var idToken = await _firebaseAuth.currentUser!.getIdToken();
+    String? comment = _descriptionController.text;
+
+    if (comment.isEmpty) {
+      comment = null;
+    }
+
     return await _transactionVM.addIncome(
       idToken: idToken,
       amount: amount,
-      noteComment: _descriptionController.text,
+      noteComment: comment,
       noteImage: imageUrl,
     );
   }
