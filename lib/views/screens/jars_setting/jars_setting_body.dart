@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jars_mobile/constant.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';
+import 'package:jars_mobile/utils/debouncer.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/jars_setting/components/jars_percentage.dart';
 import 'package:jars_mobile/views/screens/jars_setting/components/jars_structure_donut_chart.dart';
@@ -37,6 +38,7 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
   List<Widget> listViews = [];
   final ScrollController scrollController = ScrollController();
   double topBarOpacity = 0.0;
+  Debouncer saveDebouncer = Debouncer(milliseconds: 300);
 
   @override
   void initState() {
@@ -353,38 +355,40 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
                             TextButton(
                               onPressed: getTotalPercentage() == 100
                                   ? () {
-                                      FirebaseAuth.instance.currentUser!
-                                          .getIdToken()
-                                          .then((idToken) {
-                                        walletVM.putWallet(
-                                          idToken: idToken,
-                                          wallet: _necessitiesWallet!,
-                                        );
+                                      saveDebouncer.run(() {
+                                        FirebaseAuth.instance.currentUser!
+                                            .getIdToken()
+                                            .then((idToken) {
+                                          walletVM.putWallet(
+                                            idToken: idToken,
+                                            wallet: _necessitiesWallet!,
+                                          );
 
-                                        walletVM.putWallet(
-                                          idToken: idToken,
-                                          wallet: _investmentWallet!,
-                                        );
+                                          walletVM.putWallet(
+                                            idToken: idToken,
+                                            wallet: _investmentWallet!,
+                                          );
 
-                                        walletVM.putWallet(
-                                          idToken: idToken,
-                                          wallet: _savingWallet!,
-                                        );
+                                          walletVM.putWallet(
+                                            idToken: idToken,
+                                            wallet: _savingWallet!,
+                                          );
 
-                                        walletVM.putWallet(
-                                          idToken: idToken,
-                                          wallet: _educationWallet!,
-                                        );
+                                          walletVM.putWallet(
+                                            idToken: idToken,
+                                            wallet: _educationWallet!,
+                                          );
 
-                                        walletVM.putWallet(
-                                          idToken: idToken,
-                                          wallet: _playWallet!,
-                                        );
+                                          walletVM.putWallet(
+                                            idToken: idToken,
+                                            wallet: _playWallet!,
+                                          );
 
-                                        walletVM.putWallet(
-                                          idToken: idToken,
-                                          wallet: _giveWallet!,
-                                        );
+                                          walletVM.putWallet(
+                                            idToken: idToken,
+                                            wallet: _giveWallet!,
+                                          );
+                                        });
                                       });
                                     }
                                   : () {
