@@ -27,7 +27,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
           "Content-Type": "application/json",
         }),
         body: jsonEncode(
-          Map<String, String>.from({
+          Map<String, dynamic>.from({
             "amount": amount.toString(),
             "noteComment": noteComment,
             "noteImage": noteImage,
