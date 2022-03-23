@@ -4,7 +4,7 @@ abstract class TransactionRepository {
   Future getTransactions({required String idToken});
 
   Future<Transactions> getTransaction(
-      {required String idToken, required String transactionId});
+      {required String idToken, required int transactionId});
 
   Future<Transactions> createTransaction(
       {required String idToken, required Transactions transaction});

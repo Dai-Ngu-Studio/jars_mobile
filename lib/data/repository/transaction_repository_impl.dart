@@ -16,13 +16,29 @@ class TransactionRepositoryImpl extends TransactionRepository {
   }
 
   @override
-  Future<Transactions> getTransaction(
-      {required String idToken, required String transactionId}) {
-    throw UnimplementedError();
+  Future<Transactions> getTransaction({
+    required String idToken,
+    required int transactionId,
+  }) async {
+    try {
+      dynamic response = await _apiService.getResponse(
+        '${ApiEndPoint().transaction}/$transactionId',
+        header: Map<String, String>.from({
+          "Authorization": "Bearer $idToken",
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }),
+      );
+      return Transactions.fromJson(response);
+    } catch (_) {
+      rethrow;
+    }
   }
 
   @override
-  Future getTransactions({required String idToken}) async {
+  Future getTransactions({
+    required String idToken,
+  }) async {
     try {
       dynamic response = await _apiService.getResponse(
         ApiEndPoint().transaction,
@@ -39,8 +55,8 @@ class TransactionRepositoryImpl extends TransactionRepository {
         json.add(Transactions.fromJson(item));
       }
       return json;
-    } catch (e) {
-      throw Exception(e.toString());
+    } catch (_) {
+      rethrow;
     }
   }
 }

@@ -1,4 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:jars_mobile/data/models/transaction.dart';
 import 'package:jars_mobile/data/remote/response/api_response.dart';
 import 'package:jars_mobile/data/repository/transaction_repository_impl.dart';
 
@@ -22,5 +24,12 @@ class TransactionViewModel extends ChangeNotifier {
             ApiResponse.error(error.toString()),
           ),
         );
+  }
+
+  Future<Transactions> getTransaction(
+      {required String idToken, required int transactionId}) async {
+    _setTransactions(ApiResponse.loading());
+    return await _transactionRepo.getTransaction(
+        idToken: idToken, transactionId: transactionId);
   }
 }
