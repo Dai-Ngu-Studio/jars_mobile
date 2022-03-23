@@ -4,6 +4,8 @@ import 'package:jars_mobile/constant.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/service/firebase/auth_service.dart';
 import 'package:jars_mobile/views/screens/app_info/app_info_screen.dart';
+import 'package:jars_mobile/views/screens/bill/bill_screen.dart';
+import 'package:jars_mobile/views/screens/create_bill/create_bill_screen.dart';
 import 'package:jars_mobile/views/screens/general_settings/general_settings_screen.dart';
 import 'package:jars_mobile/views/screens/settings/components/setting_menu.dart';
 import 'package:jars_mobile/views/screens/settings/components/user_box.dart';
@@ -157,6 +159,50 @@ class _SettingsBodyState extends State<SettingsBody>
         text: "Log out",
         onPressed: () {
           _authService.signOut(context: context);
+        },
+        iconNext: false,
+      ),
+    );
+
+    listViews.add(
+      SettingMenu(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: widget.animationController!,
+            curve: const Interval(
+              (1 / count) * 5,
+              1.0,
+              curve: Curves.fastOutSlowIn,
+            ),
+          ),
+        ),
+        animationController: widget.animationController!,
+        icon: const Icon(Icons.logout, size: 18),
+        text: "Bill",
+        onPressed: () {
+          Navigator.of(context).pushNamed(BillScreen.routeName);
+        },
+        iconNext: false,
+      ),
+    );
+
+    listViews.add(
+      SettingMenu(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: widget.animationController!,
+            curve: const Interval(
+              (1 / count) * 5,
+              1.0,
+              curve: Curves.fastOutSlowIn,
+            ),
+          ),
+        ),
+        animationController: widget.animationController!,
+        icon: const Icon(Icons.logout, size: 18),
+        text: "Create Bill",
+        onPressed: () {
+          Navigator.of(context).pushNamed(CreateBillScreen.routeName);
         },
         iconNext: false,
       ),
