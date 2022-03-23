@@ -14,7 +14,7 @@ class AccountViewModel {
 
   Future<void> login({required String idToken, String? fcmToken}) async {
     _setAccount(ApiResponse.loading());
-    _accountRepo
+    await _accountRepo
         .login(idToken: idToken, fcmToken: fcmToken)
         .whenComplete(() => _setAccount(ApiResponse.completed(null)))
         .onError(

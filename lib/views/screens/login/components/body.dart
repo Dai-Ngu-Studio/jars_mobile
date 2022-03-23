@@ -145,43 +145,44 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void _login() {
+  void _login() async {
     final _firebaseAuth = FirebaseAuth.instance;
 
     setState(() => _isLoading = true);
 
+    var googleLogin = await _googleSignIn.googleLogin();
+
+    // if (googleLogin != null) {
+    //   if (_firebaseAuth.currentUser != null) {
+    //     var idToken = await _firebaseAuth.currentUser!.getIdToken();
+    //     if (idToken != null) {
+    //       var fcmTokenGot = await fcmToken;
+    //       await _accountViewModel.login(
+    //           idToken: idToken, fcmToken: fcmTokenGot);
+    //     }
+    //   }
+    // }
+
     _googleSignIn.googleLogin().whenComplete(() {
       if (_firebaseAuth.currentUser != null) {
-        _firebaseAuth.currentUser!.getIdToken().then((idToken) {
-          fcmToken.then((fcmToken) {
-            _accountViewModel
-                .login(idToken: idToken, fcmToken: fcmToken)
-                .whenComplete(() {
-              Future.delayed(const Duration(seconds: 3)).whenComplete(() {
-                _walletViewModel
-                    .generateSixJars(idToken: idToken)
-                    .whenComplete(() {
-                  _prefs.setBool(key: "isSkipIntro", value: true);
-
-                  Navigator.of(context).pushReplacementNamed(
-                    JarsApp.routeName,
-                  );
-                }).onError((error, stackTrace) {
-                  log(error.toString());
-                  showErrorSnackbar(
-                    context: context,
-                    message: error.toString(),
-                  );
-                });
-              });
-            }).catchError((error) {
-              log(error.toString());
-              showErrorSnackbar(context: context, message: error.toString());
-            });
+        _firebaseAuth.currentUser!.getIdToken().then((idToken) async {
+          var fcmTokenGot = await fcmToken;
+          await _accountViewModel.login(
+              idToken: idToken, fcmToken: fcmTokenGot);
+          await _walletViewModel
+              .generateSixJars(idToken: idToken)
+              .whenComplete(() {
+            _prefs.setBool(key: "isSkipIntro", value: true);
+            Navigator.of(context).pushReplacementNamed(
+              JarsApp.routeName,
+            );
+          }).onError((error, stackTrace) {
+            log(error.toString());
+            showErrorSnackbar(
+              context: context,
+              message: error.toString(),
+            );
           });
-        }).catchError((error) {
-          log(error.toString());
-          showErrorSnackbar(context: context, message: error.toString());
         });
       }
     }).catchError(
