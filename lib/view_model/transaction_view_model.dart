@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/data/models/transaction.dart';
-import 'package:jars_mobile/data/remote/app_exception.dart';
 import 'package:jars_mobile/data/remote/response/api_response.dart';
 import 'package:jars_mobile/data/repository/transaction_repository_impl.dart';
 
@@ -11,6 +10,7 @@ class TransactionViewModel extends ChangeNotifier {
   ApiResponse<List> transactions = ApiResponse.loading();
 
   void _setTransactions(ApiResponse<List> response) {
+    print(response);
     transactions = response;
     notifyListeners();
   }
@@ -29,8 +29,10 @@ class TransactionViewModel extends ChangeNotifier {
         noteComment: noteComment,
         noteImage: noteImage,
       );
+      _setTransactions(ApiResponse.completed(null));
       return true;
-    } catch (_) {
+    } catch (e) {
+      _setTransactions(ApiResponse.error(e.toString()));
       rethrow;
     }
   }
@@ -39,7 +41,7 @@ class TransactionViewModel extends ChangeNotifier {
     _setTransactions(ApiResponse.loading());
     await _transactionRepo
         .getTransactions(idToken: idToken)
-        .then(((value) => _setTransactions(ApiResponse.completed(value))))
+        .then((value) => _setTransactions(ApiResponse.completed(value)))
         .onError(
           (error, stackTrace) => _setTransactions(
             ApiResponse.error(error.toString()),
@@ -47,10 +49,21 @@ class TransactionViewModel extends ChangeNotifier {
         );
   }
 
-  Future<Transactions> getTransaction(
-      {required String idToken, required int transactionId}) async {
+  Future<Transactions> getTransaction({
+    required String idToken,
+    required int transactionId,
+  }) async {
     _setTransactions(ApiResponse.loading());
-    return await _transactionRepo.getTransaction(
-        idToken: idToken, transactionId: transactionId);
+    return await _transactionRepo
+        .getTransaction(
+          idToken: idToken,
+          transactionId: transactionId,
+        )
+        .whenComplete(() => _setTransactions(ApiResponse.completed(null)))
+        .catchError(
+      (error, stackTrace) {
+        _setTransactions(ApiResponse.error(error.toString()));
+      },
+    );
   }
 }

@@ -2,14 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:jars_mobile/data/remote/app_exception.dart';
 import 'package:jars_mobile/view_model/cloud_view_model.dart';
 import 'package:jars_mobile/view_model/transaction_view_model.dart';
+import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
 import 'package:jars_mobile/views/widgets/error_snackbar.dart';
 import 'package:mime/mime.dart';
@@ -221,11 +219,9 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
                   return;
                 }
 
-                if (await addIncome(
-                  amount: amount,
-                  imageUrl: imageUrl,
-                )) {
+                if (await addIncome(amount: amount, imageUrl: imageUrl)) {
                   Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed(JarsApp.routeName);
                 } else {
                   showErrorSnackbar(
                     context: context,
@@ -240,10 +236,7 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
     );
   }
 
-  Future<bool> addIncome({
-    required num amount,
-    String? imageUrl,
-  }) async {
+  Future<bool> addIncome({required num amount, String? imageUrl}) async {
     var idToken = await _firebaseAuth.currentUser!.getIdToken();
     String? comment = _descriptionController.text;
 
