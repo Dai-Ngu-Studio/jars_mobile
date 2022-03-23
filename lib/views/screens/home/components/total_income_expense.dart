@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/add_transaction/add_transaction_screen.dart';
@@ -94,17 +95,17 @@ class _TotalIncomeExpenseState extends State<TotalIncomeExpense> {
                             final int balance = viewModel.wallet.data!.fold(0,
                                 (previousValue, element) {
                               return previousValue +
-                                  int.parse(element.amountLeft.toString());
+                                  (element as Wallet).amountLeft!.toInt();
                             });
                             final int income = viewModel.wallet.data!.fold(0,
                                 (previousValue, element) {
                               return previousValue +
-                                  int.parse(element.totalAdded.toString());
+                                  (element as Wallet).totalAdded!.toInt();
                             });
                             final num expense = viewModel.wallet.data!.fold(0,
                                 (previousValue, element) {
                               return previousValue +
-                                  int.parse(element.totalSpend.toString());
+                                  (element as Wallet).totalSpend!.toInt();
                             });
                             final num percentage;
 
