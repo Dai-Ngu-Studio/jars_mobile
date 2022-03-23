@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:jars_mobile/data/models/bill.dart';
 import 'package:jars_mobile/data/remote/network/api_end_point.dart';
 import 'package:jars_mobile/data/remote/network/base_api_service.dart';
@@ -10,9 +12,29 @@ class BillRepositoryImpl extends BillRepository {
   @override
   Future<Bill> createBill({
     required String idToken,
-    required Bill bill,
-  }) {
-    throw UnimplementedError();
+    required String name,
+    required String date,
+    required List<dynamic> billDetails,
+  }) async {
+    print(jsonEncode(Map<String, dynamic>.from({
+      "name": name,
+      "date": date,
+      "billDetails": billDetails,
+    })));
+    dynamic response = await _apiService.postResponse(
+      ApiEndPoint().bill,
+      header: Map<String, String>.from({
+        "Authorization": "Bearer $idToken",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      }),
+      body: jsonEncode(Map<String, dynamic>.from({
+        "name": name,
+        "date": date,
+        "billDetails": billDetails,
+      })),
+    );
+    return Bill.fromJson(response);
   }
 
   @override
@@ -20,18 +42,14 @@ class BillRepositoryImpl extends BillRepository {
     required String idToken,
     required int billId,
   }) async {
-    try {
-      dynamic response = await _apiService.getResponse(
-        '${ApiEndPoint().bill}/$billId',
-        header: Map<String, String>.from({
-          "Authorization": "Bearer $idToken",
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        }),
-      );
-      return Bill.fromJson(response);
-    } catch (_) {
-      rethrow;
-    }
+    dynamic response = await _apiService.getResponse(
+      '${ApiEndPoint().bill}/$billId',
+      header: Map<String, String>.from({
+        "Authorization": "Bearer $idToken",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      }),
+    );
+    return Bill.fromJson(response);
   }
 }
