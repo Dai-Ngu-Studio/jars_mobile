@@ -4,8 +4,8 @@ class Bill {
   int? id;
   String? date;
   String? name;
-  int? amount;
-  int? leftAmount;
+  num? amount;
+  num? leftAmount;
   int? categoryId;
   int? contractId;
   int? statusCode;
