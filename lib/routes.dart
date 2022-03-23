@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jars_mobile/views/screens/add_contract/add_contract.dart';
 import 'package:jars_mobile/views/screens/add_transaction/add_transaction_screen.dart';
 import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/views/screens/app_info/app_info_screen.dart';
@@ -13,4 +14,5 @@ final Map<String, WidgetBuilder> routes = {
   AppInfoScreen.routeName: (context) => const AppInfoScreen(),
   GeneralSettingsScreen.routeName: (context) => const GeneralSettingsScreen(),
   FactoryResetScreen.routeName: (context) => const FactoryResetScreen(),
+  AddContractScreen.routeName: (context) => const AddContractScreen(),
 };
