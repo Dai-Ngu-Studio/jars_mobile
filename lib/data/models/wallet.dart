@@ -8,7 +8,7 @@ class Wallet {
   int? categoryWalletId;
   num? totalAdded;
   num? totalSpend;
-  num? ammountLeft;
+  num? amountLeft;
 
   Wallet({
     this.id,
@@ -20,7 +20,7 @@ class Wallet {
     this.categoryWalletId,
     this.totalAdded,
     this.totalSpend,
-    this.ammountLeft,
+    this.amountLeft,
   });
 
   Wallet.fromJson(Map<String, dynamic> json) {
@@ -33,7 +33,7 @@ class Wallet {
     categoryWalletId = json['categoryWalletId'];
     totalAdded = json['totalAdded'];
     totalSpend = json['totalSpend'];
-    ammountLeft = json['ammountLeft'];
+    amountLeft = json['amountLeft'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,7 +47,7 @@ class Wallet {
     data['categoryWalletId'] = categoryWalletId;
     data['totalAdded'] = totalAdded;
     data['totalSpend'] = totalSpend;
-    data['ammountLeft'] = ammountLeft;
+    data['amountLeft'] = amountLeft;
     return data;
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/data/remote/response/api_response.dart';
@@ -35,7 +33,7 @@ class WalletViewModel extends ChangeNotifier {
             percentage: wallet.percentage,
             startDate: wallet.startDate,
             walletAmount: wallet.walletAmount,
-            ammountLeft: walletSpent.ammountLeft,
+            amountLeft: walletSpent.amountLeft,
             totalSpend: -walletSpent.totalSpend,
             totalAdded: walletSpent.totalAdded,
           ),
