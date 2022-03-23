@@ -93,7 +93,11 @@ class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
                       builder: (context, viewModel, _) {
                         switch (viewModel.wallet.status) {
                           case Status.LOADING:
-                            return LoadingWidget();
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 120.0),
+                              child: LoadingWidget(),
+                            );
                           case Status.ERROR:
                             return ErrorWidget(
                               viewModel.wallet.message ??
