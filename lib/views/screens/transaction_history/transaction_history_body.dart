@@ -128,6 +128,7 @@ class _TransactionHistoryBodyState extends State<TransactionHistoryBody> {
                     physics: const ScrollPhysics(),
                     addAutomaticKeepAlives: false,
                     itemCount: viewModel.transactions.data!.length,
+                    reverse: true,
                     itemBuilder: (context, index) {
                       widget.animationController?.forward();
                       final Transactions transaction =
