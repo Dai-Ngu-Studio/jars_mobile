@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jars_mobile/views/screens/bill_details/bill_details_screen.dart';
+import 'package:jars_mobile/views/screens/update_bill/update_bill_screen.dart';
 
 class BillBox extends StatelessWidget {
   const BillBox({
@@ -25,8 +26,11 @@ class BillBox extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.of(context).pushNamed(
-            BillDetailsScreen.routeName,
-            arguments: BillDetailsScreenArguments(billId: billId),
+            UpdateBillScreen.routeName,
+            arguments: UpdateBillScreenArguments(
+              billId: billId,
+            ),
+
           );
         },
         child: Container(

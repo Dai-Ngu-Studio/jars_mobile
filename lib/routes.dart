@@ -10,6 +10,7 @@ import 'package:jars_mobile/views/screens/transaction_details/transaction_detail
 import 'package:jars_mobile/views/screens/bill/bill_screen.dart';
 import 'package:jars_mobile/views/screens/create_bill/create_bill_screen.dart';
 import 'package:jars_mobile/views/screens/create_bill_details/create_bill_details_screen.dart';
+import 'package:jars_mobile/views/screens/update_bill/update_bill_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {
   LoginScreen.routeName: (context) => const LoginScreen(),
@@ -25,4 +26,5 @@ final Map<String, WidgetBuilder> routes = {
     return const CreateBillDetailsScreen();
   },
   BillDetailsScreen.routeName: (context) => const BillDetailsScreen(),
+  UpdateBillScreen.routeName: (context) => const UpdateBillScreen(),
 };

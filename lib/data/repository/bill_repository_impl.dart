@@ -69,4 +69,32 @@ class BillRepositoryImpl extends BillRepository {
     }
     return json;
   }
+
+  @override
+  Future updateBill({
+    required String idToken,
+    required int billId,
+    required int walletId,
+    required String? name,
+    required String? date,
+    required num leftAmount,
+  }) async {
+    await _apiService.putResponse(
+      '${ApiEndPoint().bill}?bill_id=$billId&wallet_id=$walletId',
+      header: Map<String, String>.from({
+        "Authorization": "Bearer $idToken",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      }),
+      body: jsonEncode(
+        Map<String, dynamic>.from(
+          {
+            "name": name,
+            "date": date,
+            "leftAmount": leftAmount,
+          },
+        ),
+      ),
+    );
+  }
 }
