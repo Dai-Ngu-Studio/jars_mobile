@@ -10,7 +10,7 @@ class JarMoneyBox extends StatelessWidget {
     required this.jarName,
     required this.jarImage,
     required this.jarColor,
-    required this.totalMoney,
+    required this.remainingMoney,
     required this.spendMoney,
   }) : super(key: key);
 
@@ -20,7 +20,7 @@ class JarMoneyBox extends StatelessWidget {
   final String jarName;
   final String jarImage;
   final Color jarColor;
-  final int totalMoney;
+  final int remainingMoney;
   final int spendMoney;
 
   @override
@@ -64,7 +64,7 @@ class JarMoneyBox extends StatelessWidget {
                               locale: 'vi_VN',
                               decimalDigits: 0,
                               symbol: 'đ',
-                            ).format(totalMoney),
+                            ).format(remainingMoney),
                             style: const TextStyle(
                               fontSize: 10,
                               color: Colors.black,
@@ -87,7 +87,7 @@ class JarMoneyBox extends StatelessWidget {
                           child: Row(
                             children: [
                               Container(
-                                width: totalMoney != 0
+                                width: remainingMoney != 0
                                     ?
                                     // VD: có 12tr và tiêu 3tr
                                     // 12tr : tổng tiền
@@ -111,7 +111,7 @@ class JarMoneyBox extends StatelessWidget {
                                                         .size
                                                         .width -
                                                     115) /
-                                                totalMoney)) *
+                                                remainingMoney)) *
                                         animation!.value
                                     : 0,
                                 height: 4,
