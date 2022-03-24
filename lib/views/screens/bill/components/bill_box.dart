@@ -84,7 +84,9 @@ class BillBox extends StatelessWidget {
               Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(text: "$leftAmount"),
+                    TextSpan(
+                        text: NumberFormat.currency(locale: 'vi_VN', symbol: "")
+                            .format(leftAmount)),
                     const TextSpan(text: "/"),
                     TextSpan(
                       text: NumberFormat.currency(locale: 'vi_VN', symbol: "đ")

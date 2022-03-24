@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:jars_mobile/data/models/bill.dart';
 import 'package:jars_mobile/data/remote/response/api_response.dart';
 import 'package:jars_mobile/data/repository/bill_repository_impl.dart';
@@ -17,10 +17,14 @@ class BillViewModel extends ChangeNotifier {
 
   Future getBills({
     required String idToken,
+    required int page,
   }) async {
-    _setBill(ApiResponse.loading());
-    await _billRepo
-        .getBills(idToken: idToken)
+    // _setBill(ApiResponse.loading());
+    return await _billRepo
+        .getBills(
+          idToken: idToken,
+          page: page,
+        )
         .then(
           (value) => _setBill(ApiResponse.completed(value)),
         )

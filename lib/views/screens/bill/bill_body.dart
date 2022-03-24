@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jars_mobile/constant.dart';
 import 'package:jars_mobile/data/models/bill.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';
 import 'package:jars_mobile/view_model/bill_view_model.dart';
 import 'package:jars_mobile/views/screens/bill/components/bill_box.dart';
+import 'package:jars_mobile/views/widgets/error_snackbar.dart';
 import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -19,13 +21,46 @@ class _BillBodyState extends State<BillBody> {
   final _billVM = BillViewModel();
   final _firebaseAuth = FirebaseAuth.instance;
 
+  final _scrollController = ScrollController();
+
+  int currPage = 0;
+  bool canLoadMore = true;
+
   List<Bill> bills = [];
 
   @override
   void initState() {
     super.initState();
+    currPage = 0;
+
+    _scrollController.addListener(
+      () async {
+        if (_scrollController.position.atEdge) {
+          bool isAtTopOfList = _scrollController.position.pixels == 0;
+          if (!isAtTopOfList) {
+            if (canLoadMore) {
+              currPage++;
+              await getData();
+              showErrorSnackbar(
+                context: context,
+                message: "Loading more...",
+                duration: 500,
+              );
+            }
+          }
+        }
+      },
+    );
+  }
+
+  Future<bool> getData() async {
     _firebaseAuth.currentUser!.getIdToken().then((idToken) {
-      _billVM.getBills(idToken: idToken).whenComplete(() {
+      _billVM
+          .getBills(
+        idToken: idToken,
+        page: currPage,
+      )
+          .whenComplete(() {
         if (_billVM.bills.data == null) {
           return;
         }
@@ -39,12 +74,11 @@ class _BillBodyState extends State<BillBody> {
           );
           bills.add(_bill);
         }
-        bills = bills.reversed.toList();
+        if (_billVM.bills.data!.length < 8) {
+          canLoadMore = false;
+        }
       });
     });
-  }
-
-  Future<bool> getData() async {
     await Future<dynamic>.delayed(const Duration(milliseconds: 50));
     return true;
   }
@@ -72,14 +106,16 @@ class _BillBodyState extends State<BillBody> {
                         "Something went wrong! Please try again later.");
                   case Status.COMPLETED:
                     return ListView.builder(
+                      controller: _scrollController,
                       itemCount: bills.length,
                       itemBuilder: (context, index) {
                         return BillBox(
-                            billId: bills[index].id!,
-                            name: bills[index].name!,
-                            date: bills[index].date!,
-                            leftAmount: bills[index].leftAmount!,
-                            amount: bills[index].amount!);
+                          billId: bills[index].id!,
+                          name: bills[index].name!,
+                          date: bills[index].date!,
+                          leftAmount: bills[index].leftAmount!,
+                          amount: bills[index].amount!,
+                        );
                       },
                     );
                   default:

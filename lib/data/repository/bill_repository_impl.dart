@@ -51,9 +51,10 @@ class BillRepositoryImpl extends BillRepository {
   @override
   Future getBills({
     required String idToken,
+    required int page,
   }) async {
     dynamic response = await _apiService.getResponse(
-      ApiEndPoint().bill,
+      '${ApiEndPoint().bill}?size=8&page=$page&sortOrder=desc',
       header: Map<String, String>.from({
         "Authorization": "Bearer $idToken",
         "Accept": "application/json",
