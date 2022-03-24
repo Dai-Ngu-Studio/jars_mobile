@@ -143,38 +143,38 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
       ),
     );
 
-    listViews.add(
-      TitleView(
-        titleTxt: 'Report',
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 5,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
-          ),
-        ),
-        animationController: widget.animationController!,
-      ),
-    );
+    // listViews.add(
+    //   TitleView(
+    //     titleTxt: 'Report',
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+    //       CurvedAnimation(
+    //         parent: widget.animationController!,
+    //         curve: const Interval(
+    //           (1 / count) * 5,
+    //           1.0,
+    //           curve: Curves.fastOutSlowIn,
+    //         ),
+    //       ),
+    //     ),
+    //     animationController: widget.animationController!,
+    //   ),
+    // );
 
-    listViews.add(
-      Report(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 4,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
-          ),
-        ),
-        animationController: widget.animationController!,
-      ),
-    );
+    // listViews.add(
+    //   Report(
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+    //       CurvedAnimation(
+    //         parent: widget.animationController!,
+    //         curve: const Interval(
+    //           (1 / count) * 4,
+    //           1.0,
+    //           curve: Curves.fastOutSlowIn,
+    //         ),
+    //       ),
+    //     ),
+    //     animationController: widget.animationController!,
+    //   ),
+    // );
   }
 
   Future<bool> getData() async {
