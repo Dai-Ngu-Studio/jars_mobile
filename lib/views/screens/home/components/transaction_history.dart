@@ -1,6 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:jars_mobile/data/models/transaction.dart';
+import 'package:jars_mobile/data/models/wallet.dart';
+import 'package:jars_mobile/data/remote/response/status.dart';
 import 'package:jars_mobile/utils/utilities.dart';
+import 'package:jars_mobile/view_model/transaction_view_model.dart';
+import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/home/components/transaction_history_box.dart';
+import 'package:jars_mobile/views/screens/transaction_details/transaction_details_screen.dart';
+import 'package:jars_mobile/views/widgets/adaptive_button.dart';
+import 'package:jars_mobile/views/widgets/loading.dart';
+import 'package:provider/provider.dart';
 
 class TransactionHistory extends StatefulWidget {
   const TransactionHistory({
@@ -17,6 +29,22 @@ class TransactionHistory extends StatefulWidget {
 }
 
 class _TransactionHistoryState extends State<TransactionHistory> {
+  final _transactionVM = TransactionViewModel();
+  final _walletVM = WalletViewModel();
+  final _firebaseAuth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    _firebaseAuth.currentUser!.getIdToken().then((idToken) async {
+      await _walletVM.getWallet(idToken: idToken);
+
+      _firebaseAuth.currentUser!.getIdToken().then((idToken) {
+        _transactionVM.getTransactions(idToken: idToken);
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -68,33 +96,64 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      TransactionHistoryBox(
-                        animation: widget.animation!,
-                        animationController: widget.animationController!,
-                        listTransaction: [
-                          {
-                            'jarName': 'Investment',
-                            'jarImage':
-                                Utilities.getJarImageByName('Investment'),
-                            'amount': 1200000,
-                            'transactionDate': '12/12/2020',
+                      ChangeNotifierProvider<TransactionViewModel>(
+                        create: (BuildContext context) => _transactionVM,
+                        child: Consumer<TransactionViewModel>(
+                          builder: (context, viewModel, _) {
+                            viewModel.transactions.data?.sort(
+                              (a, b) => b.transactionDate.compareTo(
+                                a.transactionDate,
+                              ),
+                            );
+
+                            switch (viewModel.transactions.status) {
+                              case Status.LOADING:
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: LoadingWidget(),
+                                );
+                              case Status.ERROR:
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ErrorWidget(
+                                    viewModel.transactions.message ??
+                                        "Something went wrong.",
+                                  ),
+                                );
+                              case Status.COMPLETED:
+                                return Column(
+                                  children: [
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: const ScrollPhysics(),
+                                      addAutomaticKeepAlives: false,
+                                      itemCount: 4,
+                                      itemBuilder: (context, index) {
+                                        final Transactions transaction =
+                                            viewModel.transactions.data![index];
+                                        return TransactionHistoryBox(
+                                          animation: widget.animation,
+                                          animationController:
+                                              widget.animationController,
+                                          transaction: transaction,
+                                          walletVM: _walletVM,
+                                          index: index,
+                                        );
+                                      },
+                                    ),
+                                    // const SizedBox(height: 8),
+                                    // AdaptiveButton(
+                                    //   text: 'More',
+                                    //   enabled: true,
+                                    //   onPressed: () {},
+                                    // )
+                                  ],
+                                );
+                              default:
+                            }
+                            return const SizedBox.shrink();
                           },
-                          {
-                            'jarName': 'Give',
-                            'jarImage': Utilities.getJarImageByName('Give'),
-                            'amount': 600000,
-                            'transactionDate': '12/12/2020',
-                            'transactionNote': 'Tiền từ thiện',
-                          },
-                          {
-                            'jarName': 'Investment',
-                            'jarImage':
-                                Utilities.getJarImageByName('Investment'),
-                            'amount': 1200000,
-                            'transactionDate': '12/12/2020',
-                            'transactionNote': 'Đầu tư chứng khoán',
-                          },
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -105,5 +164,12 @@ class _TransactionHistoryState extends State<TransactionHistory> {
         );
       },
     );
+  }
+
+  String? getJarNameByJarId({required int jarID}) {
+    for (Wallet element in _walletVM.wallet.data!) {
+      if (element.id == jarID) return element.name!;
+    }
+    return null;
   }
 }
