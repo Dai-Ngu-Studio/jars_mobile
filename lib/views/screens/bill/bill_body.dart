@@ -1,5 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/data/models/bill.dart';
+import 'package:jars_mobile/data/remote/response/status.dart';
+import 'package:jars_mobile/view_model/bill_view_model.dart';
 import 'package:jars_mobile/views/screens/bill/components/bill_box.dart';
+import 'package:jars_mobile/views/widgets/error_snackbar.dart';
+import 'package:jars_mobile/views/widgets/loading.dart';
+import 'package:provider/provider.dart';
 
 class BillBody extends StatefulWidget {
   const BillBody({Key? key}) : super(key: key);
@@ -9,55 +18,130 @@ class BillBody extends StatefulWidget {
 }
 
 class _BillBodyState extends State<BillBody> {
-  List listData = [];
+  final _billVM = BillViewModel();
+  final _firebaseAuth = FirebaseAuth.instance;
+
+  final _scrollController = ScrollController();
+
+  int currPage = 0;
+  bool canLoadMore = true;
+
+  List<Bill> bills = [];
+
   @override
   void initState() {
-    listData = [
-      {
-        "id": 1,
-        "name": "tiền nhà",
-        "date": "2020-01-01",
-        "leftAmount": 100,
-        "amount": 200,
-      },
-      {
-        "id": 1,
-        "name": "tiền học",
-        "date": "2020-01-01",
-        "leftAmount": 100,
-        "amount": 200,
-      },
-      {
-        "id": 1,
-        "name": "tiền wifi",
-        "date": "2020-01-01",
-        "leftAmount": 100,
-        "amount": 200,
-      },
-      {
-        "id": 1,
-        "name": "tiền tập gym",
-        "date": "2020-01-01",
-        "leftAmount": 100,
-        "amount": 200,
-      },
-    ];
     super.initState();
+    currPage = 0;
+
+    _scrollController.addListener(
+      () async {
+        if (_scrollController.position.atEdge) {
+          bool isAtTopOfList = _scrollController.position.pixels == 0;
+          if (!isAtTopOfList) {
+            if (canLoadMore) {
+              currPage++;
+              await getData();
+              showErrorSnackbar(
+                context: context,
+                message: "Loading more...",
+                duration: 500,
+              );
+            }
+          }
+        }
+      },
+    );
+  }
+
+  Future<bool> getData() async {
+    _firebaseAuth.currentUser!.getIdToken().then((idToken) {
+      _billVM
+          .getBills(
+        idToken: idToken,
+        page: currPage,
+      )
+          .whenComplete(() {
+        if (_billVM.bills.data == null) {
+          return;
+        }
+        for (var bill in _billVM.bills.data!) {
+          var _bill = Bill(
+            id: (bill as Bill).id,
+            name: bill.name,
+            date: bill.date,
+            leftAmount: bill.leftAmount,
+            amount: bill.amount,
+          );
+          bills.add(_bill);
+        }
+        if (_billVM.bills.data!.length < 8) {
+          canLoadMore = false;
+        }
+      });
+    });
+    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
+    return true;
+  }
+
+  Widget getBillsViewUI() {
+    return FutureBuilder(
+      future: getData(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox.shrink();
+        } else if (snapshot.hasError) {
+          return const Center(
+            child: Text("Something went wrong! Please try again later."),
+          );
+        } else {
+          return ChangeNotifierProvider<BillViewModel>(
+            create: (BuildContext context) => _billVM,
+            child: Consumer<BillViewModel>(
+              builder: (context, viewModel, _) {
+                switch (viewModel.bills.status) {
+                  case Status.LOADING:
+                    return LoadingWidget();
+                  case Status.ERROR:
+                    return ErrorWidget(viewModel.bills.message ??
+                        "Something went wrong! Please try again later.");
+                  case Status.COMPLETED:
+                    return ListView.builder(
+                      controller: _scrollController,
+                      itemCount: bills.length,
+                      itemBuilder: (context, index) {
+                        return BillBox(
+                          billId: bills[index].id!,
+                          name: bills[index].name!,
+                          date: bills[index].date!,
+                          leftAmount: bills[index].leftAmount!,
+                          amount: bills[index].amount!,
+                        );
+                      },
+                    );
+                  default:
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          );
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: listData.length,
-      itemBuilder: (context, index) {
-        return BillBox(
-          billId: listData[index]['id'],
-          name: listData[index]['name'],
-          date: listData[index]['date'],
-          leftAmount: listData[index]['leftAmount'],
-          amount: listData[index]['amount'],
-        );
-      },
-    );
+    return SafeArea(
+        child: Container(
+      color: kBackgroundColor,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: [
+            getBillsViewUI(),
+          ],
+        ),
+      ),
+    ));
   }
 }

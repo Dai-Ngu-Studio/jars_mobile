@@ -15,7 +15,7 @@ class CreateBillScreen extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 40,
         centerTitle: true,
-        title: const Text('Create Bills', style: TextStyle(fontSize: 16)),
+        title: const Text('Create Bill', style: TextStyle(fontSize: 16)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, size: 20),
           onPressed: () => Navigator.of(context).pop(),

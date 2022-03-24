@@ -222,11 +222,6 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
     );
   }
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -247,52 +242,39 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
   }
 
   Widget getMainListViewUI() {
-    return FutureBuilder<bool>(
-      future: getData(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (!snapshot.hasData) {
+    return ChangeNotifierProvider<WalletViewModel>(
+      create: (BuildContext context) => walletVM,
+      child: Consumer<WalletViewModel>(
+        builder: (context, viewModel, _) {
+          switch (viewModel.wallet.status) {
+            case Status.LOADING:
+              return LoadingWidget();
+            case Status.ERROR:
+              return ErrorWidget(
+                viewModel.wallet.message ?? "Something went wrong",
+              );
+            case Status.COMPLETED:
+              return ListView.builder(
+                controller: scrollController,
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.only(
+                  top: AppBar().preferredSize.height +
+                      MediaQuery.of(context).padding.top +
+                      24,
+                  bottom: 62 + MediaQuery.of(context).padding.bottom,
+                ),
+                itemCount: listViews.length,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (BuildContext context, int index) {
+                  widget.animationController?.forward();
+                  return listViews[index];
+                },
+              );
+            default:
+          }
           return const SizedBox.shrink();
-        } else if (snapshot.hasError) {
-          return const Center(
-            child: Text("Something went wrong! Please try again later."),
-          );
-        } else {
-          return ChangeNotifierProvider<WalletViewModel>(
-            create: (BuildContext context) => walletVM,
-            child: Consumer<WalletViewModel>(
-              builder: (context, viewModel, _) {
-                switch (viewModel.wallet.status) {
-                  case Status.LOADING:
-                    return LoadingWidget();
-                  case Status.ERROR:
-                    return ErrorWidget(
-                      viewModel.wallet.message ?? "Something went wrong",
-                    );
-                  case Status.COMPLETED:
-                    return ListView.builder(
-                      controller: scrollController,
-                      physics: const BouncingScrollPhysics(),
-                      padding: EdgeInsets.only(
-                        top: AppBar().preferredSize.height +
-                            MediaQuery.of(context).padding.top +
-                            24,
-                        bottom: 62 + MediaQuery.of(context).padding.bottom,
-                      ),
-                      itemCount: listViews.length,
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (BuildContext context, int index) {
-                        widget.animationController?.forward();
-                        return listViews[index];
-                      },
-                    );
-                  default:
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          );
-        }
-      },
+        },
+      ),
     );
   }
 

@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:jars_mobile/data/models/bill.dart';
 import 'package:jars_mobile/data/models/bill_details.dart';
+import 'package:jars_mobile/view_model/bill_view_model.dart';
 import 'package:jars_mobile/views/screens/create_bill_details/create_bill_details_screen.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
+import 'package:jars_mobile/views/widgets/error_snackbar.dart';
 
 class CreateBillBody extends StatefulWidget {
   const CreateBillBody({Key? key}) : super(key: key);
@@ -12,12 +16,17 @@ class CreateBillBody extends StatefulWidget {
 }
 
 class _CreateBillBodyState extends State<CreateBillBody> {
+  final _amountController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _billVM = BillViewModel();
+  final _firebaseAuth = FirebaseAuth.instance;
   DateTime date = DateTime.now();
   List billDetails = [];
 
   @override
   void initState() {
     super.initState();
+    _amountController.text = 0.toString();
   }
 
   @override
@@ -32,19 +41,9 @@ class _CreateBillBodyState extends State<CreateBillBody> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: TextField(
+                  controller: _nameController,
                   decoration: InputDecoration(
                     hintText: 'Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Amount',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -83,6 +82,43 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                     ],
                   ),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: TextField(
+                        enabled: false,
+                        controller: _amountController,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        decoration: const InputDecoration(
+                          hintText: "0",
+                          hintStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text("đ"),
+                  )
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -153,14 +189,11 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                                         Text.rich(
                                           TextSpan(
                                             children: [
-                                              const TextSpan(
-                                                text: "Bill Details Name: ",
-                                                style: TextStyle(
-                                                  color: Colors.black,
+                                              TextSpan(
+                                                style: const TextStyle(
+                                                  fontSize: 18,
                                                   fontWeight: FontWeight.bold,
                                                 ),
-                                              ),
-                                              TextSpan(
                                                 text: billDetails[index]
                                                     .itemName!,
                                               )
@@ -171,36 +204,18 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                                         Text.rich(
                                           TextSpan(
                                             children: [
-                                              const TextSpan(
-                                                text: "Bill Details Price: ",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
                                               TextSpan(
-                                                text: billDetails[index]
-                                                    .price
-                                                    .toString(),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Text.rich(
-                                          TextSpan(
-                                            children: [
-                                              const TextSpan(
-                                                text: "Bill Details Quantity: ",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: billDetails[index]
-                                                    .quantity
-                                                    .toString(),
+                                                text:
+                                                    '${billDetails[index].quantity.toString()}× ' +
+                                                        NumberFormat.currency(
+                                                          locale: 'vi_VN',
+                                                          decimalDigits: 0,
+                                                          symbol: 'đ',
+                                                        )
+                                                            .format(billDetails[
+                                                                    index]
+                                                                .price)
+                                                            .toString(),
                                               )
                                             ],
                                           ),
@@ -222,10 +237,23 @@ class _CreateBillBodyState extends State<CreateBillBody> {
           AdaptiveButton(
             text: "Save",
             enabled: true,
-            onPressed: () {},
+            onPressed: () async {
+              await createBill();
+              Navigator.of(context).pop();
+            },
           ),
         ],
       ),
+    );
+  }
+
+  Future<Bill> createBill() async {
+    var idToken = await _firebaseAuth.currentUser!.getIdToken();
+    return await _billVM.createBill(
+      idToken: idToken,
+      date: date.toIso8601String(),
+      name: _nameController.text,
+      billDetails: billDetails,
     );
   }
 
@@ -243,6 +271,15 @@ class _CreateBillBodyState extends State<CreateBillBody> {
   }
 
   void _addBillDetails(BillDetails billDetails) {
-    setState(() => this.billDetails.add(billDetails));
+    billDetails.id = 0;
+    billDetails.billId = 0;
+    setState(() {
+      this.billDetails.add(billDetails);
+      final int amount = this.billDetails.fold(0, (previousValue, element) {
+        return previousValue +
+            (element as BillDetails).quantity! * element.price!;
+      });
+      _amountController.text = amount.toString();
+    });
   }
 }
