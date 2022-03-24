@@ -130,6 +130,7 @@ class _AddContractScreenState extends State<AddContractScreen> {
                                   'Daily',
                                   'Weekly',
                                   'Monthly',
+                                  'Demo',
                                 ].map<DropdownMenuItem<String>>((value) {
                                   return DropdownMenuItem(
                                     value: value,
@@ -265,8 +266,11 @@ class _AddContractScreenState extends State<AddContractScreen> {
                 else if(dropdownValue == 'Weekly'){
                   scheduleFromDropDown =2 ;
                 }
-                else{
+                else if(dropdownValue == 'Monthly'){
                   scheduleFromDropDown = 3;
+                }
+                else{
+                  scheduleFromDropDown = 4;
                 }
                 final position =  _geolocatorPlatform.getCurrentPosition();
                 

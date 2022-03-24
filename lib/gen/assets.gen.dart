@@ -48,6 +48,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/jars_logo.png
   AssetGenImage get jarsLogo =>
       const AssetGenImage('assets/images/jars_logo.png');
+
+  /// File path: assets/images/paid.png
+  AssetGenImage get paid => const AssetGenImage('assets/images/paid.png');
 }
 
 class $AssetsSvgsGen {

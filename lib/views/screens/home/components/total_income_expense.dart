@@ -113,7 +113,7 @@ class _TotalIncomeExpenseState extends State<TotalIncomeExpense> {
                             } else if (expense == 0) {
                               percentage = 100;
                             } else {
-                              percentage = (expense / income * 100) as int;
+                              percentage = (expense / income * 100).toInt();
                             }
 
                             final degree = percentage * 3.6;

@@ -9,8 +9,9 @@ class GeneralSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    GeneralSttingsArguments args =
-        ModalRoute.of(context)!.settings.arguments as GeneralSttingsArguments;
+    GeneralSettingsScreenArguments args = ModalRoute.of(context)!
+        .settings
+        .arguments as GeneralSettingsScreenArguments;
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
@@ -30,8 +31,8 @@ class GeneralSettingsScreen extends StatelessWidget {
   }
 }
 
-class GeneralSttingsArguments {
+class GeneralSettingsScreenArguments {
   final AnimationController? animationController;
 
-  const GeneralSttingsArguments({this.animationController});
+  const GeneralSettingsScreenArguments({this.animationController});
 }

@@ -26,7 +26,6 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
   final _cloudVM = CloudViewModel();
   final _transactionVM = TransactionViewModel();
   final _firebaseAuth = FirebaseAuth.instance;
-  // String dropdownValue = 'None-recurring';
 
   File? _image;
   String? _base64Image;
@@ -102,56 +101,6 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
                     )
                   ],
                 ),
-                // const Divider(thickness: 1, height: 8),
-                // Row(
-                //   children: [
-                //     const Padding(
-                //       padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
-                //       child: Icon(Icons.edit_calendar_rounded),
-                //     ),
-                //     Expanded(
-                //       child: Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //         children: [
-                // InkWell(
-                //   onTap: () => _selectDate(context),
-                //   child: Text(
-                //     DateFormat("EE dd, MMMM, yyyy")
-                //         .format(selectedDate),
-                //     style: const TextStyle(
-                //       fontSize: 16,
-                //       fontWeight: FontWeight.w600,
-                //     ),
-                //   ),
-                // ),
-                // Material(
-                //   color: Colors.transparent,
-                //   child: InkWell(
-                //     child: DropdownButton(
-                //       value: dropdownValue,
-                //       elevation: 4,
-                //       onChanged: (String? newValue) {
-                //         setState(() => dropdownValue = newValue!);
-                //       },
-                //       items: [
-                //         'None-recurring',
-                //         'Daily',
-                //         'Weekly',
-                //         'Monthly',
-                //       ].map<DropdownMenuItem<String>>((value) {
-                //         return DropdownMenuItem(
-                //           value: value,
-                //           child: Text(value),
-                //         );
-                //       }).toList(),
-                //     ),
-                //   ),
-                // )
-                // ],
-                // ),
-                // ),
-                // ],
-                // ),
                 const Divider(thickness: 1, height: 8),
                 Row(
                   children: [

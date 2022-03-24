@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:jars_mobile/data/models/note.dart';
 import 'package:jars_mobile/data/remote/network/api_end_point.dart';
 import 'package:jars_mobile/data/remote/network/base_api_service.dart';
@@ -26,4 +28,34 @@ class NoteRepositoryImpl extends NoteRepository {
       rethrow;
     }
   }
+
+  @override
+  Future addNote({
+    required String idToken,
+   required String addDate, String? comments,
+    String? image, required num contractId, 
+    num? latitude, 
+    num? longitude
+    })async {
+    dynamic response = await _apiService.postResponse(
+      ApiEndPoint().note+'?contract_id='+contractId.toString(),
+      header: Map<String, String>.from({
+        "Authorization": "Bearer $idToken",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      }),
+      body: jsonEncode(Map<String, dynamic>.from({
+       "addedDate": addDate,
+        "comments": comments,
+        "image": image,     
+        "contractId": contractId,
+        "latitude": latitude,
+        "longitude": longitude,
+      })),
+    );
+    return Note.fromJson(response);
+  }
+
+  
+  
 }

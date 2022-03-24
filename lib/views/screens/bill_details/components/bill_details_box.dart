@@ -17,7 +17,7 @@ class BillDetailsBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -49,12 +49,12 @@ class BillDetailsBox extends StatelessWidget {
             TextSpan(
               children: [
                 TextSpan(
-                  text: '${quantity.toString()}× ' +
+                  text: '${quantity.toString()}x ' +
                       NumberFormat.currency(
                         locale: 'vi_VN',
                         decimalDigits: 0,
                         symbol: 'đ',
-                      ).format(price).toString(),
+                      ).format(price),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

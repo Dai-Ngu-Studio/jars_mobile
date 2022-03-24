@@ -133,8 +133,8 @@ class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
                                   jarColor: Utilities.getJarColorByName(
                                     viewModel.wallet.data![index].name!,
                                   ),
-                                  totalMoney: viewModel
-                                      .wallet.data![index].totalAdded!
+                                  remainingMoney: viewModel
+                                      .wallet.data![index].amountLeft!
                                       .toInt(),
                                   spendMoney: viewModel
                                       .wallet.data![index].totalSpend

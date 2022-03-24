@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:jars_mobile/data/models/contract.dart';
@@ -16,10 +17,13 @@ import 'package:jars_mobile/view_model/contract_view_model.dart';
 import 'package:jars_mobile/view_model/note_view_model.dart';
 import 'package:jars_mobile/view_model/transaction_view_model.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
+import 'package:jars_mobile/views/screens/login/components/body.dart';
 import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:mime/mime.dart';
 
+import '../../../../data/models/note.dart';
 import '../../../../view_model/cloud_view_model.dart';
+import '../../../widgets/error_snackbar.dart';
 
 class DetailContractBody extends StatefulWidget {
   const DetailContractBody({Key? key, this.contractId})
@@ -49,7 +53,7 @@ class _DetailContractBodyState extends State<DetailContractBody> {
   String dropdownValue = 'Daily';
   String? _base64Image;
   Contract? contractDetail;
-  
+  Note? note;
 
   @override
   void initState() {
@@ -179,9 +183,10 @@ class _DetailContractBodyState extends State<DetailContractBody> {
                               color: Colors.transparent,
                               child: InkWell(
                                 child: DropdownButton(
-                                  value: snapshot.data!['contract'].scheduleTypeId.toString() == 1 ?
+                                  value: snapshot.data!['contract'].scheduleTypeId.toString() == '1' ?
                                   'Daily':
-                                  snapshot.data!['contract'].scheduleTypeId.toString() == 2 ?'Weekly' :'Monthly' ,
+                                  snapshot.data!['contract'].scheduleTypeId.toString() == '2' ?'Weekly' :
+                                  snapshot.data!['contract'].scheduleTypeId.toString() == '3'?'Monthly' :'Demo' ,
                                   elevation: 4,
                                   onChanged: (String? newValue) {
                                     setState(() => dropdownValue = newValue!);
@@ -190,6 +195,7 @@ class _DetailContractBodyState extends State<DetailContractBody> {
                                     'Daily',
                                     'Weekly',
                                     'Monthly',
+                                    'Demo'
                                   ].map<DropdownMenuItem<String>>((value) {
                                     return DropdownMenuItem(
                                       value: value,
@@ -325,6 +331,110 @@ class _DetailContractBodyState extends State<DetailContractBody> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () async{
+                  contractDetail =Contract();
+                  note = Note();
+                   contractDetail!.scheduleTypeId = 1;
+                  if(dropdownValue == "Weekly"){
+                    contractDetail!.scheduleTypeId = 2;
+                  }
+                  else if(dropdownValue == "Monthly"){
+                    contractDetail!.scheduleTypeId = 3;
+                  }else{
+                    contractDetail!.scheduleTypeId = 4;
+                  }
+                  String? imageUrl;
+                  if (_base64Image != null) {
+                    imageUrl = await uploadImage(base64: _base64Image!);
+                  }
+
+                  contractDetail!.noteId = snapshot.data!["contract"].noteId;
+                  contractDetail!.id = snapshot.data!["contract"].id;
+                  if(_nameController.text.isNotEmpty){
+                    contractDetail!.name = _nameController.text.toString();
+                  }
+                  else{
+                    contractDetail!.name = snapshot.data!["contract"].name;
+                  }
+                  contractDetail!.accountId = snapshot.data!["contract"].accountId;
+                  if(_amountController.text.isNotEmpty){
+                    contractDetail!.amount = double.parse(_amountController.text.toString());
+                  }
+                  else{
+                    contractDetail!.amount = snapshot.data!["contract"].amount;
+                  }
+                  if( selectedEndDate.toIso8601String().isNotEmpty){
+                  contractDetail!.endDate = selectedEndDate.toIso8601String();
+                  }
+                  else{
+                    contractDetail!.endDate = snapshot.data!["contract"].endDate;
+                  }
+                  if(selectedStartDate.toIso8601String().isNotEmpty){
+                  contractDetail!.startDate = selectedStartDate.toIso8601String();
+                  }
+                  else{
+                    contractDetail!.startDate = snapshot.data!["contract"].startDate;
+                  }
+                  //
+                  log('Description for form : '+_descriptionController.text.toString());
+                
+                   //Nếu contract không có note và 2 field hình và des != null -> add note
+                  if(snapshot.data!["contract"].note ==null){
+                    if(_descriptionController.text.isNotEmpty || imageUrl != null){
+                      var idToken = await _firebaseAuth.currentUser!.getIdToken();
+                      note?.contractId = widget.contractId;
+                      note?.addedDate = DateTime.now().toIso8601String();
+                      note?.image = imageUrl;                
+                      note?.comments = _descriptionController.text.toString();
+                       var notePost = await noteVM.createNote(
+                        idToken: idToken,
+                         addDate: DateTime.now().toIso8601String(), 
+                         contractId: num.parse(widget.contractId.toString()),
+                         image: imageUrl,
+                        comments:  _descriptionController.text.toString(),
+                        );
+                        contractDetail!.noteId = notePost.id;
+                    }
+                 
+                  }
+                    //Nếu contract  có note -> update note
+                  else{
+                       await Geolocator.checkPermission();
+                      await Geolocator.requestPermission();
+                      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                    if(_descriptionController.text.toString().isNotEmpty ){
+                    note?.comments = _descriptionController.text;
+                    }
+                    else{
+                    note?.comments = snapshot.data!["contract"].note.comments;
+                    }
+                    // 
+                    if(snapshot.data!["contract"].note.longitude != null){
+                      note?.longitude = snapshot.data!["contract"].note.longitude;
+                    }
+                    else{
+                      note?.longitude = position.longitude;
+                    }
+                    if(snapshot.data!["contract"].note.latitude != null){
+                        note?.latitude = snapshot.data!["contract"].note.latitude;
+                    }
+                    else{
+                      note?.latitude = position.latitude;
+                    }
+                  
+                    if(imageUrl != null ){
+                      note?.image = imageUrl;
+                    }
+                    else{
+                      note?.image = snapshot.data!['contract'].note.image;
+                    }
+                    note?.addedDate = snapshot.data!['contract'].note.addedDate;
+                      contractDetail?.note = note;
+                  }
+                  
+                  
+                   updateContract(
+                        contract: contractDetail,
+                        );
                 },
                 child: const Text('Edit'
                 ,textAlign: TextAlign.center,
@@ -403,5 +513,38 @@ class _DetailContractBodyState extends State<DetailContractBody> {
             "data:image/${lookupMimeType(result.path)!.split("/")[1]};base64,${base64Encode(bytes)}";
       });
     }
+  }
+  Future updateContract({Contract? contract}) async {
+    var idToken = await _firebaseAuth.currentUser!.getIdToken();
+
+    await contracVM.updateContract(
+      idToken: idToken,
+      contractId: contract!.id!,
+      noteId :contract.noteId!,
+      name:contract.name!,
+      startDate:contract.startDate!,
+      endDate:contract.endDate!,
+      scheduleTypeId:contract.scheduleTypeId!,
+      amount:contract.amount!,
+      accountId:contract.accountId!,
+      comment:contract.note!.comments!,
+      longitude:contract.note!.longitude,
+      latitude:contract.note!.latitude,
+      image:contract.note!.image,
+      addedDate:contract.note!.addedDate,
+    );
+    Navigator.of(context).pop();
+  }
+  Future addNote({Note? note}) async {
+    var idToken = await _firebaseAuth.currentUser!.getIdToken();
+    await noteVM.createNote(
+      idToken: idToken,
+      contractId: num.parse(note!.contractId.toString()),
+      addDate: DateTime.now().toIso8601String(),
+      latitude: note.latitude,
+      longitude: note.longitude,
+      comments: note.comments,
+      image: note.image
+    );   
   }
 }

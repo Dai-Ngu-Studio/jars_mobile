@@ -56,4 +56,47 @@ class ContractViewModel extends ChangeNotifier {
   }) async {
     return await _contracttionRepo.getContract(idToken: idToken, contractId: contractID);
   }
+  Future updateContract({
+    required String idToken,
+    required int contractId,
+    required int noteId,
+    required String name,
+    required String startDate,
+    required String endDate,
+    required num scheduleTypeId,
+    required num amount,
+    required String accountId,
+    required String comment,
+    double? longitude,
+    double? latitude,
+    String? image,
+    String? addedDate,
+  }) async {
+    await _contracttionRepo
+        .updateContract(
+          idToken: idToken,
+          contractId: contractId,
+            noteId :noteId,
+                name:name,
+            startDate:startDate,
+            endDate:endDate,
+              scheduleTypeId:scheduleTypeId,
+            amount:amount,
+            accountId:accountId,
+              comment:comment,
+              longitude:longitude,
+            latitude:latitude,
+            image:image,
+            addedDate:addedDate,
+        )
+        .whenComplete(
+          () => _setContract(ApiResponse.completed(null)),
+        )
+        .onError(
+          (error, stackTrace) => _setContract(
+            ApiResponse.error(error.toString()),
+          ),
+        );
+  }
+
 }

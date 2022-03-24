@@ -54,7 +54,7 @@ class TotalIncomeExpenseBox extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              '${(percentage * animation!.value).toInt()}',
+                              '${100 - (percentage * animation!.value).toInt()}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
@@ -85,8 +85,8 @@ class TotalIncomeExpenseBox extends StatelessWidget {
                             jarsColor.shade400,
                             jarsColor.shade100,
                           ],
-                          angle:
-                              degree + (360 - 252) * (1.0 - animation!.value),
+                          angle: (360 - degree) +
+                              (360 - 252) * (1.0 - animation!.value),
                         ),
                         child: const SizedBox(width: 100, height: 100),
                       ),

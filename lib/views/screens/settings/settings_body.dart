@@ -7,7 +7,6 @@ import 'package:jars_mobile/views/screens/add_contract/view_contracts.dart';
 import 'package:jars_mobile/views/screens/app_info/app_info_screen.dart';
 import 'package:jars_mobile/views/screens/bill/bill_screen.dart';
 import 'package:jars_mobile/views/screens/create_bill/create_bill_screen.dart';
-import 'package:jars_mobile/views/screens/general_settings/general_settings_screen.dart';
 import 'package:jars_mobile/views/screens/settings/components/setting_menu.dart';
 import 'package:jars_mobile/views/screens/settings/components/user_box.dart';
 import '../add_contract/add_contract.dart';
@@ -50,6 +49,32 @@ class _SettingsBodyState extends State<SettingsBody>
       ),
     );
 
+    // listViews.add(
+    //   SettingMenu(
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+    //       CurvedAnimation(
+    //         parent: widget.animationController!,
+    //         curve: const Interval(
+    //           (1 / count) * 1,
+    //           1.0,
+    //           curve: Curves.fastOutSlowIn,
+    //         ),
+    //       ),
+    //     ),
+    //     animationController: widget.animationController!,
+    //     icon: const Icon(Icons.grid_view_rounded, size: 18),
+    //     text: "General Settings",
+    //     onPressed: () {
+    //       Navigator.of(context).pushNamed(
+    //         GeneralSettingsScreen.routeName,
+    //         arguments: GeneralSttingsArguments(
+    //           animationController: widget.animationController,
+    //         ),
+    //       );
+    //     },
+    //   ),
+    // );
+
     listViews.add(
       SettingMenu(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -63,15 +88,9 @@ class _SettingsBodyState extends State<SettingsBody>
           ),
         ),
         animationController: widget.animationController!,
-        icon: const Icon(Icons.grid_view_rounded, size: 18),
-        text: "General Settings",
+        text: "Bill",
         onPressed: () {
-          Navigator.of(context).pushNamed(
-            GeneralSettingsScreen.routeName,
-            arguments: GeneralSttingsArguments(
-              animationController: widget.animationController,
-            ),
-          );
+          Navigator.of(context).pushNamed(BillScreen.routeName);
         },
       ),
     );
@@ -83,6 +102,28 @@ class _SettingsBodyState extends State<SettingsBody>
             parent: widget.animationController!,
             curve: const Interval(
               (1 / count) * 2,
+              1.0,
+              curve: Curves.fastOutSlowIn,
+            ),
+          ),
+        ),
+        animationController: widget.animationController!,
+        text: "Create Bill",
+        onPressed: () {
+          Navigator.of(context).pushNamed(CreateBillScreen.routeName);
+        },
+      ),
+    );
+
+    listViews.add(const SizedBox(height: 24));
+
+    listViews.add(
+      SettingMenu(
+        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: widget.animationController!,
+            curve: const Interval(
+              (1 / count) * 3,
               1.0,
               curve: Curves.fastOutSlowIn,
             ),
@@ -102,7 +143,7 @@ class _SettingsBodyState extends State<SettingsBody>
           CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval(
-              (1 / count) * 3,
+              (1 / count) * 4,
               1.0,
               curve: Curves.fastOutSlowIn,
             ),
@@ -128,7 +169,7 @@ class _SettingsBodyState extends State<SettingsBody>
           CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval(
-              (1 / count) * 4,
+              (1 / count) * 5,
               1.0,
               curve: Curves.fastOutSlowIn,
             ),
@@ -149,61 +190,17 @@ class _SettingsBodyState extends State<SettingsBody>
           CurvedAnimation(
             parent: widget.animationController!,
             curve: const Interval(
-              (1 / count) * 5,
+              (1 / count) * 6,
               1.0,
               curve: Curves.fastOutSlowIn,
             ),
           ),
         ),
-        animationController: widget.animationController!,
+        animationController: widget.animationController!,     
         icon: const Icon(Icons.logout, size: 18),
         text: "Log out",
         onPressed: () {
           _authService.signOut(context: context);
-        },
-        iconNext: false,
-      ),
-    );
-
-    listViews.add(
-      SettingMenu(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 5,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
-          ),
-        ),
-        animationController: widget.animationController!,
-        icon: const Icon(Icons.logout, size: 18),
-        text: "Bill",
-        onPressed: () {
-          Navigator.of(context).pushNamed(BillScreen.routeName);
-        },
-        iconNext: false,
-      ),
-    );
-
-    listViews.add(
-      SettingMenu(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 5,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
-          ),
-        ),
-        animationController: widget.animationController!,
-        icon: const Icon(Icons.add_box_outlined, size: 18),
-        text: "Create Bill",
-        onPressed: () {
-          Navigator.of(context).pushNamed(CreateBillScreen.routeName);
         },
         iconNext: false,
       ),

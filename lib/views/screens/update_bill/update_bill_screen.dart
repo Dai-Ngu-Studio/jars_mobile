@@ -18,7 +18,6 @@ class _UpdateBillScreenState extends State<UpdateBillScreen> {
         ModalRoute.of(context)!.settings.arguments as UpdateBillScreenArguments;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
         toolbarHeight: 40,

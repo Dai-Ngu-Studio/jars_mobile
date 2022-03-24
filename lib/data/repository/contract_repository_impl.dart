@@ -114,4 +114,54 @@ class ContractRepositoryImpl extends ContractRepository {
     );
     return Contract.fromJson(response);
   }
+    @override
+  Future updateContract({
+     required String idToken,
+    required int contractId,
+    required int noteId,
+    required String name,
+    required String startDate,
+    required String endDate,
+    required num scheduleTypeId,
+    required num amount,
+    required String accountId,
+    required String comment,
+    double? longitude,
+    double? latitude,
+    String? image,
+    String? addedDate,
+  }) async {
+    await _apiService.putResponse(
+      '${ApiEndPoint().contract}/$contractId',
+      header: Map<String, String>.from({
+        "Authorization": "Bearer $idToken",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      }),
+      body: jsonEncode(
+        Map<String, dynamic>.from(
+            {              
+                "id": contractId,
+                "accountId": accountId,
+                "scheduleTypeId": scheduleTypeId,
+                "noteId": noteId,
+                "startDate": startDate,
+                "endDate": endDate,
+                "amount": amount,
+                "name": name,
+                "note": {
+                  "id" :noteId,
+                  "addedDate": addedDate,
+                  "comments": comment,
+                  "image": image,
+                  "contractId": contractId,
+                  "latitude": latitude,
+                  "longitude": longitude
+                }
+          }         
+        ),
+      ),
+    );
+  }
+
 }

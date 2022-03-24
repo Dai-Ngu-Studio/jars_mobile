@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jars_mobile/constant.dart';
 import 'package:jars_mobile/data/models/bill.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';

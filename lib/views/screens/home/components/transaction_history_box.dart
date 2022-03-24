@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
 
 class TransactionHistoryBox extends StatelessWidget {

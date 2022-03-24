@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jars_mobile/data/models/transaction.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
-import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/utils/utilities.dart';
 import 'package:jars_mobile/view_model/bill_view_model.dart';
 import 'package:jars_mobile/view_model/note_view_model.dart';
@@ -124,7 +123,13 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 10.0),
                             child: Text(
-                              snapshot.data!["transaction"].amount.toString(),
+                              NumberFormat.currency(
+                                locale: 'vi_VN',
+                                decimalDigits: 0,
+                                symbol: '',
+                              )
+                                  .format(snapshot.data!["transaction"].amount)
+                                  .toString(),
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
