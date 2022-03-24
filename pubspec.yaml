@@ -125,6 +125,7 @@ flutter:
     - assets/images/jar.png
     - assets/images/jar_selected.png
     - assets/images/intro_begin.png
+    - assets/images/paid.png
 
   # fonts:
   #   - family: Schyler
