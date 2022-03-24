@@ -9,7 +9,7 @@ import 'package:jars_mobile/views/screens/bill/bill_screen.dart';
 import 'package:jars_mobile/views/screens/create_bill/create_bill_screen.dart';
 import 'package:jars_mobile/views/screens/settings/components/setting_menu.dart';
 import 'package:jars_mobile/views/screens/settings/components/user_box.dart';
-import '../add_contract/add_contract.dart';
+
 class SettingsBody extends StatefulWidget {
   const SettingsBody({Key? key, this.animationController}) : super(key: key);
 
@@ -115,8 +115,6 @@ class _SettingsBodyState extends State<SettingsBody>
       ),
     );
 
-    listViews.add(const SizedBox(height: 24));
-
     listViews.add(
       SettingMenu(
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -130,12 +128,35 @@ class _SettingsBodyState extends State<SettingsBody>
           ),
         ),
         animationController: widget.animationController!,
-        icon: Assets.svgs.excel.svg(width: 18),
-        text: "Export Excel",
-        onPressed: () {},
-        iconNext: false,
+        text: "View Contract",
+        onPressed: () {
+          Navigator.of(context).pushNamed(ListContractScreen.routeName);
+        },
+        iconNext: true,
       ),
     );
+
+    listViews.add(const SizedBox(height: 24));
+
+    // listViews.add(
+    //   SettingMenu(
+    //     animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+    //       CurvedAnimation(
+    //         parent: widget.animationController!,
+    //         curve: const Interval(
+    //           (1 / count) * 3,
+    //           1.0,
+    //           curve: Curves.fastOutSlowIn,
+    //         ),
+    //       ),
+    //     ),
+    //     animationController: widget.animationController!,
+    //     icon: Assets.svgs.excel.svg(width: 18),
+    //     text: "Export Excel",
+    //     onPressed: () {},
+    //     iconNext: false,
+    //   ),
+    // );
 
     listViews.add(
       SettingMenu(
@@ -196,32 +217,11 @@ class _SettingsBodyState extends State<SettingsBody>
             ),
           ),
         ),
-        animationController: widget.animationController!,     
+        animationController: widget.animationController!,
         icon: const Icon(Icons.logout, size: 18),
         text: "Log out",
         onPressed: () {
           _authService.signOut(context: context);
-        },
-        iconNext: false,
-      ),
-    );
-       listViews.add(
-      SettingMenu(
-        animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-          CurvedAnimation(
-            parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 5,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
-          ),
-        ),
-        animationController: widget.animationController!,
-        icon: const Icon(Icons.add_box_outlined, size: 18),
-        text: "View Contract",
-        onPressed: () {
-          Navigator.of(context).pushNamed(ListContractScreen.routeName);
         },
         iconNext: false,
       ),
