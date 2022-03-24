@@ -66,4 +66,31 @@ class BillViewModel extends ChangeNotifier {
       },
     );
   }
+
+  Future updateBill({
+    required String idToken,
+    required int billId,
+    required int walletId,
+    required String? name,
+    required String? date,
+    required num leftAmount,
+  }) async {
+    await _billRepo
+        .updateBill(
+          idToken: idToken,
+          billId: billId,
+          walletId: walletId,
+          name: name,
+          date: date,
+          leftAmount: leftAmount,
+        )
+        .whenComplete(
+          () => _setBill(ApiResponse.completed(null)),
+        )
+        .onError(
+          (error, stackTrace) => _setBill(
+            ApiResponse.error(error.toString()),
+          ),
+        );
+  }
 }

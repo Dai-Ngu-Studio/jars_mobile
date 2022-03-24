@@ -277,7 +277,7 @@ class _CreateBillBodyState extends State<CreateBillBody> {
       this.billDetails.add(billDetails);
       final int amount = this.billDetails.fold(0, (previousValue, element) {
         return previousValue +
-            (element as BillDetails).quantity! * element.price!;
+            (element as BillDetails).quantity! * element.price!.toInt();
       });
       _amountController.text = amount.toString();
     });

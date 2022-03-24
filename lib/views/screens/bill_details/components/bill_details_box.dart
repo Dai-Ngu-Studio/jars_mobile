@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class BillDetailsBox extends StatelessWidget {
   const BillDetailsBox({
@@ -34,33 +35,31 @@ class BillDetailsBox extends StatelessWidget {
           Text.rich(
             TextSpan(
               children: [
-                const TextSpan(
-                  text: "Name: ",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                TextSpan(
+                  text: name,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                TextSpan(text: name),
               ],
             ),
           ),
           Text.rich(
             TextSpan(
               children: [
-                const TextSpan(
-                  text: "Price: ",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                TextSpan(
+                  text: '${quantity.toString()}× ' +
+                      NumberFormat.currency(
+                        locale: 'vi_VN',
+                        decimalDigits: 0,
+                        symbol: 'đ',
+                      ).format(price).toString(),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                TextSpan(text: price.toString()),
-              ],
-            ),
-          ),
-          Text.rich(
-            TextSpan(
-              children: [
-                const TextSpan(
-                  text: "Quantity: ",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                TextSpan(text: quantity.toString()),
               ],
             ),
           ),

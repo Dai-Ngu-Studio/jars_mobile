@@ -106,4 +106,12 @@ class WalletViewModel extends ChangeNotifier {
       walletId: walletId,
     );
   }
+
+  Future<List> getWallets({
+    required String idToken,
+  }) async {
+    return await _walletRepo.getWallets(
+      idToken: idToken,
+    );
+  }
 }

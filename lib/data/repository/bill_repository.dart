@@ -14,4 +14,13 @@ abstract class BillRepository {
     required String idToken,
     required int page,
   });
+
+  Future updateBill({
+    required String idToken,
+    required int billId,
+    required int walletId,
+    required String name,
+    required String date,
+    required num leftAmount,
+  });
 }
