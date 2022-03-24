@@ -1,4 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:jars_mobile/data/models/transaction.dart';
+import 'package:jars_mobile/data/remote/app_exception.dart';
 import 'package:jars_mobile/data/remote/response/api_response.dart';
 import 'package:jars_mobile/data/repository/transaction_repository_impl.dart';
 
@@ -12,6 +15,26 @@ class TransactionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> addIncome({
+    required String idToken,
+    required num amount,
+    String? noteComment,
+    String? noteImage,
+  }) async {
+    _setTransactions(ApiResponse.loading());
+    try {
+      await _transactionRepo.addIncome(
+        idToken: idToken,
+        amount: amount,
+        noteComment: noteComment,
+        noteImage: noteImage,
+      );
+      return true;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
   Future getTransactions({required String idToken}) async {
     _setTransactions(ApiResponse.loading());
     await _transactionRepo
@@ -22,5 +45,12 @@ class TransactionViewModel extends ChangeNotifier {
             ApiResponse.error(error.toString()),
           ),
         );
+  }
+
+  Future<Transactions> getTransaction(
+      {required String idToken, required int transactionId}) async {
+    _setTransactions(ApiResponse.loading());
+    return await _transactionRepo.getTransaction(
+        idToken: idToken, transactionId: transactionId);
   }
 }

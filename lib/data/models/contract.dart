@@ -7,7 +7,7 @@ class Contract {
   int? noteId;
   String? startDate;
   String? endDate;
-  int? amount;
+  num? amount;
   String? name;
   Note? note;
 

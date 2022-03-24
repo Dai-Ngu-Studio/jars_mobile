@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  
   cupertino_icons: ^1.0.4
 
   firebase_core: ^1.13.1
@@ -61,6 +61,7 @@ dependencies:
   mime: ^1.0.1
 
   fluttertoast: ^8.0.9
+  geolocator: ^8.2.0
 
 dev_dependencies:
   flutter_test:

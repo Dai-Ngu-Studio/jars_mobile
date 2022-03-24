@@ -5,6 +5,7 @@ import 'package:jars_mobile/constant.dart';
 import 'package:jars_mobile/data/models/transaction.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';
 import 'package:jars_mobile/view_model/transaction_view_model.dart';
+import 'package:jars_mobile/views/screens/transaction_details/transaction_details_screen.dart';
 import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -89,6 +90,14 @@ class _HistoryBodyState extends State<HistoryBody> {
                           ).format(transaction.amount);
 
                           return ListTile(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                TransactionDetails.routeName,
+                                arguments: TransactionDetailsScreenArguments(
+                                  transactionId: transaction.id!,
+                                ),
+                              );
+                            },
                             title: Text(amount.toString()),
                             subtitle: Text(date),
                           );
