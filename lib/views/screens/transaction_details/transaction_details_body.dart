@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jars_mobile/data/models/transaction.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
+import 'package:jars_mobile/utils/utilities.dart';
 import 'package:jars_mobile/view_model/bill_view_model.dart';
 import 'package:jars_mobile/view_model/note_view_model.dart';
 import 'package:jars_mobile/view_model/transaction_view_model.dart';
@@ -28,11 +30,6 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
   final _firebaseAuth = FirebaseAuth.instance;
 
   Transactions? transaction;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future<Map<String, dynamic>> getData() async {
     var idToken = await _firebaseAuth.currentUser!.getIdToken();
@@ -159,14 +156,16 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
                             Row(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 14),
-                                  child: Assets.svgs.jar.svg(
-                                    color: Colors.black,
-                                    width: 10,
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: SvgPicture.asset(
+                                    Utilities.getJarImageByName(
+                                      snapshot.data!["wallet"].name,
+                                    ),
+                                    height: 24,
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 22),
+                                  padding: const EdgeInsets.only(left: 18),
                                   child: Text(
                                     snapshot.data!["wallet"].name!.toString(),
                                     style: const TextStyle(
@@ -192,18 +191,15 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              InkWell(
-                                onTap: () {},
-                                child: Text(
-                                  DateFormat("dd/MM/yyyy HH:mm").format(
-                                    DateTime.parse(snapshot.data!["transaction"]
-                                            .transactionDate!)
-                                        .toLocal(),
-                                  ),
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              Text(
+                                DateFormat("dd/MM/yyyy HH:mm").format(
+                                  DateTime.parse(snapshot.data!["transaction"]
+                                          .transactionDate!)
+                                      .toLocal(),
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
@@ -220,10 +216,13 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
                         ),
                         Expanded(
                           child: Text(
-                            snapshot.data!["note"]?.comments ??
-                                'No comments written.',
+                            snapshot.data!["note"]?.comments == null ||
+                                    snapshot.data!["note"]?.comments.isEmpty
+                                ? 'No comments written.'
+                                : snapshot.data!["note"]?.comments,
                             style: const TextStyle(
                               fontSize: 16,
+                              color: Colors.black,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -231,27 +230,28 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
                       ],
                     ),
                     const Divider(thickness: 1, height: 8),
-                    Column(
-                      children: [
-                        Row(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
-                              child: Icon(Icons.image_rounded),
-                            ),
-                          ],
-                        ),
-                        (snapshot.data!["note"] != null &&
-                                snapshot.data!["note"].image != null)
-                            ? SizedBox(
+                    snapshot.data!["note"] != null &&
+                            snapshot.data!["note"].image != null
+                        ? Column(
+                            children: [
+                              Row(
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
+                                    child: Icon(Icons.image_rounded),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
                                 width: double.infinity,
                                 height:
                                     MediaQuery.of(context).size.height * 0.33,
                                 child:
-                                    Image.network(snapshot.data!["note"].image))
-                            : const SizedBox.shrink(),
-                      ],
-                    ),
+                                    Image.network(snapshot.data!["note"].image),
+                              )
+                            ],
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -271,5 +271,12 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
         ],
       ),
     );
+  }
+
+  String? getJarNameByJarId({required int jarID}) {
+    for (Wallet element in walletVM.wallet.data!) {
+      if (element.id == jarID) return element.name!;
+    }
+    return null;
   }
 }
