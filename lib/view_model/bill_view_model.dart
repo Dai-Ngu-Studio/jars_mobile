@@ -17,8 +17,18 @@ class BillViewModel extends ChangeNotifier {
 
   Future getBills({
     required String idToken,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    _setBill(ApiResponse.loading());
+    await _billRepo
+        .getBills(idToken: idToken)
+        .then(
+          (value) => _setBill(ApiResponse.completed(value)),
+        )
+        .onError(
+          (error, stackTrace) => _setBill(
+            ApiResponse.error(error.toString()),
+          ),
+        );
   }
 
   Future<Bill> getBill({

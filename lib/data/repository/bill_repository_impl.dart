@@ -16,11 +16,6 @@ class BillRepositoryImpl extends BillRepository {
     required String date,
     required List<dynamic> billDetails,
   }) async {
-    print(jsonEncode(Map<String, dynamic>.from({
-      "name": name,
-      "date": date,
-      "billDetails": billDetails,
-    })));
     dynamic response = await _apiService.postResponse(
       ApiEndPoint().bill,
       header: Map<String, String>.from({
@@ -51,5 +46,26 @@ class BillRepositoryImpl extends BillRepository {
       }),
     );
     return Bill.fromJson(response);
+  }
+
+  @override
+  Future getBills({
+    required String idToken,
+  }) async {
+    dynamic response = await _apiService.getResponse(
+      ApiEndPoint().bill,
+      header: Map<String, String>.from({
+        "Authorization": "Bearer $idToken",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      }),
+    );
+
+    final json = [];
+
+    for (var item in response) {
+      json.add(Bill.fromJson(item));
+    }
+    return json;
   }
 }

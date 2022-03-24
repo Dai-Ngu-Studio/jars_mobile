@@ -9,4 +9,6 @@ abstract class BillRepository {
     required String date,
     required List<dynamic> billDetails,
   });
+
+  Future getBills({required String idToken});
 }
