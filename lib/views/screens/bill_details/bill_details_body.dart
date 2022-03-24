@@ -1,12 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:jars_mobile/data/models/bill_details.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';
 import 'package:jars_mobile/view_model/bill_details_view_model.dart';
 import 'package:jars_mobile/views/screens/bill_details/components/bill_details_box.dart';
-import 'package:jars_mobile/views/screens/update_bill/update_bill_screen.dart';
-import 'package:jars_mobile/views/widgets/adaptive_button.dart';
 import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:provider/provider.dart';
 

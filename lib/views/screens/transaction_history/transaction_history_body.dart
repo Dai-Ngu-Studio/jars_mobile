@@ -13,15 +13,16 @@ import 'package:jars_mobile/views/screens/transaction_details/transaction_detail
 import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
-class HistoryBody extends StatefulWidget {
-  const HistoryBody({Key? key, this.animationController}) : super(key: key);
+class TransactionHistoryBody extends StatefulWidget {
+  const TransactionHistoryBody({Key? key, this.animationController})
+      : super(key: key);
   final AnimationController? animationController;
 
   @override
-  State<HistoryBody> createState() => _HistoryBodyState();
+  State<TransactionHistoryBody> createState() => _TransactionHistoryBodyState();
 }
 
-class _HistoryBodyState extends State<HistoryBody> {
+class _TransactionHistoryBodyState extends State<TransactionHistoryBody> {
   Animation<double>? topBarAnimation;
 
   final _transactionVM = TransactionViewModel();
@@ -82,8 +83,8 @@ class _HistoryBodyState extends State<HistoryBody> {
           backgroundColor: Colors.transparent,
           body: Stack(
             children: [
-              getAppBarUI(),
               getHistoryViewUI(),
+              getAppBarUI(),
               SizedBox(height: MediaQuery.of(context).padding.bottom)
             ],
           ),
@@ -143,51 +144,56 @@ class _HistoryBodyState extends State<HistoryBody> {
                       final jarName =
                           getJarNameByJarId(jarID: transaction.walletId!)!;
 
-                      return Column(
-                        children: [
-                          ListTile(
-                            leading: SvgPicture.asset(
-                              Utilities.getJarImageByName(jarName),
-                            ),
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                TransactionDetails.routeName,
-                                arguments: TransactionDetailsScreenArguments(
-                                  transactionId: transaction.id!,
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              leading: SvgPicture.asset(
+                                Utilities.getJarImageByName(jarName),
+                              ),
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  TransactionDetails.routeName,
+                                  arguments: TransactionDetailsScreenArguments(
+                                    transactionId: transaction.id!,
+                                  ),
+                                );
+                              },
+                              title: Text(
+                                jarName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
-                              );
-                            },
-                            title: Text(
-                              jarName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+                              ),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    transaction.amount!.isNegative
+                                        ? amount
+                                        : "+$amount",
+                                    style: TextStyle(
+                                      color: transaction.amount!.isNegative
+                                          ? Colors.red
+                                          : Colors.green,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    date,
+                                    style: const TextStyle(
+                                      color: Colors.black45,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  transaction.amount!.isNegative
-                                      ? "-$amount"
-                                      : "+$amount",
-                                  style: TextStyle(
-                                    color: transaction.amount!.isNegative
-                                        ? Colors.red
-                                        : Colors.green,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Text(
-                                  date,
-                                  style: const TextStyle(color: Colors.black45),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Divider(),
-                        ],
+                            const Divider(),
+                          ],
+                        ),
                       );
                     },
                   );

@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jars_mobile/data/models/transaction.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
-import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/utils/utilities.dart';
 import 'package:jars_mobile/view_model/bill_view_model.dart';
 import 'package:jars_mobile/view_model/note_view_model.dart';

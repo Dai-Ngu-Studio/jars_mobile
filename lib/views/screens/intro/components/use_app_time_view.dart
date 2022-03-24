@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 
 class UseAppTimeView extends StatelessWidget {
