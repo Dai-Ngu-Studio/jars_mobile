@@ -6,7 +6,6 @@ import 'package:jars_mobile/data/models/bill_details.dart';
 import 'package:jars_mobile/view_model/bill_view_model.dart';
 import 'package:jars_mobile/views/screens/create_bill_details/create_bill_details_screen.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
-import 'package:jars_mobile/views/widgets/error_snackbar.dart';
 
 class CreateBillBody extends StatefulWidget {
   const CreateBillBody({Key? key}) : super(key: key);
@@ -179,6 +178,16 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                                       onPressed: () {
                                         setState(() {
                                           billDetails.removeAt(index);
+
+                                          final int amount = billDetails.fold(0,
+                                              (previousValue, element) {
+                                            return previousValue +
+                                                (element as BillDetails)
+                                                        .quantity! *
+                                                    element.price!.toInt();
+                                          });
+                                          _amountController.text =
+                                              amount.toString();
                                         });
                                       },
                                     ),
