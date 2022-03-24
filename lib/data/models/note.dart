@@ -5,8 +5,8 @@ class Note {
   String? image;
   int? transactionId;
   int? contractId;
-  int? latitude;
-  int? longitude;
+  double? latitude;
+  double? longitude;
 
   Note({
     this.id,
