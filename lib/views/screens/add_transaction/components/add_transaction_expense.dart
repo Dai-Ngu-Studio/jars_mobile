@@ -3,19 +3,26 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/utils/utilities.dart';
+import 'package:jars_mobile/view_model/cloud_view_model.dart';
+import 'package:jars_mobile/view_model/transaction_view_model.dart';
+import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
+import 'package:jars_mobile/views/widgets/error_snackbar.dart';
 import 'package:mime/mime.dart';
 
 class AddTransactionExpense extends StatefulWidget {
-  const AddTransactionExpense({Key? key, required this.jars}) : super(key: key);
+  const AddTransactionExpense({Key? key, required this.wallets})
+      : super(key: key);
 
-  final List jars;
+  final List wallets;
 
   @override
   State<AddTransactionExpense> createState() => _AddTransactionExpenseState();
@@ -23,18 +30,21 @@ class AddTransactionExpense extends StatefulWidget {
 
 class _AddTransactionExpenseState extends State<AddTransactionExpense> {
   DateTime selectedDate = DateTime.now();
-  TextEditingController _amountController = TextEditingController();
-  String dropdownValue = 'None-recurring';
-  String? jarName;
-  String? jarId;
+  String? walletName;
+  int? walletId;
   File? _image;
-  String? _fileName;
   String? _base64Image;
+
+  final _amountController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _cloudVM = CloudViewModel();
+  final _transactionVM = TransactionViewModel();
+  final _firebaseAuth = FirebaseAuth.instance;
 
   @override
   void initState() {
-    jarName = widget.jars.first['jarName'];
-    jarId = widget.jars.first['id'];
+    walletName = (widget.wallets.first as Wallet).name;
+    walletId = (widget.wallets.first as Wallet).id;
     super.initState();
   }
 
@@ -100,7 +110,7 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: InkWell(
-                    onTap: selectJars,
+                    onTap: selectWallets,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -116,7 +126,7 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                             Padding(
                               padding: const EdgeInsets.only(left: 22),
                               child: Text(
-                                jarName!,
+                                walletName!,
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -130,71 +140,72 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                     ),
                   ),
                 ),
+                // const Divider(thickness: 1, height: 8),
+                // Row(
+                //   children: [
+                //     const Padding(
+                //       padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
+                //       child: Icon(Icons.edit_calendar_rounded),
+                //     ),
+                //     Expanded(
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: [
+                //           InkWell(
+                //             onTap: () {},
+                //             child: Text(
+                //               DateFormat("EE dd, MMMM, yyyy")
+                //                   .format(selectedDate),
+                //               style: const TextStyle(
+                //                 fontSize: 16,
+                //                 fontWeight: FontWeight.w600,
+                //               ),
+                //             ),
+                //           ),
+                //           Material(
+                //             color: Colors.transparent,
+                //             child: InkWell(
+                //               child: DropdownButton(
+                //                 value: dropdownValue,
+                //                 elevation: 4,
+                //                 onChanged: (String? newValue) {
+                //                   setState(() => dropdownValue = newValue!);
+                //                 },
+                //                 items: [
+                //                   'None-recurring',
+                //                   'Daily',
+                //                   'Weekly',
+                //                   'Monthly',
+                //                 ].map<DropdownMenuItem<String>>((value) {
+                //                   return DropdownMenuItem(
+                //                     value: value,
+                //                     child: Text(value),
+                //                   );
+                //                 }).toList(),
+                //               ),
+                //             ),
+                //           )
+                //         ],
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 const Divider(thickness: 1, height: 8),
                 Row(
                   children: [
                     const Padding(
                       padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
-                      child: Icon(Icons.edit_calendar_rounded),
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () => _selectDate(context),
-                            child: Text(
-                              DateFormat("EE dd, MMMM, yyyy")
-                                  .format(selectedDate),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              child: DropdownButton(
-                                value: dropdownValue,
-                                elevation: 4,
-                                onChanged: (String? newValue) {
-                                  setState(() => dropdownValue = newValue!);
-                                },
-                                items: [
-                                  'None-recurring',
-                                  'Daily',
-                                  'Weekly',
-                                  'Monthly',
-                                ].map<DropdownMenuItem<String>>((value) {
-                                  return DropdownMenuItem(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const Divider(thickness: 1, height: 8),
-                Row(
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
                       child: Icon(Icons.edit_note_rounded),
                     ),
                     Expanded(
                       child: TextField(
+                        controller: _descriptionController,
                         keyboardType: TextInputType.text,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: "Note",
                           hintStyle: TextStyle(
                             fontSize: 16,
@@ -235,7 +246,16 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
             AdaptiveButton(
               text: "Save",
               enabled: true,
-              onPressed: () {},
+              onPressed: () async {
+                if (await addExpense()) {
+                  Navigator.of(context).popAndPushNamed(JarsApp.routeName);
+                } else {
+                  showErrorSnackbar(
+                    context: context,
+                    message: "Something went wrong! Please try again.",
+                  );
+                }
+              },
             )
           ],
         ),
@@ -243,17 +263,51 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
     );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
+  Future<bool> addExpense() async {
+    var idToken = await _firebaseAuth.currentUser!.getIdToken();
+    String? imageUrl;
+    String? comment = _descriptionController.text;
+    int? amount = int.tryParse(_amountController.text);
+    if (amount == null) {
+      showErrorSnackbar(
+          context: context, message: "Amount should be numberic.");
+      return false;
     }
+    amount = -amount;
+
+    if (_base64Image != null) {
+      imageUrl = await uploadImage(base64: _base64Image!);
+    }
+
+    if (comment.isEmpty) {
+      comment = null;
+    }
+
+    return await _transactionVM.addExpense(
+      idToken: idToken,
+      amount: amount,
+      walletId: walletId!,
+      noteComment: comment,
+      noteImage: imageUrl,
+    );
+  }
+
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //       context: context,
+  //       initialDate: selectedDate,
+  //       firstDate: DateTime(2015, 8),
+  //       lastDate: DateTime(2101));
+  //   if (picked != null && picked != selectedDate) {
+  //     setState(() {
+  //       selectedDate = picked;
+  //     });
+  //   }
+  // }
+
+  Future<String> uploadImage({required String base64}) async {
+    var idToken = await _firebaseAuth.currentUser!.getIdToken();
+    return await _cloudVM.uploadImage(idToken: idToken, base64: base64);
   }
 
   void _handleImageSelection() async {
@@ -272,14 +326,13 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
 
       setState(() {
         _image = File(result.path);
-        _fileName = result.name;
         _base64Image =
             "data:image/${lookupMimeType(result.path)!.split("/")[1]};base64,${base64Encode(bytes)}";
       });
     }
   }
 
-  void selectJars() {
+  void selectWallets() {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -300,13 +353,13 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
               Expanded(
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: widget.jars.length,
+                  itemCount: widget.wallets.length,
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
                         setState(() {
-                          jarName = widget.jars[index]['jarName'];
-                          jarId = widget.jars[index]['id'];
+                          walletName = widget.wallets[index].name;
+                          walletId = widget.wallets[index].id;
                         });
                         Navigator.pop(context);
                       },
@@ -320,11 +373,11 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                               children: [
                                 SvgPicture.asset(
                                   Utilities.getJarImageByName(
-                                      widget.jars[index]['jarName']),
+                                      widget.wallets[index].name),
                                 ),
                                 const SizedBox(width: 16),
                                 Text(
-                                  widget.jars[index]['jarName'],
+                                  widget.wallets[index].name,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -346,7 +399,7 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                                     locale: 'vi_VN',
                                     symbol: 'đ',
                                   ).format(
-                                    int.parse(widget.jars[index]['amount']),
+                                    widget.wallets[index].walletAmount,
                                   ),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,

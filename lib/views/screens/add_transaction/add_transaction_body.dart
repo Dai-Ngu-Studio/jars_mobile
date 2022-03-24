@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/add_transaction/components/add_transaction_expense.dart';
 import 'package:jars_mobile/views/screens/add_transaction/components/add_transaction_income.dart';
 import 'package:jars_mobile/views/screens/add_transaction/components/add_transaction_move_money.dart';
@@ -16,50 +18,28 @@ class AddTransactionBody extends StatefulWidget {
 
 class _AddTransactionBodyState extends State<AddTransactionBody>
     with SingleTickerProviderStateMixin {
+  final _walletVM = WalletViewModel();
+  final _firebaseAuth = FirebaseAuth.instance;
   late final TabController _controller;
-  List jars = [];
+  List wallets = [];
 
   @override
   void initState() {
     super.initState();
     _controller = TabController(
-      length: 1,
+      length: 2,
       vsync: this,
       initialIndex: widget.tabIndex!,
     );
 
-    jars = [
-      {
-        'jarName': 'Necessities',
-        'id': '1',
-        'amount': '8600000',
-      },
-      {
-        'jarName': 'Education',
-        'id': '2',
-        'amount': '1200000',
-      },
-      {
-        'jarName': 'Saving',
-        'id': '3',
-        'amount': '1200000',
-      },
-      {
-        'jarName': 'Play',
-        'id': '4',
-        'amount': '1200000',
-      },
-      {
-        'jarName': 'Investment',
-        'id': '5',
-        'amount': '1200000',
-      },
-      {
-        'jarName': 'Give',
-        'id': '5',
-        'amount': '900000',
-      },
-    ];
+    _firebaseAuth.currentUser!.getIdToken().then((idToken) async {
+      var wallets = await _walletVM.getWallets(
+        idToken: idToken,
+      );
+      setState(() {
+        this.wallets = wallets;
+      });
+    });
   }
 
   @override
@@ -82,6 +62,7 @@ class _AddTransactionBodyState extends State<AddTransactionBody>
               child: TabBar(
                 tabs: const [
                   Tab(text: "INCOME"),
+                  Tab(text: "EXPENSE"),
                 ],
                 labelColor: Colors.white,
                 unselectedLabelColor: Colors.white,
@@ -109,9 +90,9 @@ class _AddTransactionBodyState extends State<AddTransactionBody>
           Expanded(
             child: TabBarView(
               controller: _controller,
-              children: const [
-                AddTransactionIncome(),
-                // AddTransactionExpense(jars: jars),
+              children: [
+                const AddTransactionIncome(),
+                AddTransactionExpense(wallets: wallets),
                 // AddTransactionMoveMoney(jars: jars),
               ],
             ),
