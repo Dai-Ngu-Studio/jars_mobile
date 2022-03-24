@@ -2,14 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
-import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/utils/utilities.dart';
 import 'package:jars_mobile/view_model/cloud_view_model.dart';
 import 'package:jars_mobile/view_model/transaction_view_model.dart';
@@ -118,9 +116,9 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(left: 14),
-                              child: Assets.svgs.jar.svg(
-                                color: Colors.black,
-                                width: 10,
+                              child: SvgPicture.asset(
+                                Utilities.getJarImageByName(walletName!),
+                                height: 24,
                               ),
                             ),
                             Padding(

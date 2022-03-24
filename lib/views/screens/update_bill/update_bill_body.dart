@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:jars_mobile/data/models/bill.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
-import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/utils/utilities.dart';
 import 'package:jars_mobile/view_model/bill_view_model.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
@@ -89,110 +88,130 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
           case ConnectionState.active:
             return LoadingWidget();
           case ConnectionState.done:
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    offset: const Offset(1.1, 1.1),
-                    blurRadius: 10.0,
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Text(
-                                  NumberFormat.currency(
-                                    locale: 'vi_VN',
-                                    decimalDigits: 0,
-                                    symbol: '',
-                                  )
-                                      .format(snapshot.data!["bill"].amount)
-                                      .toString(),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+            return Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      offset: const Offset(1.1, 1.1),
+                      blurRadius: 10.0,
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const Text(
+                                      "Total: ",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Text(
+                                        NumberFormat.currency(
+                                          locale: 'vi_VN',
+                                          decimalDigits: 0,
+                                          symbol: '',
+                                        )
+                                            .format(
+                                                snapshot.data!["bill"].amount)
+                                            .toString(),
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Text("đ"),
-                            )
-                          ],
-                        ),
-                        const Divider(thickness: 1, height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Text(
-                                  NumberFormat.currency(
-                                    locale: 'vi_VN',
-                                    decimalDigits: 0,
-                                    symbol: '',
-                                  )
-                                      .format(snapshot.data!["bill"].leftAmount)
-                                      .toString(),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Text("đ"),
+                              )
+                            ],
+                          ),
+                          const Divider(thickness: 1, height: 36),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    const Text(
+                                      "Remaining: ",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Text(
+                                        NumberFormat.currency(
+                                          locale: 'vi_VN',
+                                          decimalDigits: 0,
+                                          symbol: '',
+                                        )
+                                            .format(
+                                              snapshot.data!["bill"].leftAmount,
+                                            )
+                                            .toString(),
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.blue,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade300,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: const Text("đ"),
+                              )
+                            ],
+                          ),
+                          const Divider(thickness: 1, height: 24),
+                          Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
+                                child: Icon(Icons.calendar_month_rounded),
                               ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Text("đ"),
-                            )
-                          ],
-                        ),
-                        const Divider(thickness: 1, height: 8),
-                        Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.fromLTRB(8, 8, 16, 8),
-                              child: Icon(Icons.calendar_month_rounded),
-                            ),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  InkWell(
-                                    onTap: () {},
-                                    child: Text(
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
                                       DateFormat("dd/MM/yyyy HH:mm").format(
                                         DateTime.parse(
                                           snapshot.data!["bill"].date,
@@ -203,115 +222,123 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Divider(thickness: 1, height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: TextField(
-                                  controller: _amountController,
-                                  keyboardType: TextInputType.number,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  decoration: const InputDecoration(
-                                    hintText: "0",
-                                    hintStyle: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    border: InputBorder.none,
-                                  ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Text("đ"),
-                            )
-                          ],
-                        ),
-                        const Divider(thickness: 1, height: 8),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: InkWell(
-                            onTap: selectWallets,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          AdaptiveButton(
+                            text: "View Bill Details",
+                            enabled: true,
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                BillDetailsScreen.routeName,
+                                arguments: BillDetailsScreenArguments(
+                                  billId: widget.billId,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      snapshot.data!["bill"].leftAmount == 0
+                          ? const SizedBox.shrink()
+                          : Column(
                               children: [
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 14),
-                                      child: Assets.svgs.jar.svg(
-                                        color: Colors.black,
-                                        width: 10,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 22),
-                                      child: Text(
-                                        walletName ?? "Necessities",
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
+                                    Expanded(
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: TextField(
+                                          controller: _amountController,
+                                          keyboardType: TextInputType.number,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          decoration: const InputDecoration(
+                                            hintText: "0",
+                                            hintStyle: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            border: InputBorder.none,
+                                          ),
                                         ),
                                       ),
                                     ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade300,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Text("đ"),
+                                    )
                                   ],
                                 ),
-                                const Icon(Icons.arrow_forward_ios, size: 18),
+                                const Divider(thickness: 1, height: 16),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12.0),
+                                  child: InkWell(
+                                    onTap: selectWallets,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 14),
+                                              child: SvgPicture.asset(
+                                                Utilities.getJarImageByName(
+                                                  walletName!,
+                                                ),
+                                                height: 24,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                left: 22,
+                                              ),
+                                              child: Text(
+                                                walletName ?? "Necessities",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Icon(Icons.arrow_forward_ios,
+                                            size: 18),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                AdaptiveButton(
+                                  text: "Save",
+                                  enabled: true,
+                                  onPressed: () => updateBill(
+                                    bill: snapshot.data!["bill"],
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                        ),
-                        const Divider(thickness: 1, height: 8),
-                      ],
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    AdaptiveButton(
-                      text: "View Bill Details",
-                      enabled: true,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(
-                          BillDetailsScreen.routeName,
-                          arguments: BillDetailsScreenArguments(
-                            billId: widget.billId,
-                          ),
-                        );
-                      },
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: MediaQuery.of(context).size.height * 0.1,
-                    ),
-                    AdaptiveButton(
-                      text: "Save",
-                      enabled: true,
-                      onPressed: () => updateBill(
-                        bill: snapshot.data!["bill"],
-                      ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               ),
             );
@@ -359,6 +386,12 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
   void selectWallets() {
     showModalBottomSheet(
       context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
       builder: (context) {
         return Container(
           height: 380,

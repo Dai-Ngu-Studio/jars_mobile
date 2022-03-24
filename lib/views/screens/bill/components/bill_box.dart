@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:jars_mobile/views/screens/bill_details/bill_details_screen.dart';
+import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/views/screens/update_bill/update_bill_screen.dart';
 
 class BillBox extends StatelessWidget {
@@ -30,7 +30,6 @@ class BillBox extends StatelessWidget {
             arguments: UpdateBillScreenArguments(
               billId: billId,
             ),
-
           );
         },
         child: Container(
@@ -77,31 +76,44 @@ class BillBox extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                          text: DateFormat('dd/MM/yyyy')
-                              .format(DateTime.parse(date)),
+                          text: DateFormat('dd/MM/yyyy').format(
+                            DateTime.parse(date),
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-              Text.rich(
-                TextSpan(
-                  children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Text.rich(
                     TextSpan(
-                        text: NumberFormat.currency(locale: 'vi_VN', symbol: "")
-                            .format(leftAmount)),
-                    const TextSpan(text: "/"),
-                    TextSpan(
-                      text: NumberFormat.currency(locale: 'vi_VN', symbol: "đ")
-                          .format(amount),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      children: [
+                        TextSpan(
+                          text:
+                              NumberFormat.currency(locale: 'vi_VN', symbol: "")
+                                  .format(amount - leftAmount),
+                        ),
+                        const TextSpan(text: "/"),
+                        TextSpan(
+                          text: NumberFormat.currency(
+                            locale: 'vi_VN',
+                            symbol: "đ",
+                          ).format(amount),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  leftAmount == 0
+                      ? Assets.images.paid.image(width: 50)
+                      : const SizedBox.shrink(),
+                ],
               ),
             ],
           ),
