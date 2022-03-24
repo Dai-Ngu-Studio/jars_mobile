@@ -16,4 +16,12 @@ abstract class TransactionRepository {
     String? noteComment,
     String? noteImage,
   });
+
+  Future addExpense({
+    required String idToken,
+    required int walletId,
+    required num amount,
+    String? noteComment,
+    String? noteImage,
+  });
 }

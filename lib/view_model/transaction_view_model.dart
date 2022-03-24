@@ -10,7 +10,6 @@ class TransactionViewModel extends ChangeNotifier {
   ApiResponse<List> transactions = ApiResponse.loading();
 
   void _setTransactions(ApiResponse<List> response) {
-    print(response);
     transactions = response;
     notifyListeners();
   }
@@ -65,5 +64,29 @@ class TransactionViewModel extends ChangeNotifier {
         _setTransactions(ApiResponse.error(error.toString()));
       },
     );
+  }
+
+  Future<bool> addExpense({
+    required String idToken,
+    required num amount,
+    required int walletId,
+    String? noteComment,
+    String? noteImage,
+  }) async {
+    _setTransactions(ApiResponse.loading());
+    try {
+      await _transactionRepo.addExpense(
+        idToken: idToken,
+        walletId: walletId,
+        amount: amount,
+        noteComment: noteComment,
+        noteImage: noteImage,
+      );
+      _setTransactions(ApiResponse.completed(null));
+      return true;
+    } catch (e) {
+      _setTransactions(ApiResponse.error(e.toString()));
+      rethrow;
+    }
   }
 }

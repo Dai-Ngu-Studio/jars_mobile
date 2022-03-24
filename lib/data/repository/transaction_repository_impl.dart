@@ -28,7 +28,7 @@ class TransactionRepositoryImpl extends TransactionRepository {
         }),
         body: jsonEncode(
           Map<String, dynamic>.from({
-            "amount": amount.toString(),
+            "amount": amount,
             "noteComment": noteComment,
             "noteImage": noteImage,
           }),
@@ -73,5 +73,35 @@ class TransactionRepositoryImpl extends TransactionRepository {
       json.add(Transactions.fromJson(item));
     }
     return json;
+  }
+
+  @override
+  Future addExpense({
+    required String idToken,
+    required int walletId,
+    required num amount,
+    String? noteComment,
+    String? noteImage,
+  }) async {
+    try {
+      dynamic response = await _apiService.postResponse(
+        ApiEndPoint().transaction,
+        function: 'expense',
+        header: Map<String, String>.from({
+          "Authorization": "Bearer $idToken",
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        }),
+        body: jsonEncode(
+          Map<String, dynamic>.from({
+            "walletId": walletId,
+            "amount": amount,
+            "noteComment": noteComment,
+            "noteImage": noteImage,
+          }),
+        ),
+      );
+      return response;
+    } on FormatException catch (_) {}
   }
 }
