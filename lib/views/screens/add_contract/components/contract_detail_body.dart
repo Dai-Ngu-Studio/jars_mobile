@@ -37,14 +37,15 @@ class DetailContractBody extends StatefulWidget {
 
 class _DetailContractBodyState extends State<DetailContractBody> {
   final _formKey = GlobalKey<FormState>();
-  DateTime selectedStartDate = DateTime.now();
+  
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   File? _image;
-  DateTime selectedEndDate = DateTime.now(); 
+  
   final transactionVM = TransactionViewModel();
   final _cloudVM = CloudViewModel();
   final walletVM = WalletViewModel();
-  
+  DateTime? selectedStartDate;
+  DateTime? selectedEndDate;
   final noteVM = NoteViewModel();
   final contracVM = ContractViewModel();
   final billVM = BillViewModel();
@@ -59,16 +60,19 @@ class _DetailContractBodyState extends State<DetailContractBody> {
   void initState() {
     super.initState();
     getData();
+    
   }
   TextEditingController _descriptionController = TextEditingController(text: '');
   Future<Map<String, dynamic>> getData() async {
     var idToken = await _firebaseAuth.currentUser!.getIdToken();
     Map<String, dynamic> data = <String, dynamic>{};
-
+    
     var contract = await contracVM.getContract(
       idToken: idToken,
       contractID: widget.contractId!,
     ); 
+    selectedStartDate = selectedStartDate ?? DateTime.parse(contract.startDate!);
+    selectedEndDate = selectedEndDate ?? DateTime.parse(contract.endDate!);
     data.addAll({"contract": contract});
     return data;
   }
@@ -223,11 +227,10 @@ class _DetailContractBodyState extends State<DetailContractBody> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [                        
                             InkWell(
-                              onTap: () => _selectStartDate(context),
+                              onTap: ()=> _selectStartDate(context),
+                                
                               child: Text(
-                                snapshot.data!['contract'].startDate.toString() == null?
-                                DateTime.now().toIso8601String():
-                                snapshot.data!['contract'].startDate.toString(),
+                                selectedStartDate!.toIso8601String(),
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -252,10 +255,11 @@ class _DetailContractBodyState extends State<DetailContractBody> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [                        
                             InkWell(
-                              onTap: () => _selectEndDate(context),
+                              onTap: () =>
+                                _selectEndDate(context),
+                              
                               child: Text(
-                               snapshot.data!['contract'].endDate.toString() == null?
-                                DateTime.now().toIso8601String():snapshot.data!['contract'].endDate.toString(),
+                                selectedEndDate!.toIso8601String(),
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -362,17 +366,19 @@ class _DetailContractBodyState extends State<DetailContractBody> {
                   else{
                     contractDetail!.amount = snapshot.data!["contract"].amount;
                   }
-                  if( selectedEndDate.toIso8601String().isNotEmpty){
-                  contractDetail!.endDate = selectedEndDate.toIso8601String();
+                //   selectedStartDate =DateTime.parse(snapshot.data!["contract"].startDate.toString()); 
+                //   selectedEndDate = DateTime.parse(snapshot.data!["contract"].endDate.toString()); 
+                  if( selectedEndDate!.toIso8601String().isNotEmpty){
+                  contractDetail!.endDate = selectedEndDate!.toIso8601String();
                   }
                   else{
                     contractDetail!.endDate = snapshot.data!["contract"].endDate;
                   }
-                  if(selectedStartDate.toIso8601String().isNotEmpty){
-                  contractDetail!.startDate = selectedStartDate.toIso8601String();
+                  if(selectedStartDate!.toIso8601String().isNotEmpty){
+                  contractDetail!.startDate = selectedStartDate!.toIso8601String();
                   }
                   else{
-                    contractDetail!.startDate = snapshot.data!["contract"].startDate;
+                    contractDetail!.startDate = snapshot.data!["contract"].startDate.toString();
                   }
                   //
                   log('Description for form : '+_descriptionController.text.toString());
@@ -467,7 +473,7 @@ class _DetailContractBodyState extends State<DetailContractBody> {
   Future<void> _selectStartDate(BuildContext context) async {
     final DateTime? pickedStartDate = await showDatePicker(
         context: context,
-        initialDate: selectedStartDate,
+        initialDate: selectedStartDate ?? DateTime.now(),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (pickedStartDate != null && pickedStartDate != selectedStartDate) {
@@ -479,7 +485,7 @@ class _DetailContractBodyState extends State<DetailContractBody> {
     Future<void> _selectEndDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: selectedEndDate,
+        initialDate: selectedEndDate ?? DateTime.now(),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedEndDate) {
