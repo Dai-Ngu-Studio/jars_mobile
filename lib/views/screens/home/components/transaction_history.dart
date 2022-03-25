@@ -100,6 +100,9 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                         create: (BuildContext context) => _transactionVM,
                         child: Consumer<TransactionViewModel>(
                           builder: (context, viewModel, _) {
+                            if (viewModel.transactions.data?.isEmpty ?? true) {
+                              return const Text("No transactions yet.");
+                            }
                             viewModel.transactions.data?.sort(
                               (a, b) => b.transactionDate.compareTo(
                                 a.transactionDate,
