@@ -51,7 +51,7 @@ class _DetailContractBodyState extends State<DetailContractBody> {
   final billVM = BillViewModel();
   final _firebaseAuth = FirebaseAuth.instance;
   String? _fileName;
-  String dropdownValue = 'Daily';
+  String? dropdownValue ;
   String? _base64Image;
   Contract? contractDetail;
   Note? note;
@@ -71,8 +71,21 @@ class _DetailContractBodyState extends State<DetailContractBody> {
       idToken: idToken,
       contractID: widget.contractId!,
     ); 
+    String dropdownFromContract;
+    if(contract.scheduleTypeId ==1){
+      dropdownFromContract = 'Daily';
+    }else if(contract.scheduleTypeId ==2){
+     dropdownFromContract = 'Weekly'; 
+    }
+    else if(contract.scheduleTypeId ==3){
+     dropdownFromContract = 'Monthly'; 
+    }else{
+       dropdownFromContract = 'Demo'; 
+    }
+    
     selectedStartDate = selectedStartDate ?? DateTime.parse(contract.startDate!);
     selectedEndDate = selectedEndDate ?? DateTime.parse(contract.endDate!);
+    dropdownValue = dropdownValue ?? dropdownFromContract;
     data.addAll({"contract": contract});
     return data;
   }
@@ -187,10 +200,7 @@ class _DetailContractBodyState extends State<DetailContractBody> {
                               color: Colors.transparent,
                               child: InkWell(
                                 child: DropdownButton(
-                                  value: snapshot.data!['contract'].scheduleTypeId.toString() == '1' ?
-                                  'Daily':
-                                  snapshot.data!['contract'].scheduleTypeId.toString() == '2' ?'Weekly' :
-                                  snapshot.data!['contract'].scheduleTypeId.toString() == '3'?'Monthly' :'Demo' ,
+                                  value: dropdownValue ,
                                   elevation: 4,
                                   onChanged: (String? newValue) {
                                     setState(() => dropdownValue = newValue!);
