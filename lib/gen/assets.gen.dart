@@ -38,16 +38,19 @@ class $AssetsImagesGen {
   AssetGenImage get introBegin =>
       const AssetGenImage('assets/images/intro_begin.png');
 
+  /// File path: assets/images/jar.png
+  AssetGenImage get jar => const AssetGenImage('assets/images/jar.png');
+
+  /// File path: assets/images/jar_selected.png
+  AssetGenImage get jarSelected =>
+      const AssetGenImage('assets/images/jar_selected.png');
+
   /// File path: assets/images/jars_logo.png
   AssetGenImage get jarsLogo =>
       const AssetGenImage('assets/images/jars_logo.png');
 
-  /// File path: assets/images/wallet.png
-  AssetGenImage get wallet => const AssetGenImage('assets/images/wallet.png');
-
-  /// File path: assets/images/wallet_selected.png
-  AssetGenImage get walletSelected =>
-      const AssetGenImage('assets/images/wallet_selected.png');
+  /// File path: assets/images/paid.png
+  AssetGenImage get paid => const AssetGenImage('assets/images/paid.png');
 }
 
 class $AssetsSvgsGen {
@@ -56,8 +59,35 @@ class $AssetsSvgsGen {
   /// File path: assets/svgs/auto_split.svg
   SvgGenImage get autoSplit => const SvgGenImage('assets/svgs/auto_split.svg');
 
+  /// File path: assets/svgs/excel.svg
+  SvgGenImage get excel => const SvgGenImage('assets/svgs/excel.svg');
+
   /// File path: assets/svgs/google.svg
   SvgGenImage get google => const SvgGenImage('assets/svgs/google.svg');
+
+  /// File path: assets/svgs/jar.svg
+  SvgGenImage get jar => const SvgGenImage('assets/svgs/jar.svg');
+
+  /// File path: assets/svgs/jar_education.svg
+  SvgGenImage get jarEducation =>
+      const SvgGenImage('assets/svgs/jar_education.svg');
+
+  /// File path: assets/svgs/jar_give.svg
+  SvgGenImage get jarGive => const SvgGenImage('assets/svgs/jar_give.svg');
+
+  /// File path: assets/svgs/jar_investment.svg
+  SvgGenImage get jarInvestment =>
+      const SvgGenImage('assets/svgs/jar_investment.svg');
+
+  /// File path: assets/svgs/jar_necessities.svg
+  SvgGenImage get jarNecessities =>
+      const SvgGenImage('assets/svgs/jar_necessities.svg');
+
+  /// File path: assets/svgs/jar_play.svg
+  SvgGenImage get jarPlay => const SvgGenImage('assets/svgs/jar_play.svg');
+
+  /// File path: assets/svgs/jar_saving.svg
+  SvgGenImage get jarSaving => const SvgGenImage('assets/svgs/jar_saving.svg');
 
   /// File path: assets/svgs/six_jars_principle.svg
   SvgGenImage get sixJarsPrinciple =>

@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:jars_mobile/data/local/app_shared_preference.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/view_model/account_view_model.dart';
-import 'package:jars_mobile/views/screens/home/home_screen.dart';
+import 'package:jars_mobile/view_model/wallet_view_model.dart';
+import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/service/firebase/auth_service.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
+import 'package:jars_mobile/views/widgets/error_snackbar.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -21,8 +23,8 @@ class _BodyState extends State<Body> {
   final AuthService _googleSignIn = AuthService();
   bool _isLoading = false;
   final _prefs = AppSharedPreference();
-  final accountViewModel = AccountViewModel();
-  String? fcmToken;
+  final _accountViewModel = AccountViewModel();
+  final _walletViewModel = WalletViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -143,46 +145,55 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void _login() {
+  void _login() async {
     final _firebaseAuth = FirebaseAuth.instance;
 
     setState(() => _isLoading = true);
-    _googleSignIn.googleLogin().then((_) {
-      if (_firebaseAuth.currentUser != null) {
-        _prefs.setBool(key: "isSkipIntro", value: true);
 
-        _firebaseAuth.currentUser!.getIdToken().then((idToken) {
-          getFCMToken().then((value) {
-            accountViewModel.login(
-              idToken: idToken,
-              fcmToken: fcmToken,
+    var googleLogin = await _googleSignIn.googleLogin();
+
+    // if (googleLogin != null) {
+    //   if (_firebaseAuth.currentUser != null) {
+    //     var idToken = await _firebaseAuth.currentUser!.getIdToken();
+    //     if (idToken != null) {
+    //       var fcmTokenGot = await fcmToken;
+    //       await _accountViewModel.login(
+    //           idToken: idToken, fcmToken: fcmTokenGot);
+    //     }
+    //   }
+    // }
+
+    _googleSignIn.googleLogin().whenComplete(() {
+      if (_firebaseAuth.currentUser != null) {
+        _firebaseAuth.currentUser!.getIdToken().then((idToken) async {
+          var fcmTokenGot = await fcmToken;
+          await _accountViewModel.login(
+              idToken: idToken, fcmToken: fcmTokenGot);
+          await _walletViewModel
+              .generateSixJars(idToken: idToken)
+              .whenComplete(() {
+            _prefs.setBool(key: "isSkipIntro", value: true);
+            Navigator.of(context).pushReplacementNamed(
+              JarsApp.routeName,
+            );
+          }).onError((error, stackTrace) {
+            log(error.toString());
+            showErrorSnackbar(
+              context: context,
+              message: error.toString(),
             );
           });
-
-          Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
-        }).catchError((error) {
-          log(error.toString());
         });
       }
     }).catchError(
       (error) {
-        final snackBar = SnackBar(
-          content: Text(error.toString()),
-          duration: const Duration(seconds: 5),
-        );
         log(error.toString());
-        ScaffoldMessenger.of(context).showSnackBar(
-          snackBar,
-        );
+        showErrorSnackbar(context: context, message: error.toString());
       },
     ).then((_) => setState(() => _isLoading = false));
   }
 
-  Future<String?> getFCMToken() async {
-    await FirebaseMessaging.instance
-        .getToken()
-        .then((value) => setState(() => fcmToken = value!));
-    print("LoginScreen Body :: FCM Token: $fcmToken");
-    return fcmToken;
+  Future<String?> get fcmToken async {
+    return await FirebaseMessaging.instance.getToken();
   }
 }

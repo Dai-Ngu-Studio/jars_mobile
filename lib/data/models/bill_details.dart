@@ -1,7 +1,7 @@
 class BillDetails {
   int? id;
   String? itemName;
-  int? price;
+  num? price;
   int? quantity;
   int? billId;
 

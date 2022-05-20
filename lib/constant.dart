@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 
 const kPrimaryColor = Color(0xFF3f81ee);
 const kSecondaryColor = Color(0xFF7B8490);
+const kBackgroundColor = Color(0xFFF2F3F8);
 const kAnimationDuration = Duration(milliseconds: 200);
+
+const kNecessitiesColor = Color(0xFFea3b00);
+const kEducationColor = Color(0xFF0b78e3);
+const kSavingColor = Color(0xFFe6a63c);
+const kPlayColor = Color(0xFF8d4de8);
+const kInvestmentColor = Color(0xFF7ed321);
+const kGiveColor = Color(0xFFff00cf);
 
 const MaterialColor jarsColor = MaterialColor(
   0xFF3F81EE,

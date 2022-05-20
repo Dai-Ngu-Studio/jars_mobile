@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:jars_mobile/views/screens/login/login_screen.dart';
 
-class AuthService extends ChangeNotifier {
+class AuthService {
   final googleSignIn = GoogleSignIn(
     scopes: [
       'email',
@@ -83,6 +83,7 @@ class AuthService extends ChangeNotifier {
         await googleSignIn.signOut();
       }
       await FirebaseAuth.instance.signOut();
+      await googleSignIn.signOut();
     } catch (e) {
       throw Exception(e.toString());
     } finally {

@@ -1,6 +1,6 @@
 class Account {
   String? id;
-  int? accountTypeId;
+  bool? isAdmin;
   String? email;
   String? displayName;
   String? photoUrl;
@@ -8,7 +8,7 @@ class Account {
 
   Account({
     this.id,
-    this.accountTypeId,
+    this.isAdmin,
     this.email,
     this.displayName,
     this.photoUrl,
@@ -17,7 +17,7 @@ class Account {
 
   Account.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    accountTypeId = json['accountTypeId'];
+    isAdmin = json['isAdmin'];
     email = json['email'];
     displayName = json['displayName'];
     photoUrl = json['photoUrl'];
@@ -27,7 +27,7 @@ class Account {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['accountTypeId'] = accountTypeId;
+    data['isAdmin'] = isAdmin;
     data['email'] = email;
     data['displayName'] = displayName;
     data['photoUrl'] = photoUrl;

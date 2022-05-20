@@ -1,20 +1,16 @@
 import 'package:jars_mobile/data/models/bill_details.dart';
-import 'package:jars_mobile/data/models/category.dart';
-import 'package:jars_mobile/data/models/contract.dart';
-import 'package:jars_mobile/data/models/transaction.dart';
 
 class Bill {
   int? id;
   String? date;
   String? name;
-  int? amount;
-  int? leftAmount;
+  num? amount;
+  num? leftAmount;
   int? categoryId;
   int? contractId;
-  Category? category;
-  Contract? contract;
+  int? statusCode;
+  String? accountId;
   List<BillDetails>? billDetails;
-  List<Transactions>? transactions;
 
   Bill({
     this.id,
@@ -24,10 +20,9 @@ class Bill {
     this.leftAmount,
     this.categoryId,
     this.contractId,
-    this.category,
-    this.contract,
+    this.statusCode,
+    this.accountId,
     this.billDetails,
-    this.transactions,
   });
 
   Bill.fromJson(Map<String, dynamic> json) {
@@ -38,20 +33,12 @@ class Bill {
     leftAmount = json['leftAmount'];
     categoryId = json['categoryId'];
     contractId = json['contractId'];
-    category =
-        json['category'] != null ? Category.fromJson(json['category']) : null;
-    contract =
-        json['contract'] != null ? Contract.fromJson(json['contract']) : null;
+    statusCode = json['statusCode'];
+    accountId = json['accountId'];
     if (json['billDetails'] != null) {
       billDetails = <BillDetails>[];
       json['billDetails'].forEach((v) {
         billDetails!.add(BillDetails.fromJson(v));
-      });
-    }
-    if (json['transactions'] != null) {
-      transactions = <Transactions>[];
-      json['transactions'].forEach((v) {
-        transactions!.add(Transactions.fromJson(v));
       });
     }
   }
@@ -65,17 +52,10 @@ class Bill {
     data['leftAmount'] = leftAmount;
     data['categoryId'] = categoryId;
     data['contractId'] = contractId;
-    if (category != null) {
-      data['category'] = category!.toJson();
-    }
-    if (contract != null) {
-      data['contract'] = contract!.toJson();
-    }
+    data['statusCode'] = statusCode;
+    data['accountId'] = accountId;
     if (billDetails != null) {
       data['billDetails'] = billDetails!.map((v) => v.toJson()).toList();
-    }
-    if (transactions != null) {
-      data['transactions'] = transactions!.map((v) => v.toJson()).toList();
     }
     return data;
   }

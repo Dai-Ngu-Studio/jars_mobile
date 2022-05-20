@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 
 class UseAppTimeView extends StatelessWidget {
@@ -62,7 +61,7 @@ class UseAppTimeView extends StatelessWidget {
         position: _secondHalfAnimation,
         child: Container(
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(bottom: 100),
+          padding: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -97,7 +96,11 @@ class UseAppTimeView extends StatelessWidget {
                     maxWidth: 350,
                     maxHeight: 250,
                   ),
-                  child: SvgPicture.asset(Assets.svgs.useAppTime.path),
+                  child: Assets.svgs.useAppTime.svg(
+                    width: MediaQuery.of(context).size.width < 350
+                        ? 200
+                        : MediaQuery.of(context).size.width,
+                  ),
                 ),
               ),
             ],

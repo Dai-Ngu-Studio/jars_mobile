@@ -3,19 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jars_mobile/data/models/tab_icon_data.dart';
 import 'package:jars_mobile/service/local_notification/local_notification_service.dart';
-import 'package:jars_mobile/views/screens/home/bottom_bar_view.dart';
-import 'package:jars_mobile/views/screens/home/components/body.dart';
+import 'package:jars_mobile/views/screens/add_transaction/add_transaction_screen.dart';
+import 'package:jars_mobile/views/screens/app/components/bottom_bar_view.dart';
+import 'package:jars_mobile/views/screens/home/home_body.dart';
+import 'package:jars_mobile/views/screens/jars_setting/jars_setting_body.dart';
+import 'package:jars_mobile/views/screens/settings/settings_body.dart';
+import 'package:jars_mobile/views/screens/transaction_history/transaction_history_body.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class JarsApp extends StatefulWidget {
+  const JarsApp({Key? key}) : super(key: key);
 
   static String routeName = '/home';
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<JarsApp> createState() => _JarsAppState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+class _JarsAppState extends State<JarsApp> with TickerProviderStateMixin {
   AnimationController? animationController;
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
@@ -36,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 600),
       vsync: this,
     );
-    tabBody = const HomeScreen();
+    tabBody = HomeBody(animationController: animationController);
 
     LocalNotificationService.initialize(context);
 
@@ -80,9 +84,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
     );
     return Scaffold(
+      backgroundColor: const Color(0xFFf2f3f8),
       body: Stack(
         children: [
-          const Body(),
+          tabBody,
           bottomBar(),
         ],
       ),
@@ -92,39 +97,50 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget bottomBar() {
     return Column(
       children: [
-        const Expanded(
-          child: SizedBox(),
-        ),
+        const Expanded(child: SizedBox()),
         BottomBarView(
           tabIconsList: tabIconsList,
-          addClick: () {},
+          addClick: () {
+            Navigator.of(context).pushNamed(
+              AddTransactionScreen.routeName,
+              arguments: AddTransactionScreenArguments(tabIndex: 0),
+            );
+          },
           changeIndex: (int index) {
             if (index == 0) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
                 setState(() {
-                  tabBody = const Body();
+                  tabBody = HomeBody(
+                    animationController: animationController,
+                  );
                 });
               });
             } else if (index == 1) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
                 setState(() {
-                  // tabBody =
+                  tabBody = JarsSettingBody(
+                    animationController: animationController,
+                  );
                 });
               });
             } else if (index == 2) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
                 setState(() {
-                  // tabBody =
+                  tabBody = TransactionHistoryBody(
+                    animationController: animationController,
+                  );
                 });
               });
             } else if (index == 3) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
                 setState(() {
-                  // tabBody =
+                  tabBody = SettingsBody(
+                    animationController: animationController,
+                  );
                 });
               });
             }

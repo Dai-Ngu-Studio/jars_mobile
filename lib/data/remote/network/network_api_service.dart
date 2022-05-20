@@ -7,11 +7,13 @@ import 'package:jars_mobile/data/remote/network/base_api_service.dart';
 
 class NetworkApiService extends BaseApiService {
   @override
-  Future getResponse(String url, {required header}) async {
+  Future getResponse(String url, {String? function, required header}) async {
     dynamic responseJson;
     try {
       final response = await http.get(
-        Uri.parse(baseUrl + url),
+        function == null
+            ? Uri.parse("$baseUrl$url")
+            : Uri.parse("$baseUrl$url/$function"),
         headers: header,
       );
       responseJson = returnResponse(response);
@@ -22,11 +24,18 @@ class NetworkApiService extends BaseApiService {
   }
 
   @override
-  Future getResponseByID(String url, {required header, dynamic id}) async {
+  Future getResponseByID(
+    String url, {
+    String? function,
+    required header,
+    dynamic id,
+  }) async {
     dynamic responseJson;
     try {
       final response = await http.get(
-        Uri.parse("$baseUrl$url"),
+        function == null
+            ? Uri.parse("$baseUrl$url/$id")
+            : Uri.parse("$baseUrl$url/$function/$id"),
         headers: header,
       );
       responseJson = returnResponse(response);
@@ -100,6 +109,7 @@ class NetworkApiService extends BaseApiService {
 
   dynamic returnResponse(http.Response response) {
     switch (response.statusCode) {
+      case 201:
       case 200:
         dynamic responseJson = jsonDecode(response.body);
         return responseJson;

@@ -53,7 +53,7 @@ class WelcomeView extends StatelessWidget {
         position: _secondHalfAnimation,
         child: Container(
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(bottom: 100),
+          padding: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

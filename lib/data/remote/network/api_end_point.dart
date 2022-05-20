@@ -9,4 +9,6 @@ class ApiEndPoint {
   String get scheduleType => "schedule-types";
   String get transaction => "transactions";
   String get wallet => "wallets";
+  String get cloud => "cloud";
+  String get file => "files";
 }
