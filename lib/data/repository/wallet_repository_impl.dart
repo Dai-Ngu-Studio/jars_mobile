@@ -5,7 +5,7 @@ import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/data/remote/network/api_end_point.dart';
 import 'package:jars_mobile/data/remote/network/base_api_service.dart';
 import 'package:jars_mobile/data/remote/network/network_api_service.dart';
-import 'package:jars_mobile/data/repository/wallet_repository.dart';
+import 'package:jars_mobile/data/repository/interface/wallet_repository.dart';
 
 class WalletRepositoryImpl extends WalletRepository {
   final BaseApiService _apiService = NetworkApiService();
@@ -33,10 +33,7 @@ class WalletRepositoryImpl extends WalletRepository {
   }
 
   @override
-  Future<Wallet> getWallet({
-    required String idToken,
-    required int walletId,
-  }) async {
+  Future<Wallet> getWallet({required String idToken, required int walletId}) async {
     try {
       dynamic response = await _apiService.getResponse(
         '${ApiEndPoint().wallet}/$walletId',
@@ -53,12 +50,8 @@ class WalletRepositoryImpl extends WalletRepository {
   }
 
   @override
-  Future<void> updateWallet({
-    required String idToken,
-    required Wallet wallet,
-  }) async {
+  Future<void> updateWallet({required String idToken, required Wallet wallet}) async {
     try {
-      print(jsonEncode(wallet.toJson()));
       dynamic response = await _apiService.putResponse(
         "${ApiEndPoint().wallet}/${wallet.id}",
         header: Map<String, String>.from({
@@ -84,15 +77,16 @@ class WalletRepositoryImpl extends WalletRepository {
       );
       log('WalletRepositoryImpl :: generateSixJars :: response: $response');
     } catch (e) {
-      throw Exception(e.toString());
+      if (!e
+          .toString()
+          .contains("This account already have more than 1 wallet, cannot create 6 default jars")) {
+        rethrow;
+      }
     }
   }
 
   @override
-  Future getWalletSpent({
-    required String idToken,
-    required String walletId,
-  }) async {
+  Future getWalletSpent({required String idToken, required String walletId}) async {
     try {
       dynamic response = await _apiService.getResponseByID(
         ApiEndPoint().wallet,

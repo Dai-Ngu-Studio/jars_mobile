@@ -4,8 +4,7 @@ import 'package:jars_mobile/gen/assets.gen.dart';
 
 class WelcomeView extends StatelessWidget {
   final AnimationController animationController;
-  const WelcomeView({Key? key, required this.animationController})
-      : super(key: key);
+  const WelcomeView({Key? key, required this.animationController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +17,7 @@ class WelcomeView extends StatelessWidget {
         curve: const Interval(0.6, 0.8, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _secondHalfAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(-1, 0),
@@ -47,6 +47,7 @@ class WelcomeView extends StatelessWidget {
         curve: const Interval(0.6, 0.8, curve: Curves.fastOutSlowIn),
       ),
     );
+
     return SlideTransition(
       position: _firstHalfAnimation,
       child: SlideTransition(
@@ -60,13 +61,9 @@ class WelcomeView extends StatelessWidget {
               SlideTransition(
                 position: _welcomeImageAnimation,
                 child: Container(
-                  constraints: const BoxConstraints(
-                    maxWidth: 350,
-                    maxHeight: 350,
-                  ),
+                  constraints: const BoxConstraints(maxWidth: 350, maxHeight: 350),
                   child: Assets.images.jarsLogo.image(
-                    width:
-                        kIsWeb ? 200 : MediaQuery.of(context).size.width * 0.25,
+                    width: kIsWeb ? 200 : MediaQuery.of(context).size.width * 0.25,
                   ),
                 ),
               ),
@@ -87,9 +84,7 @@ class WelcomeView extends StatelessWidget {
                 child: Text(
                   "Get on top of your money, achieve financial goals.\nEnjoy wonderful life and become financially independent.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ],

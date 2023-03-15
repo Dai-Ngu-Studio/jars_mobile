@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 
 class Utilities {

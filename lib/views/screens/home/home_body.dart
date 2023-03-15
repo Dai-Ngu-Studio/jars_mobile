@@ -1,11 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
+import 'package:jars_mobile/view_model/account_view_model.dart';
 import 'package:jars_mobile/views/screens/home/components/jars_money.dart';
-import 'package:jars_mobile/views/screens/home/components/report.dart';
 import 'package:jars_mobile/views/screens/home/components/total_income_expense.dart';
 import 'package:jars_mobile/views/screens/home/components/transaction_history.dart';
 import 'package:jars_mobile/views/widgets/title_button_widet.dart';
+import 'package:provider/provider.dart';
 
 class HomeBody extends StatefulWidget {
   const HomeBody({Key? key, this.animationController}) : super(key: key);
@@ -37,22 +37,15 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
-          setState(() {
-            topBarOpacity = 1.0;
-          });
+          setState(() => topBarOpacity = 1.0);
         }
-      } else if (scrollController.offset <= 24 &&
-          scrollController.offset >= 0) {
+      } else if (scrollController.offset <= 24 && scrollController.offset >= 0) {
         if (topBarOpacity != scrollController.offset / 24) {
-          setState(() {
-            topBarOpacity = scrollController.offset / 24;
-          });
+          setState(() => topBarOpacity = scrollController.offset / 24);
         }
       } else if (scrollController.offset <= 0) {
         if (topBarOpacity != 0.0) {
-          setState(() {
-            topBarOpacity = 0.0;
-          });
+          setState(() => topBarOpacity = 0.0);
         }
       }
     });
@@ -66,11 +59,7 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 0,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -83,11 +72,7 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 1,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -99,11 +84,7 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 2,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -116,11 +97,7 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 3,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -132,11 +109,7 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 4,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -208,17 +181,13 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
         if (!snapshot.hasData) {
           return const SizedBox.shrink();
         } else if (snapshot.hasError) {
-          return const Center(
-            child: Text("Something went wrong! Please try again later."),
-          );
+          return const Center(child: Text("Something went wrong! Please try again later."));
         } else {
           return ListView.builder(
             controller: scrollController,
             physics: const BouncingScrollPhysics(),
             padding: EdgeInsets.only(
-              top: AppBar().preferredSize.height +
-                  MediaQuery.of(context).padding.top +
-                  24,
+              top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + 24,
               bottom: 62 + MediaQuery.of(context).padding.bottom,
             ),
             itemCount: listViews.length,
@@ -242,17 +211,11 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
             return FadeTransition(
               opacity: topBarAnimation!,
               child: Transform(
-                transform: Matrix4.translationValues(
-                  0.0,
-                  30 * (1.0 - topBarAnimation!.value),
-                  0.0,
-                ),
+                transform: Matrix4.translationValues(0.0, 30 * (1.0 - topBarAnimation!.value), 0.0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(topBarOpacity),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(32.0),
-                    ),
+                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(32.0)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.4 * topBarOpacity),
@@ -281,11 +244,9 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      DateTime.now().hour >= 6 &&
-                                              DateTime.now().hour < 12
+                                      DateTime.now().hour >= 6 && DateTime.now().hour < 12
                                           ? 'Good Morning'
-                                          : DateTime.now().hour >= 12 &&
-                                                  DateTime.now().hour < 17
+                                          : DateTime.now().hour >= 12 && DateTime.now().hour < 17
                                               ? 'Good Afternoon'
                                               : DateTime.now().hour >= 17 &&
                                                       DateTime.now().hour < 24
@@ -303,7 +264,7 @@ class _HomeBodyState extends State<HomeBody> with TickerProviderStateMixin {
                                       ),
                                     ),
                                     Text(
-                                      '${FirebaseAuth.instance.currentUser?.displayName}',
+                                      '${Provider.of<AccountViewModel>(context, listen: false).user!.displayName}',
                                       textAlign: TextAlign.left,
                                       overflow: TextOverflow.fade,
                                       softWrap: false,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/views/screens/bill/bill_body.dart';
 
 class BillScreen extends StatelessWidget {
   const BillScreen({Key? key}) : super(key: key);
 
-  static String routeName = '/bill';
+  static const String routeName = '/bill';
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import 'package:jars_mobile/data/models/bill.dart';
 import 'package:jars_mobile/data/remote/network/api_end_point.dart';
 import 'package:jars_mobile/data/remote/network/base_api_service.dart';
 import 'package:jars_mobile/data/remote/network/network_api_service.dart';
-import 'package:jars_mobile/data/repository/bill_repository.dart';
+import 'package:jars_mobile/data/repository/interface/bill_repository.dart';
 
 class BillRepositoryImpl extends BillRepository {
   final BaseApiService _apiService = NetworkApiService();
@@ -33,10 +33,7 @@ class BillRepositoryImpl extends BillRepository {
   }
 
   @override
-  Future<Bill> getBill({
-    required String idToken,
-    required int billId,
-  }) async {
+  Future<Bill> getBill({required String idToken, required int billId}) async {
     dynamic response = await _apiService.getResponse(
       '${ApiEndPoint().bill}/$billId',
       header: Map<String, String>.from({
@@ -49,10 +46,7 @@ class BillRepositoryImpl extends BillRepository {
   }
 
   @override
-  Future getBills({
-    required String idToken,
-    required int page,
-  }) async {
+  Future getBills({required String idToken, required int page}) async {
     dynamic response = await _apiService.getResponse(
       '${ApiEndPoint().bill}?size=8&page=$page&sortOrder=desc',
       header: Map<String, String>.from({

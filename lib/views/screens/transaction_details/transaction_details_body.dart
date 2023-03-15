@@ -12,8 +12,7 @@ import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/widgets/loading.dart';
 
 class TransactionDetailsBody extends StatefulWidget {
-  const TransactionDetailsBody({Key? key, this.transactionId})
-      : super(key: key);
+  const TransactionDetailsBody({Key? key, this.transactionId}) : super(key: key);
 
   final int? transactionId;
 
@@ -40,25 +39,16 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
     );
     data.addAll({"transaction": transaction});
 
-    var wallet = await walletVM.getAWallet(
-      idToken: idToken,
-      walletId: transaction.walletId!,
-    );
+    var wallet = await walletVM.getAWallet(idToken: idToken, walletId: transaction.walletId!);
     data.addAll({"wallet": wallet});
 
     if (transaction.noteId != null) {
-      var note = await noteVM.getNote(
-        idToken: idToken,
-        noteId: transaction.noteId!,
-      );
+      var note = await noteVM.getNote(idToken: idToken, noteId: transaction.noteId!);
       data.addAll({"note": note});
     }
 
     if (transaction.billId != null) {
-      var bill = await billVM.getBill(
-        idToken: idToken,
-        billId: transaction.billId!,
-      );
+      var bill = await billVM.getBill(idToken: idToken, billId: transaction.billId!);
       data.addAll({"bill": bill});
     }
 
@@ -75,19 +65,13 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
 
   Future<Wallet> getWalletData({required int walletId}) async {
     var idToken = await _firebaseAuth.currentUser!.getIdToken();
-    return walletVM.getAWallet(
-      idToken: idToken,
-      walletId: walletId,
-    );
+    return walletVM.getAWallet(idToken: idToken, walletId: walletId);
   }
 
   Widget getTransactionDetailsUI() {
     return FutureBuilder(
       future: getData(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<Map<String, dynamic>> snapshot,
-      ) {
+      builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.hasError) {
           return const Center(
             child: Text("Something went wrong! Please try again later."),
@@ -97,7 +81,7 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
           case ConnectionState.none:
           case ConnectionState.waiting:
           case ConnectionState.active:
-            return LoadingWidget();
+            return const LoadingWidget();
           case ConnectionState.done:
             return Container(
               decoration: BoxDecoration(
@@ -127,21 +111,13 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
                                 locale: 'vi_VN',
                                 decimalDigits: 0,
                                 symbol: '',
-                              )
-                                  .format(snapshot.data!["transaction"].amount)
-                                  .toString(),
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              ).format(snapshot.data!["transaction"].amount).toString(),
+                              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 6,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
                             color: Colors.grey.shade300,
                             borderRadius: BorderRadius.circular(8),
@@ -163,9 +139,7 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 8),
                                   child: SvgPicture.asset(
-                                    Utilities.getJarImageByName(
-                                      snapshot.data!["wallet"].name,
-                                    ),
+                                    Utilities.getJarImageByName(snapshot.data!["wallet"].name),
                                     height: 24,
                                   ),
                                 ),
@@ -198,14 +172,10 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
                             children: [
                               Text(
                                 DateFormat("dd/MM/yyyy HH:mm").format(
-                                  DateTime.parse(snapshot.data!["transaction"]
-                                          .transactionDate!)
+                                  DateTime.parse(snapshot.data!["transaction"].transactionDate!)
                                       .toLocal(),
                                 ),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                             ],
                           ),
@@ -235,8 +205,7 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
                       ],
                     ),
                     const Divider(thickness: 1, height: 8),
-                    snapshot.data!["note"] != null &&
-                            snapshot.data!["note"].image != null
+                    snapshot.data!["note"] != null && snapshot.data!["note"].image != null
                         ? Column(
                             children: [
                               Row(
@@ -249,10 +218,8 @@ class _TransactionDetailsBodyState extends State<TransactionDetailsBody> {
                               ),
                               SizedBox(
                                 width: double.infinity,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.33,
-                                child:
-                                    Image.network(snapshot.data!["note"].image),
+                                height: MediaQuery.of(context).size.height * 0.33,
+                                child: Image.network(snapshot.data!["note"].image),
                               )
                             ],
                           )

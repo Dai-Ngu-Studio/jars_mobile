@@ -2,18 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';
-import 'package:jars_mobile/view_model/transaction_view_model.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/home/components/total_income_expense_box.dart';
 import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class TotalIncomeExpense extends StatefulWidget {
-  const TotalIncomeExpense({
-    Key? key,
-    this.animationController,
-    this.animation,
-  }) : super(key: key);
+  const TotalIncomeExpense({Key? key, this.animationController, this.animation}) : super(key: key);
 
   final AnimationController? animationController;
   final Animation<double>? animation;
@@ -24,7 +19,6 @@ class TotalIncomeExpense extends StatefulWidget {
 
 class _TotalIncomeExpenseState extends State<TotalIncomeExpense> {
   final _walletVM = WalletViewModel();
-  final _transactionVM = TransactionViewModel();
   final _firebaseAuth = FirebaseAuth.instance;
 
   @override
@@ -43,18 +37,9 @@ class _TotalIncomeExpenseState extends State<TotalIncomeExpense> {
         return FadeTransition(
           opacity: widget.animation!,
           child: Transform(
-            transform: Matrix4.translationValues(
-              0.0,
-              30 * (1.0 - widget.animation!.value),
-              0.0,
-            ),
+            transform: Matrix4.translationValues(0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 24,
-                right: 24,
-                top: 16,
-                bottom: 18,
-              ),
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -80,31 +65,24 @@ class _TotalIncomeExpenseState extends State<TotalIncomeExpense> {
                       builder: ((context, walletVM, _) {
                         switch (walletVM.wallet.status) {
                           case Status.LOADING:
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 62.0,
-                              ),
+                            return const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 62.0),
                               child: LoadingWidget(),
                             );
                           case Status.ERROR:
-                            return ErrorWidget(
-                              walletVM.wallet.message ?? "Something went wrong",
-                            );
+                            return ErrorWidget(walletVM.wallet.message ?? "Something went wrong");
                           case Status.COMPLETED:
-                            final int balance = walletVM.wallet.data!.fold(0,
-                                (previousValue, element) {
-                              return previousValue +
-                                  (element as Wallet).amountLeft!.toInt();
+                            final int balance =
+                                walletVM.wallet.data!.fold(0, (previousValue, element) {
+                              return previousValue + (element as Wallet).amountLeft!.toInt();
                             });
-                            final int income = walletVM.wallet.data!.fold(0,
-                                (previousValue, element) {
-                              return previousValue +
-                                  (element as Wallet).totalAdded!.toInt();
+                            final int income =
+                                walletVM.wallet.data!.fold(0, (previousValue, element) {
+                              return previousValue + (element as Wallet).totalAdded!.toInt();
                             });
-                            final int expense = walletVM.wallet.data!.fold(0,
-                                (previousValue, element) {
-                              return previousValue +
-                                  (element as Wallet).totalSpend!.toInt();
+                            final int expense =
+                                walletVM.wallet.data!.fold(0, (previousValue, element) {
+                              return previousValue + (element as Wallet).totalSpend!.toInt();
                             });
                             final int percentage;
 

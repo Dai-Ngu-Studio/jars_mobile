@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
-import 'package:jars_mobile/service/firebase/auth_service.dart';
+import 'package:jars_mobile/view_model/account_view_model.dart';
 import 'package:jars_mobile/views/screens/add_contract/view_contracts.dart';
-import 'package:jars_mobile/views/screens/app_info/app_info_screen.dart';
 import 'package:jars_mobile/views/screens/bill/bill_screen.dart';
 import 'package:jars_mobile/views/screens/create_bill/create_bill_screen.dart';
+import 'package:jars_mobile/views/screens/login/login_screen.dart';
 import 'package:jars_mobile/views/screens/settings/components/setting_menu.dart';
 import 'package:jars_mobile/views/screens/settings/components/user_box.dart';
+import 'package:provider/provider.dart';
 
 class SettingsBody extends StatefulWidget {
   const SettingsBody({Key? key, this.animationController}) : super(key: key);
@@ -19,10 +20,8 @@ class SettingsBody extends StatefulWidget {
   State<SettingsBody> createState() => _SettingsBodyState();
 }
 
-class _SettingsBodyState extends State<SettingsBody>
-    with TickerProviderStateMixin {
+class _SettingsBodyState extends State<SettingsBody> with TickerProviderStateMixin {
   List<Widget> listViews = [];
-  final _authService = AuthService();
 
   @override
   void initState() {
@@ -38,11 +37,7 @@ class _SettingsBodyState extends State<SettingsBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 0,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -80,18 +75,12 @@ class _SettingsBodyState extends State<SettingsBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 1,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
         text: "Bill",
-        onPressed: () {
-          Navigator.of(context).pushNamed(BillScreen.routeName);
-        },
+        onPressed: () => Navigator.of(context).pushNamed(BillScreen.routeName),
       ),
     );
 
@@ -100,18 +89,12 @@ class _SettingsBodyState extends State<SettingsBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 2,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
         text: "Create Bill",
-        onPressed: () {
-          Navigator.of(context).pushNamed(CreateBillScreen.routeName);
-        },
+        onPressed: () => Navigator.of(context).pushNamed(CreateBillScreen.routeName),
       ),
     );
 
@@ -120,18 +103,12 @@ class _SettingsBodyState extends State<SettingsBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 3,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
         text: "View Contract",
-        onPressed: () {
-          Navigator.of(context).pushNamed(ListContractScreen.routeName);
-        },
+        onPressed: () => Navigator.of(context).pushNamed(ListContractScreen.routeName),
         iconNext: true,
       ),
     );
@@ -163,11 +140,7 @@ class _SettingsBodyState extends State<SettingsBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 4,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 4, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -176,7 +149,7 @@ class _SettingsBodyState extends State<SettingsBody>
         onPressed: () async {
           final Email email = Email(
             subject: 'Feedback JARS app',
-            recipients: ['dathtse151249@fpt.edu.vn'],
+            recipients: ['neodymium.ndungx@gmail.com'],
           );
           await FlutterEmailSender.send(email);
         },
@@ -189,18 +162,32 @@ class _SettingsBodyState extends State<SettingsBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 5,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 5, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
         icon: const Icon(Icons.info, size: 18),
         text: "App Infomation",
-        onPressed: () {
-          Navigator.of(context).pushNamed(AppInfoScreen.routeName);
+        iconNext: false,
+        onPressed: () async {
+          showAboutDialog(
+            context: context,
+            applicationName: 'JARS',
+            applicationIcon: Assets.images.jarsLogo.image(width: 75),
+            applicationVersion: '1.0.0',
+            applicationLegalese: '© 2022 JARS',
+            routeSettings: const RouteSettings(name: 'about'),
+            children: [
+              const SizedBox(height: 16),
+              const Text(
+                'JARS: financial planning, review, expense tracking, and personal asset management app.',
+              ),
+              const SizedBox(height: 4),
+              Text('User ID: ${Provider.of<AccountViewModel>(context, listen: false).user!.uid}'),
+              const SizedBox(height: 16),
+              const Text('Copyright © 2022 JARS. All rights reserved.'),
+            ],
+          );
         },
       ),
     );
@@ -210,18 +197,17 @@ class _SettingsBodyState extends State<SettingsBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 6,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 6, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
         icon: const Icon(Icons.logout, size: 18),
         text: "Log out",
-        onPressed: () {
-          _authService.signOut(context: context);
+        onPressed: () async {
+          await Provider.of<AccountViewModel>(context, listen: false).logout();
+          final navigator = Navigator.of(context);
+          navigator.popUntil((route) => route.isFirst);
+          navigator.pushReplacementNamed(LoginScreen.routeName);
         },
         iconNext: false,
       ),

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/views/screens/general_settings/general_settings_body.dart';
 
 class GeneralSettingsScreen extends StatelessWidget {
   const GeneralSettingsScreen({Key? key}) : super(key: key);
 
-  static String routeName = '/general-settings';
+  static const String routeName = '/general-settings';
 
   @override
   Widget build(BuildContext context) {
-    GeneralSettingsScreenArguments args = ModalRoute.of(context)!
-        .settings
-        .arguments as GeneralSettingsScreenArguments;
+    GeneralSettingsScreenArguments args =
+        ModalRoute.of(context)!.settings.arguments as GeneralSettingsScreenArguments;
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
@@ -24,9 +23,7 @@ class GeneralSettingsScreen extends StatelessWidget {
         ),
         title: const Text('General Settings', style: TextStyle(fontSize: 16)),
       ),
-      body: GeneralSettingsBody(
-        animationController: args.animationController,
-      ),
+      body: GeneralSettingsBody(animationController: args.animationController),
     );
   }
 }

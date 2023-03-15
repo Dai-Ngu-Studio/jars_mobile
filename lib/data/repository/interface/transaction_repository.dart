@@ -1,14 +1,9 @@
 import 'package:jars_mobile/data/models/transaction.dart';
 
 abstract class TransactionRepository {
-  Future getTransactions({
-    required String idToken,
-  });
+  Future getTransactions({required String idToken});
 
-  Future<Transactions> getTransaction({
-    required String idToken,
-    required int transactionId,
-  });
+  Future<Transactions> getTransaction({required String idToken, required int transactionId});
 
   Future addIncome({
     required String idToken,

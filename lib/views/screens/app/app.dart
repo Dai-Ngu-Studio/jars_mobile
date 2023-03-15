@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jars_mobile/data/models/tab_icon_data.dart';
-import 'package:jars_mobile/service/local_notification/local_notification_service.dart';
+import 'package:jars_mobile/services/local_notification/local_notification_service.dart';
 import 'package:jars_mobile/views/screens/add_transaction/add_transaction_screen.dart';
 import 'package:jars_mobile/views/screens/app/components/bottom_bar_view.dart';
 import 'package:jars_mobile/views/screens/home/home_body.dart';
@@ -13,7 +15,7 @@ import 'package:jars_mobile/views/screens/transaction_history/transaction_histor
 class JarsApp extends StatefulWidget {
   const JarsApp({Key? key}) : super(key: key);
 
-  static String routeName = '/home';
+  static const String routeName = '/home';
 
   @override
   State<JarsApp> createState() => _JarsAppState();
@@ -24,9 +26,7 @@ class _JarsAppState extends State<JarsApp> with TickerProviderStateMixin {
 
   List<TabIconData> tabIconsList = TabIconData.tabIconsList;
 
-  Widget tabBody = Container(
-    color: const Color(0xFFf2f3f8),
-  );
+  Widget tabBody = Container(color: const Color(0xFFf2f3f8));
 
   @override
   void initState() {
@@ -55,8 +55,8 @@ class _JarsAppState extends State<JarsApp> with TickerProviderStateMixin {
     // just in foreground (app must open)
     FirebaseMessaging.onMessage.listen((message) {
       if (message.notification != null) {
-        print(message.notification!.title);
-        print(message.notification!.body);
+        log(message.notification!.title.toString());
+        log(message.notification!.body.toString());
       }
 
       LocalNotificationService.display(message);
@@ -111,36 +111,28 @@ class _JarsAppState extends State<JarsApp> with TickerProviderStateMixin {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
                 setState(() {
-                  tabBody = HomeBody(
-                    animationController: animationController,
-                  );
+                  tabBody = HomeBody(animationController: animationController);
                 });
               });
             } else if (index == 1) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
                 setState(() {
-                  tabBody = JarsSettingBody(
-                    animationController: animationController,
-                  );
+                  tabBody = JarsSettingBody(animationController: animationController);
                 });
               });
             } else if (index == 2) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
                 setState(() {
-                  tabBody = TransactionHistoryBody(
-                    animationController: animationController,
-                  );
+                  tabBody = TransactionHistoryBody(animationController: animationController);
                 });
               });
             } else if (index == 3) {
               animationController?.reverse().then<dynamic>((data) {
                 if (!mounted) return;
                 setState(() {
-                  tabBody = SettingsBody(
-                    animationController: animationController,
-                  );
+                  tabBody = SettingsBody(animationController: animationController);
                 });
               });
             }

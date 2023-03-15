@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/add_transaction/components/add_transaction_expense.dart';
 import 'package:jars_mobile/views/screens/add_transaction/components/add_transaction_income.dart';
@@ -25,19 +25,11 @@ class _AddTransactionBodyState extends State<AddTransactionBody>
   @override
   void initState() {
     super.initState();
-    _controller = TabController(
-      length: 2,
-      vsync: this,
-      initialIndex: widget.tabIndex!,
-    );
+    _controller = TabController(length: 2, vsync: this, initialIndex: widget.tabIndex!);
 
     _firebaseAuth.currentUser!.getIdToken().then((idToken) async {
-      var wallets = await _walletVM.getWallets(
-        idToken: idToken,
-      );
-      setState(() {
-        this.wallets = wallets;
-      });
+      var wallets = await _walletVM.getWallets(idToken: idToken);
+      setState(() => this.wallets = wallets);
     });
   }
 

@@ -27,9 +27,7 @@ class BillBox extends StatelessWidget {
         onTap: () {
           Navigator.of(context).pushNamed(
             UpdateBillScreen.routeName,
-            arguments: UpdateBillScreenArguments(
-              billId: billId,
-            ),
+            arguments: UpdateBillScreenArguments(billId: billId),
           );
         },
         child: Container(
@@ -56,10 +54,7 @@ class BillBox extends StatelessWidget {
                       children: [
                         const TextSpan(
                           text: "Name: ",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         TextSpan(text: name),
                       ],
@@ -70,16 +65,9 @@ class BillBox extends StatelessWidget {
                       children: [
                         const TextSpan(
                           text: "Date: ",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                        TextSpan(
-                          text: DateFormat('dd/MM/yyyy').format(
-                            DateTime.parse(date),
-                          ),
-                        ),
+                        TextSpan(text: DateFormat('dd/MM/yyyy').format(DateTime.parse(date))),
                       ],
                     ),
                   ),
@@ -92,9 +80,10 @@ class BillBox extends StatelessWidget {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text:
-                              NumberFormat.currency(locale: 'vi_VN', symbol: "")
-                                  .format(amount - leftAmount),
+                          text: NumberFormat.currency(
+                            locale: 'vi_VN',
+                            symbol: "",
+                          ).format(amount - leftAmount),
                         ),
                         const TextSpan(text: "/"),
                         TextSpan(
@@ -102,17 +91,12 @@ class BillBox extends StatelessWidget {
                             locale: 'vi_VN',
                             symbol: "đ",
                           ).format(amount),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                   ),
-                  leftAmount == 0
-                      ? Assets.images.paid.image(width: 50)
-                      : const SizedBox.shrink(),
+                  leftAmount == 0 ? Assets.images.paid.image(width: 50) : const SizedBox.shrink(),
                 ],
               ),
             ],

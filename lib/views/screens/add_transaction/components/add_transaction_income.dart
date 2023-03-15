@@ -9,7 +9,7 @@ import 'package:jars_mobile/view_model/cloud_view_model.dart';
 import 'package:jars_mobile/view_model/transaction_view_model.dart';
 import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
-import 'package:jars_mobile/views/widgets/error_snackbar.dart';
+import 'package:jars_mobile/views/widgets/show_snackbar.dart';
 import 'package:mime/mime.dart';
 
 class AddTransactionIncome extends StatefulWidget {
@@ -73,26 +73,17 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
                         child: TextField(
                           controller: _amountController,
                           keyboardType: TextInputType.number,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           decoration: const InputDecoration(
                             hintText: "0",
-                            hintStyle: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            hintStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                             border: InputBorder.none,
                           ),
                         ),
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 6,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade300,
                         borderRadius: BorderRadius.circular(8),
@@ -111,16 +102,10 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
                     Expanded(
                       child: TextField(
                         controller: _descriptionController,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         decoration: const InputDecoration(
                           hintText: "Note",
-                          hintStyle: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           border: InputBorder.none,
                         ),
                       ),
@@ -163,8 +148,7 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
                 }
                 int? amount = int.tryParse(_amountController.text);
                 if (amount == null) {
-                  showErrorSnackbar(
-                      context: context, message: "Amount should be numberic.");
+                  showSnackbar(context: context, message: "Amount should be numberic.");
                   return;
                 }
 
@@ -172,7 +156,7 @@ class _AddTransactionIncomeState extends State<AddTransactionIncome> {
                   Navigator.of(context).pop();
                   Navigator.of(context).pushNamed(JarsApp.routeName);
                 } else {
-                  showErrorSnackbar(
+                  showSnackbar(
                     context: context,
                     message: "Something went wrong! Please try again.",
                   );

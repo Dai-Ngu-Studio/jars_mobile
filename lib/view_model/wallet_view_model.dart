@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/data/remote/response/api_response.dart';
@@ -9,7 +11,7 @@ class WalletViewModel extends ChangeNotifier {
   ApiResponse<List> wallet = ApiResponse.loading();
 
   void _setWallet(ApiResponse<List> response) {
-    print(response);
+    log(response.toString());
     wallet = response;
     notifyListeners();
   }
@@ -21,9 +23,7 @@ class WalletViewModel extends ChangeNotifier {
       List walletsSpent = await _walletRepo.getWalletsSpent(idToken: idToken);
       List<Wallet> walletFullProps = [];
       for (var wallet in wallets) {
-        final walletSpent = walletsSpent.firstWhere(
-          (walletSpent) => walletSpent.id == wallet.id,
-        );
+        final walletSpent = walletsSpent.firstWhere((walletSpent) => walletSpent.id == wallet.id);
         walletFullProps.add(
           Wallet(
             id: wallet.id,
@@ -46,42 +46,36 @@ class WalletViewModel extends ChangeNotifier {
   }
 
   Future putWallet({required String idToken, required Wallet wallet}) async {
-    _setWallet(ApiResponse.loading());
-    await _walletRepo
-        .updateWallet(idToken: idToken, wallet: wallet)
-        .whenComplete(() => _setWallet(ApiResponse.completed(null)))
-        .onError(
-          (error, stackTrace) => _setWallet(
-            ApiResponse.error(error.toString()),
-          ),
-        );
+    try {
+      _setWallet(ApiResponse.loading());
+      await _walletRepo.updateWallet(idToken: idToken, wallet: wallet);
+      _setWallet(ApiResponse.completed(null));
+    } catch (e) {
+      _setWallet(ApiResponse.error(e.toString()));
+      rethrow;
+    }
   }
 
-  Future<void> generateSixJars({required String idToken}) async {
-    _setWallet(ApiResponse.loading());
-    _walletRepo
-        .generateSixJars(idToken: idToken)
-        .whenComplete(() => _setWallet(ApiResponse.completed(null)))
-        .onError(
-          (error, stackTrace) => _setWallet(
-            ApiResponse.error(error.toString()),
-          ),
-        );
+  Future<bool> generateSixJars({required String idToken}) async {
+    try {
+      _setWallet(ApiResponse.loading());
+      await _walletRepo.generateSixJars(idToken: idToken);
+      _setWallet(ApiResponse.completed(null));
+      return true;
+    } catch (_) {
+      rethrow;
+    }
   }
 
-  Future getWalletSpent({
-    required String idToken,
-    required String walletId,
-  }) async {
-    _setWallet(ApiResponse.loading());
-    _walletRepo
-        .getWalletSpent(idToken: idToken, walletId: walletId)
-        .whenComplete(() => _setWallet(ApiResponse.completed(null)))
-        .onError(
-          (error, stackTrace) => _setWallet(
-            ApiResponse.error(error.toString()),
-          ),
-        );
+  Future getWalletSpent({required String idToken, required String walletId}) async {
+    try {
+      _setWallet(ApiResponse.loading());
+      await _walletRepo.getWalletSpent(idToken: idToken, walletId: walletId);
+      _setWallet(ApiResponse.completed(null));
+    } catch (e) {
+      _setWallet(ApiResponse.error(e.toString()));
+      rethrow;
+    }
   }
 
   Future getWalletsSpent({required String idToken}) async {
@@ -89,29 +83,15 @@ class WalletViewModel extends ChangeNotifier {
     _walletRepo
         .getWalletsSpent(idToken: idToken)
         .whenComplete(() => _setWallet(ApiResponse.completed(null)))
-        .onError(
-          (error, stackTrace) => _setWallet(
-            ApiResponse.error(error.toString()),
-          ),
-        );
+        .onError((error, stackTrace) => _setWallet(ApiResponse.error(error.toString())));
   }
 
-  Future<Wallet> getAWallet({
-    required String idToken,
-    required int walletId,
-  }) async {
+  Future<Wallet> getAWallet({required String idToken, required int walletId}) async {
     _setWallet(ApiResponse.loading());
-    return await _walletRepo.getWallet(
-      idToken: idToken,
-      walletId: walletId,
-    );
+    return await _walletRepo.getWallet(idToken: idToken, walletId: walletId);
   }
 
-  Future<List> getWallets({
-    required String idToken,
-  }) async {
-    return await _walletRepo.getWallets(
-      idToken: idToken,
-    );
+  Future<List> getWallets({required String idToken}) async {
+    return await _walletRepo.getWallets(idToken: idToken);
   }
 }

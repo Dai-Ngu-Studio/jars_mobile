@@ -39,9 +39,7 @@ class DonutChartBadge extends StatelessWidget {
           ],
         ),
         padding: EdgeInsets.all(size * .15),
-        child: Center(
-          child: SvgPicture.asset(svgAsset, fit: BoxFit.contain),
-        ),
+        child: Center(child: SvgPicture.asset(svgAsset, fit: BoxFit.contain)),
       ),
     );
   }
@@ -69,22 +67,13 @@ class DonutChartBadge extends StatelessWidget {
                   icon: const Icon(Icons.close, color: Colors.black),
                   splashRadius: 20,
                 ),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 const Padding(padding: EdgeInsets.only(right: 48)),
               ],
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-              child: Text(
-                text,
-                style: const TextStyle(fontSize: 16, color: Colors.black),
-              ),
+              child: Text(text, style: const TextStyle(fontSize: 16, color: Colors.black)),
             ),
           ],
         );

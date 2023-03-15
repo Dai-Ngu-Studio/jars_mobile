@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/views/screens/transaction_details/transaction_details_body.dart';
 
 class TransactionDetails extends StatefulWidget {
@@ -14,22 +14,17 @@ class TransactionDetails extends StatefulWidget {
 class _TransactionDetailsState extends State<TransactionDetails> {
   @override
   Widget build(BuildContext context) {
-    TransactionDetailsScreenArguments args = ModalRoute.of(context)!
-        .settings
-        .arguments as TransactionDetailsScreenArguments;
+    TransactionDetailsScreenArguments args =
+        ModalRoute.of(context)!.settings.arguments as TransactionDetailsScreenArguments;
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
         toolbarHeight: 40,
         centerTitle: true,
-        title:
-            const Text('Transaction Details', style: TextStyle(fontSize: 16)),
+        title: const Text('Transaction Details', style: TextStyle(fontSize: 16)),
         leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            size: 20,
-          ),
+          icon: const Icon(Icons.arrow_back_ios, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),

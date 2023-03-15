@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/data/models/bill.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';
 import 'package:jars_mobile/view_model/bill_view_model.dart';
 import 'package:jars_mobile/views/screens/bill/components/bill_box.dart';
-import 'package:jars_mobile/views/widgets/error_snackbar.dart';
+import 'package:jars_mobile/views/widgets/show_snackbar.dart';
 import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
@@ -40,11 +40,7 @@ class _BillBodyState extends State<BillBody> {
             if (canLoadMore) {
               currPage++;
               await getData();
-              showErrorSnackbar(
-                context: context,
-                message: "Loading more...",
-                duration: 500,
-              );
+              showSnackbar(context: context, message: "Loading more...", duration: 500);
             }
           }
         }
@@ -54,12 +50,7 @@ class _BillBodyState extends State<BillBody> {
 
   Future<bool> getData() async {
     _firebaseAuth.currentUser!.getIdToken().then((idToken) {
-      _billVM
-          .getBills(
-        idToken: idToken,
-        page: currPage,
-      )
-          .whenComplete(() {
+      _billVM.getBills(idToken: idToken, page: currPage).whenComplete(() {
         if (_billVM.bills.data == null) {
           return;
         }
@@ -89,9 +80,7 @@ class _BillBodyState extends State<BillBody> {
         if (!snapshot.hasData) {
           return const SizedBox.shrink();
         } else if (snapshot.hasError) {
-          return const Center(
-            child: Text("Something went wrong! Please try again later."),
-          );
+          return const Center(child: Text("Something went wrong! Please try again later."));
         } else {
           return ChangeNotifierProvider<BillViewModel>(
             create: (BuildContext context) => _billVM,
@@ -99,10 +88,11 @@ class _BillBodyState extends State<BillBody> {
               builder: (context, viewModel, _) {
                 switch (viewModel.bills.status) {
                   case Status.LOADING:
-                    return LoadingWidget();
+                    return const LoadingWidget();
                   case Status.ERROR:
-                    return ErrorWidget(viewModel.bills.message ??
-                        "Something went wrong! Please try again later.");
+                    return ErrorWidget(
+                      viewModel.bills.message ?? "Something went wrong! Please try again later.",
+                    );
                   case Status.COMPLETED:
                     return ListView.builder(
                       controller: _scrollController,
@@ -131,16 +121,17 @@ class _BillBodyState extends State<BillBody> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Container(
-      color: kBackgroundColor,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            getBillsViewUI(),
-          ],
+      child: Container(
+        color: kBackgroundColor,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            children: [
+              getBillsViewUI(),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }

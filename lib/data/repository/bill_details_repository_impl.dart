@@ -2,7 +2,7 @@ import 'package:jars_mobile/data/models/bill_details.dart';
 import 'package:jars_mobile/data/remote/network/api_end_point.dart';
 import 'package:jars_mobile/data/remote/network/base_api_service.dart';
 import 'package:jars_mobile/data/remote/network/network_api_service.dart';
-import 'package:jars_mobile/data/repository/bill_details_repository.dart';
+import 'package:jars_mobile/data/repository/interface/bill_details_repository.dart';
 
 class BillDetailsRepositoryImpl extends BillDetailsRepository {
   final BaseApiService _apiService = NetworkApiService();

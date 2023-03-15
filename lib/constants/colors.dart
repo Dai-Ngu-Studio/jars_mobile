@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 const kPrimaryColor = Color(0xFF3f81ee);
 const kSecondaryColor = Color(0xFF7B8490);
 const kBackgroundColor = Color(0xFFF2F3F8);
-const kAnimationDuration = Duration(milliseconds: 200);
 
 const kNecessitiesColor = Color(0xFFea3b00);
 const kEducationColor = Color(0xFF0b78e3);

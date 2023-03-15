@@ -18,25 +18,15 @@ class _FactoryResetBodyState extends State<FactoryResetBody> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'If you choose Reset, all of your records will be cleared. Be sure: ',
-          ),
+          const Text('If you choose Reset, all of your records will be cleared. Be sure: '),
           const SizedBox(height: 36),
           RichText(
             text: const TextSpan(
               style: TextStyle(color: Colors.black),
               children: [
-                TextSpan(
-                  text: 'Step 1: ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(
-                  text: 'Enter the word ',
-                ),
-                TextSpan(
-                  text: '"CONFIRM"',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                )
+                TextSpan(text: 'Step 1: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(text: 'Enter the word '),
+                TextSpan(text: '"CONFIRM"', style: TextStyle(fontWeight: FontWeight.bold))
               ],
             ),
           ),
@@ -44,13 +34,8 @@ class _FactoryResetBodyState extends State<FactoryResetBody> {
           SizedBox(
             height: 45,
             child: TextField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                isDense: true,
-              ),
-              onChanged: (value) {
-                setState(() => _isValidate = value == 'CONFIRM');
-              },
+              decoration: const InputDecoration(border: OutlineInputBorder(), isDense: true),
+              onChanged: (value) => setState(() => _isValidate = value == 'CONFIRM'),
             ),
           ),
           const SizedBox(height: 36),
@@ -58,10 +43,7 @@ class _FactoryResetBodyState extends State<FactoryResetBody> {
             text: const TextSpan(
               style: TextStyle(color: Colors.black),
               children: [
-                TextSpan(
-                  text: 'Step 2: ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+                TextSpan(text: 'Step 2: ', style: TextStyle(fontWeight: FontWeight.bold)),
                 TextSpan(text: 'Click the button bellow'),
               ],
             ),

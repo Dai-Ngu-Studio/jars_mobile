@@ -12,23 +12,11 @@ class BillDetailsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future getBillDetails({
-    required String idToken,
-    required int billId,
-  }) async {
+  Future getBillDetails({required String idToken, required int billId}) async {
     _setBillDetails(ApiResponse.loading());
     await _billDetailsRepo
-        .getBillDetails(
-          idToken: idToken,
-          billId: billId,
-        )
-        .then(
-          (value) => _setBillDetails(ApiResponse.completed(value)),
-        )
-        .onError(
-          (error, stackTrace) => _setBillDetails(
-            ApiResponse.error(error.toString()),
-          ),
-        );
+        .getBillDetails(idToken: idToken, billId: billId)
+        .then((value) => _setBillDetails(ApiResponse.completed(value)))
+        .onError((error, stackTrace) => _setBillDetails(ApiResponse.error(error.toString())));
   }
 }

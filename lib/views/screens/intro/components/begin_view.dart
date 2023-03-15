@@ -6,8 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 class BeginScreen extends StatefulWidget {
   final AnimationController animationController;
 
-  const BeginScreen({Key? key, required this.animationController})
-      : super(key: key);
+  const BeginScreen({Key? key, required this.animationController}) : super(key: key);
 
   @override
   _BeginScreenState createState() => _BeginScreenState();
@@ -18,7 +17,7 @@ class _BeginScreenState extends State<BeginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _introductionanimation = Tween<Offset>(
+    final _introductionAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(0.0, -1.0),
     ).animate(
@@ -27,8 +26,9 @@ class _BeginScreenState extends State<BeginScreen> {
         curve: const Interval(0.0, 0.2, curve: Curves.fastOutSlowIn),
       ),
     );
+
     return SlideTransition(
-      position: _introductionanimation,
+      position: _introductionAnimation,
       child: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -70,8 +70,7 @@ class _BeginScreenState extends State<BeginScreen> {
                       text: TextSpan(
                         children: [
                           const TextSpan(
-                            text:
-                                "By continuing, you confirm that you have read and agree to the ",
+                            text: "By continuing, you confirm that you have read and agree to the ",
                             style: TextStyle(color: Colors.white, fontSize: 12),
                           ),
                           WidgetSpan(
@@ -97,13 +96,9 @@ class _BeginScreenState extends State<BeginScreen> {
                     ),
                     const SizedBox(height: 16),
                     Padding(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom + 16,
-                      ),
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 16),
                       child: InkWell(
-                        onTap: () {
-                          widget.animationController.animateTo(0.2);
-                        },
+                        onTap: () => widget.animationController.animateTo(0.2),
                         child: Container(
                           height: 52,
                           padding: const EdgeInsets.only(
@@ -118,10 +113,7 @@ class _BeginScreenState extends State<BeginScreen> {
                           ),
                           child: const Text(
                             "Let's begin",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ),
                       ),
@@ -137,8 +129,8 @@ class _BeginScreenState extends State<BeginScreen> {
   }
 
   void _launchURL() async {
-    if (!await launch(_privacyPolicyUrl)) {
-      throw 'Could not launch $_privacyPolicyUrl';
+    if (!await launchUrl(Uri.parse(_privacyPolicyUrl))) {
+      throw 'Could not open $_privacyPolicyUrl';
     }
   }
 }

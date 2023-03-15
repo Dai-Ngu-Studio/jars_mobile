@@ -24,8 +24,8 @@ class _CreateBillBodyState extends State<CreateBillBody> {
 
   @override
   void initState() {
-    super.initState();
     _amountController.text = 0.toString();
+    super.initState();
   }
 
   @override
@@ -43,39 +43,27 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                   controller: _nameController,
                   decoration: InputDecoration(
                     hintText: 'Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1,
-                    ),
+                    border: Border.all(color: Colors.grey, width: 1),
                   ),
                   child: Row(
                     children: [
-                      const Text(
-                        "Date",
-                        style: TextStyle(fontSize: 16, color: Colors.black54),
-                      ),
+                      const Text("Date", style: TextStyle(fontSize: 16, color: Colors.black54)),
                       const SizedBox(width: 16),
                       InkWell(
                         onTap: () => _selectDate(context),
                         child: Text(
                           DateFormat("EE dd, MM, yyyy").format(date),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
@@ -91,26 +79,17 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                       child: TextField(
                         enabled: false,
                         controller: _amountController,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         decoration: const InputDecoration(
                           hintText: "0",
-                          hintStyle: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          hintStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                           border: InputBorder.none,
                         ),
                       ),
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(8),
@@ -127,9 +106,7 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                   onPressed: () {
                     Navigator.of(context).pushNamed(
                       CreateBillDetailsScreen.routeName,
-                      arguments: CreateBillDetailsScreenArguments(
-                        onPressed: _addBillDetails,
-                      ),
+                      arguments: CreateBillDetailsScreenArguments(onPressed: _addBillDetails),
                     );
                   },
                 ),
@@ -152,15 +129,11 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                     height: MediaQuery.of(context).size.height * 0.42,
                     child: billDetails.isNotEmpty
                         ? Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             child: ListView.builder(
                               itemBuilder: (context, index) {
                                 return Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
+                                  padding: const EdgeInsets.symmetric(vertical: 8),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(8),
@@ -179,21 +152,18 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                                         setState(() {
                                           billDetails.removeAt(index);
 
-                                          final int amount = billDetails.fold(0,
-                                              (previousValue, element) {
+                                          final int amount =
+                                              billDetails.fold(0, (previousValue, element) {
                                             return previousValue +
-                                                (element as BillDetails)
-                                                        .quantity! *
+                                                (element as BillDetails).quantity! *
                                                     element.price!.toInt();
                                           });
-                                          _amountController.text =
-                                              amount.toString();
+                                          _amountController.text = amount.toString();
                                         });
                                       },
                                     ),
                                     title: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text.rich(
                                           TextSpan(
@@ -203,8 +173,7 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold,
                                                 ),
-                                                text: billDetails[index]
-                                                    .itemName!,
+                                                text: billDetails[index].itemName!,
                                               )
                                             ],
                                           ),
@@ -215,15 +184,13 @@ class _CreateBillBodyState extends State<CreateBillBody> {
                                             children: [
                                               TextSpan(
                                                 text:
-                                                    '${billDetails[index].quantity.toString()}× ' +
+                                                    '${billDetails[index].quantity.toString()}x ' +
                                                         NumberFormat.currency(
                                                           locale: 'vi_VN',
                                                           decimalDigits: 0,
                                                           symbol: 'đ',
                                                         )
-                                                            .format(billDetails[
-                                                                    index]
-                                                                .price)
+                                                            .format(billDetails[index].price)
                                                             .toString(),
                                               )
                                             ],
@@ -273,9 +240,7 @@ class _CreateBillBodyState extends State<CreateBillBody> {
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != date) {
-      setState(() {
-        date = picked;
-      });
+      setState(() => date = picked);
     }
   }
 
@@ -285,8 +250,7 @@ class _CreateBillBodyState extends State<CreateBillBody> {
     setState(() {
       this.billDetails.add(billDetails);
       final int amount = this.billDetails.fold(0, (previousValue, element) {
-        return previousValue +
-            (element as BillDetails).quantity! * element.price!.toInt();
+        return previousValue + (element as BillDetails).quantity! * element.price!.toInt();
       });
       _amountController.text = amount.toString();
     });

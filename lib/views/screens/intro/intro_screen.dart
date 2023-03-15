@@ -1,14 +1,8 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
-import 'package:jars_mobile/data/local/app_shared_preference.dart';
-import 'package:jars_mobile/service/firebase/auth_service.dart';
+import 'package:jars_mobile/constants/colors.dart';
+import 'package:jars_mobile/data/local/shared_prefs_helper.dart';
 import 'package:jars_mobile/view_model/account_view_model.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
-import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/views/screens/intro/components/auto_split_view.dart';
 import 'package:jars_mobile/views/screens/intro/components/back_skip_widget.dart';
 import 'package:jars_mobile/views/screens/intro/components/begin_view.dart';
@@ -16,7 +10,7 @@ import 'package:jars_mobile/views/screens/intro/components/next_login_button.dar
 import 'package:jars_mobile/views/screens/intro/components/six_jars_principle_view.dart';
 import 'package:jars_mobile/views/screens/intro/components/use_app_time_view.dart';
 import 'package:jars_mobile/views/screens/intro/components/welcome_view.dart';
-import 'package:jars_mobile/views/widgets/error_snackbar.dart';
+import 'package:provider/provider.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({Key? key}) : super(key: key);
@@ -25,29 +19,20 @@ class IntroScreen extends StatefulWidget {
   _IntroScreenState createState() => _IntroScreenState();
 }
 
-class _IntroScreenState extends State<IntroScreen>
-    with TickerProviderStateMixin {
+class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin {
   late AnimationController? _animationController;
-  final AuthService _googleSignIn = AuthService();
-  final _prefs = AppSharedPreference();
-  final _accountViewModel = AccountViewModel();
-  final _walletViewModel = WalletViewModel();
-  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 8),
-    );
+    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 6));
     _animationController?.animateTo(0.0);
   }
 
   @override
   void dispose() {
-    super.dispose();
     _animationController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,21 +51,11 @@ class _IntroScreenState extends State<IntroScreen>
         child: ClipRect(
           child: Stack(
             children: [
-              BeginScreen(
-                animationController: _animationController!,
-              ),
-              UseAppTimeView(
-                animationController: _animationController!,
-              ),
-              SixJarsPrincipleView(
-                animationController: _animationController!,
-              ),
-              AutoSplitView(
-                animationController: _animationController!,
-              ),
-              WelcomeView(
-                animationController: _animationController!,
-              ),
+              BeginScreen(animationController: _animationController!),
+              UseAppTimeView(animationController: _animationController!),
+              SixJarsPrincipleView(animationController: _animationController!),
+              AutoSplitView(animationController: _animationController!),
+              WelcomeView(animationController: _animationController!),
               BackSkipWidget(
                 onBackClick: _onBackClick,
                 onSkipClick: _onSkipClick,
@@ -89,7 +64,6 @@ class _IntroScreenState extends State<IntroScreen>
               CenterNextButton(
                 animationController: _animationController!,
                 onNextClick: _onNextClick,
-                isLoading: isLoading,
               ),
             ],
           ),
@@ -99,91 +73,53 @@ class _IntroScreenState extends State<IntroScreen>
   }
 
   void _onSkipClick() {
-    _animationController?.animateTo(
-      0.8,
-      duration: const Duration(milliseconds: 1200),
-    );
+    _animationController?.animateTo(0.8, duration: const Duration(milliseconds: 1000));
   }
 
   void _onBackClick() {
-    if (_animationController!.value >= 0 &&
-        _animationController!.value <= 0.2) {
+    if (_animationController!.value >= 0 && _animationController!.value <= 0.2) {
       _animationController?.animateTo(0.0);
-    } else if (_animationController!.value > 0.2 &&
-        _animationController!.value <= 0.4) {
+    } else if (_animationController!.value > 0.2 && _animationController!.value <= 0.4) {
       _animationController?.animateTo(0.2);
-    } else if (_animationController!.value > 0.4 &&
-        _animationController!.value <= 0.6) {
+    } else if (_animationController!.value > 0.4 && _animationController!.value <= 0.6) {
       _animationController?.animateTo(0.4);
-    } else if (_animationController!.value > 0.6 &&
-        _animationController!.value <= 0.8) {
+    } else if (_animationController!.value > 0.6 && _animationController!.value <= 0.8) {
       _animationController?.animateTo(0.6);
-    } else if (_animationController!.value > 0.8 &&
-        _animationController!.value <= 1.0) {
+    } else if (_animationController!.value > 0.8 && _animationController!.value <= 1.0) {
       _animationController?.animateTo(0.8);
     }
   }
 
-  void _onNextClick() {
-    if (_animationController!.value >= 0 &&
-        _animationController!.value <= 0.2) {
+  Future _onNextClick() async {
+    if (_animationController!.value >= 0 && _animationController!.value <= 0.2) {
       _animationController?.animateTo(0.4);
-    } else if (_animationController!.value > 0.2 &&
-        _animationController!.value <= 0.4) {
+    } else if (_animationController!.value > 0.2 && _animationController!.value <= 0.4) {
       _animationController?.animateTo(0.6);
-    } else if (_animationController!.value > 0.4 &&
-        _animationController!.value <= 0.6) {
+    } else if (_animationController!.value > 0.4 && _animationController!.value <= 0.6) {
       _animationController?.animateTo(0.8);
-    } else if (_animationController!.value > 0.6 &&
-        _animationController!.value <= 0.8) {
-      _login();
+    } else if (_animationController!.value > 0.6 && _animationController!.value <= 0.8) {
+      return await _login();
     }
   }
 
-  void _login() {
-    final _firebaseAuth = FirebaseAuth.instance;
+  Future<bool> _login() async {
+    final accountVM = Provider.of<AccountViewModel>(
+      context,
+      listen: false,
+    );
 
-    setState(() => isLoading = true);
+    final loginResult = await accountVM.login();
 
-    _googleSignIn.googleLogin().whenComplete(() {
-      if (_firebaseAuth.currentUser != null) {
-        _firebaseAuth.currentUser!.getIdToken().then((idToken) {
-          fcmToken.then((fcmToken) {
-            _accountViewModel
-                .login(idToken: idToken, fcmToken: fcmToken)
-                .whenComplete(() {
-              Future.delayed(const Duration(seconds: 3)).whenComplete(() {
-                _walletViewModel
-                    .generateSixJars(idToken: idToken)
-                    .whenComplete(() {
-                  _prefs.setBool(key: "isSkipIntro", value: true);
+    if (!loginResult) return false;
 
-                  Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
-                }).onError((error, stackTrace) {
-                  log(error.toString());
-                  showErrorSnackbar(
-                      context: context, message: error.toString());
-                });
-              });
-            }).catchError((error) {
-              log(error.toString());
-              showErrorSnackbar(context: context, message: error.toString());
-            });
-          });
-        }).catchError((error) {
-          log(error.toString());
-          showErrorSnackbar(context: context, message: error.toString());
-        });
-      }
-    }).catchError(
-      (error) {
-        log(error.toString());
-        showErrorSnackbar(context: context, message: error.toString());
-      },
-    ).then((_) => setState(() => isLoading = false));
-  }
+    final genSixJarsResult = await Provider.of<WalletViewModel>(
+      context,
+      listen: false,
+    ).generateSixJars(idToken: (await accountVM.idToken)!);
 
-  Future<String?> get fcmToken async {
-    return await FirebaseMessaging.instance.getToken();
+    if (!genSixJarsResult) return false;
+
+    SharedPrefsHelper.set(key: "isSkipIntro", value: "true");
+    return true;
   }
 }

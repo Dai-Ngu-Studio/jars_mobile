@@ -91,9 +91,9 @@ class CurvePainter extends CustomPainter {
     );
 
     var cPaint = Paint();
-    cPaint..shader = gradient1.createShader(rect);
-    cPaint..color = Colors.white;
-    cPaint..strokeWidth = 14 / 2;
+    cPaint.shader = gradient1.createShader(rect);
+    cPaint.color = Colors.white;
+    cPaint.strokeWidth = 14 / 2;
     canvas.save();
 
     final centerToCircle = size.width / 2;

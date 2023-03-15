@@ -1,18 +1,18 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
+import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
+import 'package:jars_mobile/views/widgets/show_dialog.dart';
 
 class CenterNextButton extends StatefulWidget {
   final AnimationController animationController;
-  final VoidCallback onNextClick;
-  final bool isLoading;
+  final Function onNextClick;
 
   const CenterNextButton({
     Key? key,
     required this.animationController,
     required this.onNextClick,
-    required this.isLoading,
   }) : super(key: key);
 
   @override
@@ -20,6 +20,8 @@ class CenterNextButton extends StatefulWidget {
 }
 
 class _CenterNextButtonState extends State<CenterNextButton> {
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final _topMoveAnimation = Tween<Offset>(
@@ -72,14 +74,8 @@ class _CenterNextButtonState extends State<CenterNextButton> {
                 child: Container(
                   height: 58,
                   width: MediaQuery.of(context).size.width < 800
-                      ? 58 +
-                          MediaQuery.of(context).size.width *
-                              0.8 *
-                              _signUpMoveAnimation.value
-                      : 58 +
-                          MediaQuery.of(context).size.width *
-                              0.5 *
-                              _signUpMoveAnimation.value,
+                      ? 58 + MediaQuery.of(context).size.width * 0.8 * _signUpMoveAnimation.value
+                      : 58 + MediaQuery.of(context).size.width * 0.5 * _signUpMoveAnimation.value,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Colors.white,
@@ -105,32 +101,44 @@ class _CenterNextButtonState extends State<CenterNextButton> {
                             borderRadius: BorderRadius.circular(50),
                             child: AdaptiveButton(
                               text: "Login with Google",
+                              enabled: !_isLoading,
+                              icon: Assets.svgs.google.svg(height: 30),
+                              widthWeb: MediaQuery.of(context).size.width < 800
+                                  ? MediaQuery.of(context).size.width * 0.8
+                                  : MediaQuery.of(context).size.width * 0.5,
+                              height: double.infinity,
+                              borderRadius: 40,
+                              backgroundColor: Colors.white,
                               textStyle: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
-                              icon: Assets.svgs.google.svg(height: 30),
-                              enabled: !widget.isLoading,
-                              backgroundColor: Colors.transparent,
-                              height: double.infinity,
-                              widthWeb: double.infinity,
-                              widthMobile: double.infinity,
-                              onPressed: widget.isLoading
-                                  ? null
-                                  : () => widget.onNextClick(),
-                              isLoading: widget.isLoading,
+                              isLoading: _isLoading,
+                              onPressed: () async {
+                                try {
+                                  setState(() => _isLoading = true);
+
+                                  final loginResult = await widget.onNextClick();
+
+                                  if (loginResult as bool) {
+                                    Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
+                                  } else {
+                                    setState(() => _isLoading = true);
+                                  }
+                                } catch (e) {
+                                  setState(() => _isLoading = true);
+                                  showErrorDialog(context: context, message: e.toString());
+                                }
+                              },
                             ),
                           )
                         : InkWell(
                             key: const ValueKey('next button'),
-                            onTap: widget.onNextClick,
+                            onTap: () => widget.onNextClick(),
                             child: const Padding(
                               padding: EdgeInsets.all(16.0),
-                              child: Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: Colors.black,
-                              ),
+                              child: Icon(Icons.arrow_forward_ios_rounded, color: Colors.black),
                             ),
                           ),
                   ),
@@ -168,9 +176,7 @@ class _CenterNextButtonState extends State<CenterNextButton> {
                 duration: const Duration(milliseconds: 480),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(32),
-                  color: _selectedIndex == i
-                      ? const Color(0xff132137)
-                      : const Color(0xffE3E4E4),
+                  color: _selectedIndex == i ? const Color(0xff132137) : const Color(0xffE3E4E4),
                 ),
                 width: 10,
                 height: 10,

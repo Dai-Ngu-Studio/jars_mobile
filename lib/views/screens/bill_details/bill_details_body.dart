@@ -8,10 +8,7 @@ import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class BillDetailsBody extends StatefulWidget {
-  const BillDetailsBody({
-    Key? key,
-    required this.billId,
-  }) : super(key: key);
+  const BillDetailsBody({Key? key, required this.billId}) : super(key: key);
 
   final int billId;
 
@@ -25,19 +22,9 @@ class _BillDetailsBodyState extends State<BillDetailsBody> {
 
   List<BillDetails> billDetails = [];
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Future<bool> getData() async {
     _firebaseAuth.currentUser!.getIdToken().then((idToken) {
-      _billDetailsVM
-          .getBillDetails(
-        idToken: idToken,
-        billId: widget.billId,
-      )
-          .whenComplete(
+      _billDetailsVM.getBillDetails(idToken: idToken, billId: widget.billId).whenComplete(
         () {
           if (_billDetailsVM.billDetails.data == null) {
             return;
@@ -76,7 +63,7 @@ class _BillDetailsBodyState extends State<BillDetailsBody> {
               builder: (context, viewModel, _) {
                 switch (viewModel.billDetails.status) {
                   case Status.LOADING:
-                    return LoadingWidget();
+                    return const LoadingWidget();
                   case Status.ERROR:
                     return ErrorWidget(
                       viewModel.billDetails.message ??
@@ -85,8 +72,7 @@ class _BillDetailsBodyState extends State<BillDetailsBody> {
                   case Status.COMPLETED:
                     return GridView.builder(
                       shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 2.2,
                       ),

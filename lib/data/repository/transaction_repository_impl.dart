@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:jars_mobile/data/models/transaction.dart';
-import 'package:jars_mobile/data/remote/app_exception.dart';
 import 'package:jars_mobile/data/remote/network/api_end_point.dart';
 import 'package:jars_mobile/data/remote/network/base_api_service.dart';
 import 'package:jars_mobile/data/remote/network/network_api_service.dart';
-import 'package:jars_mobile/data/repository/transaction_repository.dart';
+import 'package:jars_mobile/data/repository/interface/transaction_repository.dart';
 
 class TransactionRepositoryImpl extends TransactionRepository {
   final BaseApiService _apiService = NetworkApiService();

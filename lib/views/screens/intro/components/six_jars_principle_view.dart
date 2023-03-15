@@ -4,8 +4,7 @@ import 'package:jars_mobile/gen/assets.gen.dart';
 class SixJarsPrincipleView extends StatelessWidget {
   final AnimationController animationController;
 
-  const SixJarsPrincipleView({Key? key, required this.animationController})
-      : super(key: key);
+  const SixJarsPrincipleView({Key? key, required this.animationController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +17,7 @@ class SixJarsPrincipleView extends StatelessWidget {
         curve: const Interval(0.2, 0.4, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _secondHalfAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(-1, 0),
@@ -27,6 +27,7 @@ class SixJarsPrincipleView extends StatelessWidget {
         curve: const Interval(0.4, 0.6, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _relaxFirstHalfAnimation = Tween<Offset>(
       begin: const Offset(2, 0),
       end: const Offset(0, 0),
@@ -36,6 +37,7 @@ class SixJarsPrincipleView extends StatelessWidget {
         curve: const Interval(0.2, 0.4, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _relaxSecondHalfAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(-2, 0),
@@ -47,13 +49,13 @@ class SixJarsPrincipleView extends StatelessWidget {
     );
 
     final _imageFirstHalfAnimation =
-        Tween<Offset>(begin: const Offset(4, 0), end: const Offset(0, 0))
-            .animate(
+        Tween<Offset>(begin: const Offset(4, 0), end: const Offset(0, 0)).animate(
       CurvedAnimation(
         parent: animationController,
         curve: const Interval(0.2, 0.4, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _imageSecondHalfAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(-4, 0),
@@ -79,10 +81,7 @@ class SixJarsPrincipleView extends StatelessWidget {
                 child: SlideTransition(
                   position: _imageSecondHalfAnimation,
                   child: Container(
-                    constraints: const BoxConstraints(
-                      maxWidth: 400,
-                      maxHeight: 300,
-                    ),
+                    constraints: const BoxConstraints(maxWidth: 400, maxHeight: 300),
                     child: Assets.svgs.sixJarsPrinciple.svg(
                       width: MediaQuery.of(context).size.width < 350
                           ? 180

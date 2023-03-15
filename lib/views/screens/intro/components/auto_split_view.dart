@@ -4,8 +4,7 @@ import 'package:jars_mobile/gen/assets.gen.dart';
 class AutoSplitView extends StatelessWidget {
   final AnimationController animationController;
 
-  const AutoSplitView({Key? key, required this.animationController})
-      : super(key: key);
+  const AutoSplitView({Key? key, required this.animationController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +14,10 @@ class AutoSplitView extends StatelessWidget {
     ).animate(
       CurvedAnimation(
         parent: animationController,
-        curve: const Interval(
-          0.4,
-          0.6,
-          curve: Curves.fastOutSlowIn,
-        ),
+        curve: const Interval(0.4, 0.6, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _secondHalfAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(-1, 0),
@@ -32,12 +28,16 @@ class AutoSplitView extends StatelessWidget {
       ),
     );
 
-    final _moodFirstHalfAnimation =
-        Tween<Offset>(begin: const Offset(2, 0), end: const Offset(0, 0))
-            .animate(CurvedAnimation(
-      parent: animationController,
-      curve: const Interval(0.4, 0.6, curve: Curves.fastOutSlowIn),
-    ));
+    final _moodFirstHalfAnimation = Tween<Offset>(
+      begin: const Offset(2, 0),
+      end: const Offset(0, 0),
+    ).animate(
+      CurvedAnimation(
+        parent: animationController,
+        curve: const Interval(0.4, 0.6, curve: Curves.fastOutSlowIn),
+      ),
+    );
+
     final _moodSecondHalfAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(-2, 0),
@@ -47,6 +47,7 @@ class AutoSplitView extends StatelessWidget {
         curve: const Interval(0.6, 0.8, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _imageFirstHalfAnimation = Tween<Offset>(
       begin: const Offset(4, 0),
       end: const Offset(0, 0),
@@ -56,17 +57,14 @@ class AutoSplitView extends StatelessWidget {
         curve: const Interval(0.4, 0.6, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _imageSecondHalfAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(-4, 0),
     ).animate(
       CurvedAnimation(
         parent: animationController,
-        curve: const Interval(
-          0.6,
-          0.8,
-          curve: Curves.fastOutSlowIn,
-        ),
+        curve: const Interval(0.6, 0.8, curve: Curves.fastOutSlowIn),
       ),
     );
 
@@ -95,12 +93,7 @@ class AutoSplitView extends StatelessWidget {
                 child: SlideTransition(
                   position: _moodSecondHalfAnimation,
                   child: const Padding(
-                    padding: EdgeInsets.only(
-                      left: 36,
-                      right: 36,
-                      top: 16,
-                      bottom: 16,
-                    ),
+                    padding: EdgeInsets.only(left: 36, right: 36, top: 16, bottom: 16),
                     child: Text(
                       "Based on the default ratio, which can be customized in the jars setting.",
                       textAlign: TextAlign.center,
@@ -115,10 +108,7 @@ class AutoSplitView extends StatelessWidget {
                 child: SlideTransition(
                   position: _imageSecondHalfAnimation,
                   child: Container(
-                    constraints: const BoxConstraints(
-                      maxWidth: 350,
-                      maxHeight: 250,
-                    ),
+                    constraints: const BoxConstraints(maxWidth: 350, maxHeight: 250),
                     child: Assets.svgs.autoSplit.svg(
                       width: MediaQuery.of(context).size.width < 350
                           ? 200

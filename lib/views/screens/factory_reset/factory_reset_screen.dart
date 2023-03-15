@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/views/screens/factory_reset/factory_reset_body.dart';
 
 class FactoryResetScreen extends StatelessWidget {
   const FactoryResetScreen({Key? key}) : super(key: key);
 
-  static String routeName = '/factory-reset';
+  static const String routeName = '/factory-reset';
 
   @override
   Widget build(BuildContext context) {

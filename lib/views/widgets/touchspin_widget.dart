@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 
 class TouchSpinWidget extends StatefulWidget {
   const TouchSpinWidget({
@@ -38,8 +38,8 @@ class _TouchSpinWidgetState extends State<TouchSpinWidget> {
     return btnDisabled ? Colors.grey : jarsColor;
   }
 
-  void _adjustValue(num adjustment) {
-    num newVal = int.parse(_controller!.text) + adjustment;
+  void _adjustValue(int adjustment) {
+    int newVal = int.parse(_controller!.text) + adjustment;
     setState(() => _controller!.text = newVal.toString());
     widget.onChanged?.call(TextEditingController(text: newVal.toString()));
   }
@@ -83,20 +83,17 @@ class _TouchSpinWidgetState extends State<TouchSpinWidget> {
           height: MediaQuery.of(context).size.width < 350 ? 30 : 35,
           decoration: BoxDecoration(
             color: Colors.grey.withOpacity(.2),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(6),
           ),
           child: TextField(
             controller: _controller,
             textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
+            enabled: false,
             style: TextStyle(
               fontSize: MediaQuery.of(context).size.width < 350 ? 12 : 16,
               fontWeight: FontWeight.w600,
             ),
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              isDense: true,
-            ),
+            decoration: const InputDecoration(border: InputBorder.none, isDense: true),
           ),
         ),
         const SizedBox(width: 5),

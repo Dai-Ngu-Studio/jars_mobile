@@ -1,16 +1,13 @@
-import 'dart:developer';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/data/local/app_shared_preference.dart';
+import 'package:jars_mobile/data/local/shared_prefs_helper.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/view_model/account_view_model.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/app/app.dart';
-import 'package:jars_mobile/service/firebase/auth_service.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
-import 'package:jars_mobile/views/widgets/error_snackbar.dart';
+import 'package:jars_mobile/views/widgets/show_dialog.dart';
+import 'package:provider/provider.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -20,11 +17,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final AuthService _googleSignIn = AuthService();
   bool _isLoading = false;
-  final _prefs = AppSharedPreference();
-  final _accountViewModel = AccountViewModel();
-  final _walletViewModel = WalletViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +51,7 @@ class _BodyState extends State<Body> {
                           Hero(
                             tag: 'SplashScreen',
                             child: Assets.images.jarsLogo.image(
-                              width: kIsWeb
-                                  ? 200
-                                  : MediaQuery.of(context).size.width * 0.25,
+                              width: kIsWeb ? 200 : MediaQuery.of(context).size.width * 0.25,
                             ),
                           ),
                           const SizedBox(height: 32),
@@ -82,10 +73,7 @@ class _BodyState extends State<Body> {
                                   ),
                                 ),
                               ],
-                              style: const TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                             ),
                           ),
                           const SizedBox(height: 32),
@@ -93,10 +81,7 @@ class _BodyState extends State<Body> {
                             child: Text(
                               "Get on top of your money, achieve financial goals.",
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
+                              style: TextStyle(fontSize: 16, color: Colors.white),
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -104,10 +89,7 @@ class _BodyState extends State<Body> {
                             child: Text(
                               "Enjoy wonderful life and become financially independent.",
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
+                              style: TextStyle(fontSize: 16, color: Colors.white),
                             ),
                           ),
                         ],
@@ -129,8 +111,34 @@ class _BodyState extends State<Body> {
                             fontWeight: FontWeight.bold,
                           ),
                           isLoading: _isLoading,
-                          onPressed: () {
-                            _login();
+                          onPressed: () async {
+                            try {
+                              setState(() => _isLoading = true);
+
+                              final accountVM = Provider.of<AccountViewModel>(
+                                context,
+                                listen: false,
+                              );
+
+                              final loginResult = await accountVM.login();
+
+                              if (loginResult) {
+                                final genSixJarsResult = await Provider.of<WalletViewModel>(
+                                  context,
+                                  listen: false,
+                                ).generateSixJars(idToken: (await accountVM.idToken)!);
+
+                                if (genSixJarsResult) {
+                                  SharedPrefsHelper.set(key: "isSkipIntro", value: "true");
+                                  Navigator.of(context).pushReplacementNamed(JarsApp.routeName);
+                                }
+                              } else {
+                                setState(() => _isLoading = false);
+                              }
+                            } catch (e) {
+                              setState(() => _isLoading = false);
+                              showErrorDialog(context: context, message: e.toString());
+                            }
                           },
                         ),
                       ),
@@ -143,57 +151,5 @@ class _BodyState extends State<Body> {
         ),
       ],
     );
-  }
-
-  void _login() async {
-    final _firebaseAuth = FirebaseAuth.instance;
-
-    setState(() => _isLoading = true);
-
-    var googleLogin = await _googleSignIn.googleLogin();
-
-    // if (googleLogin != null) {
-    //   if (_firebaseAuth.currentUser != null) {
-    //     var idToken = await _firebaseAuth.currentUser!.getIdToken();
-    //     if (idToken != null) {
-    //       var fcmTokenGot = await fcmToken;
-    //       await _accountViewModel.login(
-    //           idToken: idToken, fcmToken: fcmTokenGot);
-    //     }
-    //   }
-    // }
-
-    _googleSignIn.googleLogin().whenComplete(() {
-      if (_firebaseAuth.currentUser != null) {
-        _firebaseAuth.currentUser!.getIdToken().then((idToken) async {
-          var fcmTokenGot = await fcmToken;
-          await _accountViewModel.login(
-              idToken: idToken, fcmToken: fcmTokenGot);
-          await _walletViewModel
-              .generateSixJars(idToken: idToken)
-              .whenComplete(() {
-            _prefs.setBool(key: "isSkipIntro", value: true);
-            Navigator.of(context).pushReplacementNamed(
-              JarsApp.routeName,
-            );
-          }).onError((error, stackTrace) {
-            log(error.toString());
-            showErrorSnackbar(
-              context: context,
-              message: error.toString(),
-            );
-          });
-        });
-      }
-    }).catchError(
-      (error) {
-        log(error.toString());
-        showErrorSnackbar(context: context, message: error.toString());
-      },
-    ).then((_) => setState(() => _isLoading = false));
-  }
-
-  Future<String?> get fcmToken async {
-    return await FirebaseMessaging.instance.getToken();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';
 import 'package:jars_mobile/utils/debouncer.dart';
@@ -21,8 +21,7 @@ class JarsSettingBody extends StatefulWidget {
   State<JarsSettingBody> createState() => _JarsSettingBodyState();
 }
 
-class _JarsSettingBodyState extends State<JarsSettingBody>
-    with TickerProviderStateMixin {
+class _JarsSettingBodyState extends State<JarsSettingBody> with TickerProviderStateMixin {
   Animation<double>? topBarAnimation;
 
   Wallet? _necessitiesWallet = Wallet();
@@ -118,22 +117,15 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
-          setState(() {
-            topBarOpacity = 1.0;
-          });
+          setState(() => topBarOpacity = 1.0);
         }
-      } else if (scrollController.offset <= 24 &&
-          scrollController.offset >= 0) {
+      } else if (scrollController.offset <= 24 && scrollController.offset >= 0) {
         if (topBarOpacity != scrollController.offset / 24) {
-          setState(() {
-            topBarOpacity = scrollController.offset / 24;
-          });
+          setState(() => topBarOpacity = scrollController.offset / 24);
         }
       } else if (scrollController.offset <= 0) {
         if (topBarOpacity != 0.0) {
-          setState(() {
-            topBarOpacity = 0.0;
-          });
+          setState(() => topBarOpacity = 0.0);
         }
       }
     });
@@ -148,11 +140,7 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 0,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 0, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -164,11 +152,7 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 1,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 1, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -187,11 +171,7 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 2,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 2, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -203,11 +183,7 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
         animation: Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: widget.animationController!,
-            curve: const Interval(
-              (1 / count) * 3,
-              1.0,
-              curve: Curves.fastOutSlowIn,
-            ),
+            curve: const Interval((1 / count) * 3, 1.0, curve: Curves.fastOutSlowIn),
           ),
         ),
         animationController: widget.animationController!,
@@ -248,19 +224,15 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
         builder: (context, viewModel, _) {
           switch (viewModel.wallet.status) {
             case Status.LOADING:
-              return LoadingWidget();
+              return const LoadingWidget();
             case Status.ERROR:
-              return ErrorWidget(
-                viewModel.wallet.message ?? "Something went wrong",
-              );
+              return ErrorWidget(viewModel.wallet.message ?? "Something went wrong");
             case Status.COMPLETED:
               return ListView.builder(
                 controller: scrollController,
                 physics: const BouncingScrollPhysics(),
                 padding: EdgeInsets.only(
-                  top: AppBar().preferredSize.height +
-                      MediaQuery.of(context).padding.top +
-                      24,
+                  top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + 24,
                   bottom: 62 + MediaQuery.of(context).padding.bottom,
                 ),
                 itemCount: listViews.length,
@@ -280,24 +252,18 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
 
   Widget getAppBarUI() {
     return Column(
-      children: <Widget>[
+      children: [
         AnimatedBuilder(
           animation: widget.animationController!,
           builder: (BuildContext context, Widget? child) {
             return FadeTransition(
               opacity: topBarAnimation!,
               child: Transform(
-                transform: Matrix4.translationValues(
-                  0.0,
-                  30 * (1.0 - topBarAnimation!.value),
-                  0.0,
-                ),
+                transform: Matrix4.translationValues(0.0, 30 * (1.0 - topBarAnimation!.value), 0.0),
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(topBarOpacity),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(32.0),
-                    ),
+                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(32.0)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.4 * topBarOpacity),
@@ -375,8 +341,7 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
                                     }
                                   : () {
                                       Fluttertoast.showToast(
-                                        msg:
-                                            "Total percentage of all jars must be 100%",
+                                        msg: "Total percentage of all jars must be 100%",
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.TOP,
                                         timeInSecForIosWeb: 1,
@@ -387,10 +352,7 @@ class _JarsSettingBodyState extends State<JarsSettingBody>
                                     },
                               child: const Text(
                                 'Save',
-                                style: TextStyle(
-                                  color: jarsColor,
-                                  fontSize: 18,
-                                ),
+                                style: TextStyle(color: jarsColor, fontSize: 18),
                               ),
                             ),
                           ],

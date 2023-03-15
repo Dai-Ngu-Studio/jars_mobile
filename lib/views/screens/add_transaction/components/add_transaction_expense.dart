@@ -13,12 +13,11 @@ import 'package:jars_mobile/view_model/cloud_view_model.dart';
 import 'package:jars_mobile/view_model/transaction_view_model.dart';
 import 'package:jars_mobile/views/screens/app/app.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
-import 'package:jars_mobile/views/widgets/error_snackbar.dart';
+import 'package:jars_mobile/views/widgets/show_snackbar.dart';
 import 'package:mime/mime.dart';
 
 class AddTransactionExpense extends StatefulWidget {
-  const AddTransactionExpense({Key? key, required this.wallets})
-      : super(key: key);
+  const AddTransactionExpense({Key? key, required this.wallets}) : super(key: key);
 
   final List wallets;
 
@@ -76,26 +75,17 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                         child: TextField(
                           controller: _amountController,
                           keyboardType: TextInputType.number,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           decoration: const InputDecoration(
                             hintText: "0",
-                            hintStyle: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            hintStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                             border: InputBorder.none,
                           ),
                         ),
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 6,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade300,
                         borderRadius: BorderRadius.circular(8),
@@ -125,10 +115,7 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                               padding: const EdgeInsets.only(left: 22),
                               child: Text(
                                 walletName!,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                             ),
                           ],
@@ -199,16 +186,10 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                       child: TextField(
                         controller: _descriptionController,
                         keyboardType: TextInputType.text,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         decoration: const InputDecoration(
                           hintText: "Note",
-                          hintStyle: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           border: InputBorder.none,
                         ),
                       ),
@@ -248,7 +229,7 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                 if (await addExpense()) {
                   Navigator.of(context).popAndPushNamed(JarsApp.routeName);
                 } else {
-                  showErrorSnackbar(
+                  showSnackbar(
                     context: context,
                     message: "Something went wrong! Please try again.",
                   );
@@ -267,8 +248,7 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
     String? comment = _descriptionController.text;
     int? amount = int.tryParse(_amountController.text);
     if (amount == null) {
-      showErrorSnackbar(
-          context: context, message: "Amount should be numberic.");
+      showSnackbar(context: context, message: "Amount should be numberic.");
       return false;
     }
     amount = -amount;
@@ -342,10 +322,7 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
             children: [
               const Text(
                 "Select jar",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 16),
               Expanded(
@@ -370,15 +347,12 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SvgPicture.asset(
-                                  Utilities.getJarImageByName(
-                                      widget.wallets[index].name),
+                                  Utilities.getJarImageByName(widget.wallets[index].name),
                                 ),
                                 const SizedBox(width: 16),
                                 Text(
                                   widget.wallets[index].name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  style: const TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
@@ -387,21 +361,14 @@ class _AddTransactionExpenseState extends State<AddTransactionExpense> {
                               children: [
                                 const Text(
                                   'BALANCE',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 10,
-                                  ),
+                                  style: TextStyle(color: Colors.grey, fontSize: 10),
                                 ),
                                 Text(
                                   NumberFormat.currency(
                                     locale: 'vi_VN',
                                     symbol: 'đ',
-                                  ).format(
-                                    widget.wallets[index].walletAmount,
-                                  ),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  ).format(widget.wallets[index].walletAmount),
+                                  style: const TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ],
                             )

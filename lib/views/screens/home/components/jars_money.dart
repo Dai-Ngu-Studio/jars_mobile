@@ -8,11 +8,7 @@ import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class JarsMoney extends StatefulWidget {
-  const JarsMoney({
-    Key? key,
-    this.animationController,
-    this.animation,
-  }) : super(key: key);
+  const JarsMoney({Key? key, this.animationController, this.animation}) : super(key: key);
 
   final AnimationController? animationController;
   final Animation<double>? animation;
@@ -30,8 +26,6 @@ class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    super.initState();
-
     animationController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
@@ -40,6 +34,8 @@ class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
     _firebaseAuth.currentUser!.getIdToken().then((idToken) {
       walletVM.getWallet(idToken: idToken);
     });
+
+    super.initState();
   }
 
   @override
@@ -56,18 +52,9 @@ class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
         return FadeTransition(
           opacity: widget.animation!,
           child: Transform(
-            transform: Matrix4.translationValues(
-              0.0,
-              30 * (1.0 - widget.animation!.value),
-              0.0,
-            ),
+            transform: Matrix4.translationValues(0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 24,
-                right: 24,
-                top: 16,
-                bottom: 18,
-              ),
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -93,16 +80,12 @@ class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
                       builder: (context, viewModel, _) {
                         switch (viewModel.wallet.status) {
                           case Status.LOADING:
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 120.0),
+                            return const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 165.0),
                               child: LoadingWidget(),
                             );
                           case Status.ERROR:
-                            return ErrorWidget(
-                              viewModel.wallet.message ??
-                                  "Something went wrong",
-                            );
+                            return ErrorWidget(viewModel.wallet.message ?? "Something went wrong");
                           case Status.COMPLETED:
                             return GridView.builder(
                               shrinkWrap: true,
@@ -133,18 +116,13 @@ class _JarsMoneyState extends State<JarsMoney> with TickerProviderStateMixin {
                                   jarColor: Utilities.getJarColorByName(
                                     viewModel.wallet.data![index].name!,
                                   ),
-                                  remainingMoney: viewModel
-                                      .wallet.data![index].amountLeft!
-                                      .toInt(),
-                                  spendMoney: viewModel
-                                      .wallet.data![index].totalSpend
-                                      .toInt(),
+                                  remainingMoney: viewModel.wallet.data![index].amountLeft!.toInt(),
+                                  spendMoney: viewModel.wallet.data![index].totalSpend.toInt(),
                                   animation: animation,
                                   animationController: animationController!,
                                 );
                               },
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 1,
                                 mainAxisExtent: 65,
                               ),

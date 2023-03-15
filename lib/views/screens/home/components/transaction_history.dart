@@ -1,25 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:jars_mobile/data/models/transaction.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';
-import 'package:jars_mobile/utils/utilities.dart';
 import 'package:jars_mobile/view_model/transaction_view_model.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/home/components/transaction_history_box.dart';
-import 'package:jars_mobile/views/screens/transaction_details/transaction_details_screen.dart';
-import 'package:jars_mobile/views/widgets/adaptive_button.dart';
 import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class TransactionHistory extends StatefulWidget {
-  const TransactionHistory({
-    Key? key,
-    this.animationController,
-    this.animation,
-  }) : super(key: key);
+  const TransactionHistory({Key? key, this.animationController, this.animation}) : super(key: key);
 
   final AnimationController? animationController;
   final Animation<double>? animation;
@@ -53,18 +44,9 @@ class _TransactionHistoryState extends State<TransactionHistory> {
         return FadeTransition(
           opacity: widget.animation!,
           child: Transform(
-            transform: Matrix4.translationValues(
-              0.0,
-              30 * (1.0 - widget.animation!.value),
-              0.0,
-            ),
+            transform: Matrix4.translationValues(0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 24,
-                right: 24,
-                top: 16,
-                bottom: 18,
-              ),
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -104,23 +86,20 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                               return const Text("No transactions yet.");
                             }
                             viewModel.transactions.data?.sort(
-                              (a, b) => b.transactionDate.compareTo(
-                                a.transactionDate,
-                              ),
+                              (a, b) => b.transactionDate.compareTo(a.transactionDate),
                             );
 
                             switch (viewModel.transactions.status) {
                               case Status.LOADING:
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                return const Padding(
+                                  padding: EdgeInsets.all(8.0),
                                   child: LoadingWidget(),
                                 );
                               case Status.ERROR:
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ErrorWidget(
-                                    viewModel.transactions.message ??
-                                        "Something went wrong.",
+                                    viewModel.transactions.message ?? "Something went wrong.",
                                   ),
                                 );
                               case Status.COMPLETED:
@@ -136,8 +115,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                                             viewModel.transactions.data![index];
                                         return TransactionHistoryBox(
                                           animation: widget.animation,
-                                          animationController:
-                                              widget.animationController,
+                                          animationController: widget.animationController,
                                           transaction: transaction,
                                           walletVM: _walletVM,
                                           index: index,

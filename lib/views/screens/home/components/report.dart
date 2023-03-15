@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jars_mobile/views/screens/home/components/report_bar_chart.dart';
 
 class Report extends StatefulWidget {
-  const Report({
-    Key? key,
-    this.animationController,
-    this.animation,
-  }) : super(key: key);
+  const Report({Key? key, this.animationController, this.animation}) : super(key: key);
 
   final AnimationController? animationController;
   final Animation<double>? animation;
@@ -68,18 +64,9 @@ class _ReportState extends State<Report> {
         return FadeTransition(
           opacity: widget.animation!,
           child: Transform(
-            transform: Matrix4.translationValues(
-              0.0,
-              30 * (1.0 - widget.animation!.value),
-              0.0,
-            ),
+            transform: Matrix4.translationValues(0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 24,
-                right: 24,
-                top: 16,
-                bottom: 18,
-              ),
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -100,15 +87,8 @@ class _ReportState extends State<Report> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        top: 36,
-                        bottom: 16,
-                      ),
-                      child: ReportBarChart(
-                        transactionList: weeklyTransaction,
-                      ),
+                      padding: const EdgeInsets.only(left: 16, right: 16, top: 36, bottom: 16),
+                      child: ReportBarChart(transactionList: weeklyTransaction),
                     ),
                   ],
                 ),

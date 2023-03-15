@@ -55,10 +55,7 @@ class BackSkipWidget extends StatelessWidget {
                   child: IconButton(
                     onPressed: onSkipClick,
                     padding: const EdgeInsets.only(right: 8),
-                    icon: const Text(
-                      'Skip',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    icon: const Text('Skip', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],

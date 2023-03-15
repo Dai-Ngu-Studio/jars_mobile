@@ -31,11 +31,7 @@ class JarMoneyBox extends StatelessWidget {
         return FadeTransition(
           opacity: animation!,
           child: Transform(
-            transform: Matrix4.translationValues(
-              0.0,
-              50 * (1.0 - animation!.value),
-              0.0,
-            ),
+            transform: Matrix4.translationValues(0.0, 50 * (1.0 - animation!.value), 0.0),
             child: Row(
               children: [
                 SvgPicture.asset(jarImage, width: 25),
@@ -65,10 +61,7 @@ class JarMoneyBox extends StatelessWidget {
                               decimalDigits: 0,
                               symbol: 'đ',
                             ).format(remainingMoney),
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.black,
-                            ),
+                            style: const TextStyle(fontSize: 10, color: Colors.black),
                           ),
                         ],
                       ),
@@ -76,13 +69,11 @@ class JarMoneyBox extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 4),
                         child: Container(
                           height: 4,
-                          width: MediaQuery.of(context).size.width -
-                              115, //24 + 24 + 16 + 16 + 25 + 10
+                          width:
+                              MediaQuery.of(context).size.width - 115, //24 + 24 + 16 + 16 + 25 + 10
                           decoration: BoxDecoration(
                             color: jarColor.withOpacity(0.2),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(4.0),
-                            ),
+                            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                           ),
                           child: Row(
                             children: [
@@ -107,10 +98,7 @@ class JarMoneyBox extends StatelessWidget {
                                     //                         24*2 + 16*2  +   25     +     10      = 115
                                     ((MediaQuery.of(context).size.width - 115) -
                                             (spendMoney *
-                                                (MediaQuery.of(context)
-                                                        .size
-                                                        .width -
-                                                    115) /
+                                                (MediaQuery.of(context).size.width - 115) /
                                                 remainingMoney)) *
                                         animation!.value
                                     : 0,
@@ -122,9 +110,7 @@ class JarMoneyBox extends StatelessWidget {
                                       jarColor.withOpacity(0.5),
                                     ],
                                   ),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(4.0),
-                                  ),
+                                  borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                                 ),
                               )
                             ],

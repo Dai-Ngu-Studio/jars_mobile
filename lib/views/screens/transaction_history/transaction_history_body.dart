@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/data/models/transaction.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/data/remote/response/status.dart';
@@ -14,8 +14,8 @@ import 'package:jars_mobile/views/widgets/loading.dart';
 import 'package:provider/provider.dart';
 
 class TransactionHistoryBody extends StatefulWidget {
-  const TransactionHistoryBody({Key? key, this.animationController})
-      : super(key: key);
+  const TransactionHistoryBody({Key? key, this.animationController}) : super(key: key);
+
   final AnimationController? animationController;
 
   @override
@@ -53,22 +53,15 @@ class _TransactionHistoryBodyState extends State<TransactionHistoryBody> {
     scrollController.addListener(() {
       if (scrollController.offset >= 24) {
         if (topBarOpacity != 1.0) {
-          setState(() {
-            topBarOpacity = 1.0;
-          });
+          setState(() => topBarOpacity = 1.0);
         }
-      } else if (scrollController.offset <= 24 &&
-          scrollController.offset >= 0) {
+      } else if (scrollController.offset <= 24 && scrollController.offset >= 0) {
         if (topBarOpacity != scrollController.offset / 24) {
-          setState(() {
-            topBarOpacity = scrollController.offset / 24;
-          });
+          setState(() => topBarOpacity = scrollController.offset / 24);
         }
       } else if (scrollController.offset <= 0) {
         if (topBarOpacity != 0.0) {
-          setState(() {
-            topBarOpacity = 0.0;
-          });
+          setState(() => topBarOpacity = 0.0);
         }
       }
     });
@@ -100,103 +93,86 @@ class _TransactionHistoryBodyState extends State<TransactionHistoryBody> {
         builder: (context, viewModel, _) {
           switch (viewModel.transactions.status) {
             case Status.LOADING:
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: LoadingWidget(),
-              );
+              return const Padding(padding: EdgeInsets.all(8.0), child: LoadingWidget());
             case Status.ERROR:
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ErrorWidget(
-                  viewModel.transactions.message ?? "Something went wrong.",
-                ),
+                child: ErrorWidget(viewModel.transactions.message ?? "Something went wrong."),
               );
             case Status.COMPLETED:
+              if (viewModel.transactions.data!.isEmpty) {
+                return const Center(child: Text("No transactions yet"));
+              }
+
+              final trans = viewModel.transactions.data!.reversed.toList();
+
               return ListView.builder(
-                addAutomaticKeepAlives: false,
+                shrinkWrap: true,
                 controller: scrollController,
+                itemCount: trans.length,
                 padding: EdgeInsets.only(
-                  top: AppBar().preferredSize.height +
-                      MediaQuery.of(context).padding.top +
-                      24,
+                  top: AppBar().preferredSize.height + MediaQuery.of(context).padding.top + 24,
                   bottom: 62 + MediaQuery.of(context).padding.bottom,
+                  left: 16,
+                  right: 16,
                 ),
-                scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const ScrollPhysics(),
-                    addAutomaticKeepAlives: false,
-                    itemCount: viewModel.transactions.data!.length,
-                    reverse: true,
-                    itemBuilder: (context, index) {
-                      widget.animationController?.forward();
-                      final Transactions transaction =
-                          viewModel.transactions.data![index];
-                      var date = DateFormat("dd/MM/yyyy").format(
-                        DateTime.parse(transaction.transactionDate!).toLocal(),
-                      );
-                      var amount = NumberFormat.currency(
-                        locale: 'vi_VN',
-                        decimalDigits: 0,
-                        symbol: 'đ',
-                      ).format(transaction.amount);
+                  widget.animationController?.forward();
+                  final Transactions transaction = trans[index];
+                  var date = DateFormat("dd/MM/yyyy").format(
+                    DateTime.parse(transaction.transactionDate!).toLocal(),
+                  );
+                  var amount = NumberFormat.currency(
+                    locale: 'vi_VN',
+                    decimalDigits: 0,
+                    symbol: 'đ',
+                  ).format(transaction.amount);
 
-                      final jarName =
-                          getJarNameByJarId(jarID: transaction.walletId!)!;
+                  final jarName = getJarNameByJarId(jarID: transaction.walletId!)!;
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              leading: SvgPicture.asset(
-                                Utilities.getJarImageByName(jarName),
-                              ),
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                  TransactionDetails.routeName,
-                                  arguments: TransactionDetailsScreenArguments(
-                                    transactionId: transaction.id!,
-                                  ),
-                                );
-                              },
-                              title: Text(
-                                jarName,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: SvgPicture.asset(Utilities.getJarImageByName(jarName)),
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                TransactionDetails.routeName,
+                                arguments: TransactionDetailsScreenArguments(
+                                  transactionId: transaction.id!,
                                 ),
-                              ),
-                              trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    transaction.amount!.isNegative
-                                        ? amount
-                                        : "+$amount",
-                                    style: TextStyle(
-                                      color: transaction.amount!.isNegative
-                                          ? Colors.red
-                                          : Colors.green,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Text(
-                                    date,
-                                    style: const TextStyle(
-                                      color: Colors.black45,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              );
+                            },
+                            title: Text(
+                              jarName,
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                             ),
-                            const Divider(),
-                          ],
-                        ),
-                      );
-                    },
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  transaction.amount!.isNegative ? amount : "+$amount",
+                                  style: TextStyle(
+                                    color:
+                                        transaction.amount!.isNegative ? Colors.red : Colors.green,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Text(date, style: const TextStyle(color: Colors.black45)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 },
               );
@@ -225,9 +201,7 @@ class _TransactionHistoryBodyState extends State<TransactionHistoryBody> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(topBarOpacity),
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(32.0),
-                    ),
+                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(32.0)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.4 * topBarOpacity),

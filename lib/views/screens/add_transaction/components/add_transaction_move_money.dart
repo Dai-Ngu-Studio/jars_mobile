@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/utils/utilities.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
 
 class AddTransactionMoveMoney extends StatefulWidget {
-  const AddTransactionMoveMoney({Key? key, required this.jars})
-      : super(key: key);
+  const AddTransactionMoveMoney({Key? key, required this.jars}) : super(key: key);
 
   final List jars;
 
   @override
-  State<AddTransactionMoveMoney> createState() =>
-      _AddTransactionMoveMoneyState();
+  State<AddTransactionMoveMoney> createState() => _AddTransactionMoveMoneyState();
 }
 
 class _AddTransactionMoveMoneyState extends State<AddTransactionMoveMoney> {
@@ -78,18 +76,12 @@ class _AddTransactionMoveMoneyState extends State<AddTransactionMoveMoney> {
                                       width: 40,
                                     ),
                               const SizedBox(width: 6),
-                              const Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                color: Colors.grey,
-                              )
+                              const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey)
                             ],
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Text(
-                          'Please select MOVE JAR',
-                          style: TextStyle(fontSize: 12),
-                        ),
+                        const Text('Please select MOVE JAR', style: TextStyle(fontSize: 12)),
                       ],
                     ),
                     const Icon(Icons.arrow_forward, color: jarsColor),
@@ -122,18 +114,12 @@ class _AddTransactionMoveMoneyState extends State<AddTransactionMoveMoney> {
                                       width: 40,
                                     ),
                               const SizedBox(width: 6),
-                              const Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                color: Colors.grey,
-                              )
+                              const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey)
                             ],
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Text(
-                          'Please select RECEIVE JAR',
-                          style: TextStyle(fontSize: 12),
-                        ),
+                        const Text('Please select RECEIVE JAR', style: TextStyle(fontSize: 12)),
                       ],
                     ),
                   ],
@@ -148,26 +134,17 @@ class _AddTransactionMoveMoneyState extends State<AddTransactionMoveMoney> {
                         child: TextField(
                           controller: _amountController,
                           keyboardType: TextInputType.number,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           decoration: const InputDecoration(
                             hintText: "0",
-                            hintStyle: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            hintStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                             border: InputBorder.none,
                           ),
                         ),
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 6,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade300,
                         borderRadius: BorderRadius.circular(8),
@@ -186,16 +163,10 @@ class _AddTransactionMoveMoneyState extends State<AddTransactionMoveMoney> {
                     Expanded(
                       child: TextField(
                         controller: _descriptionController,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         decoration: const InputDecoration(
                           hintText: "Note",
-                          hintStyle: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                           border: InputBorder.none,
                         ),
                       ),
@@ -228,10 +199,7 @@ class _AddTransactionMoveMoneyState extends State<AddTransactionMoveMoney> {
             children: [
               const Text(
                 "Select jar",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 16),
               Expanded(
@@ -262,16 +230,12 @@ class _AddTransactionMoveMoneyState extends State<AddTransactionMoveMoney> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SvgPicture.asset(
-                                  Utilities.getJarImageByName(
-                                    widget.jars[index]['jarName'],
-                                  ),
+                                  Utilities.getJarImageByName(widget.jars[index]['jarName']),
                                 ),
                                 const SizedBox(width: 16),
                                 Text(
                                   widget.jars[index]['jarName'],
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  style: const TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
@@ -280,23 +244,14 @@ class _AddTransactionMoveMoneyState extends State<AddTransactionMoveMoney> {
                               children: [
                                 const Text(
                                   'BALANCE',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 10,
-                                  ),
+                                  style: TextStyle(color: Colors.grey, fontSize: 10),
                                 ),
                                 Text(
                                   NumberFormat.currency(
                                     locale: 'vi_VN',
                                     symbol: 'đ',
-                                  ).format(
-                                    int.parse(
-                                      widget.jars[index]['amount'],
-                                    ),
-                                  ),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  ).format(int.parse(widget.jars[index]['amount'])),
+                                  style: const TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ],
                             )

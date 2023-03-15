@@ -34,15 +34,11 @@ class AdaptiveButton extends StatelessWidget {
     return Stack(
       children: [
         SizedBox(
-          width: kIsWeb
-              ? widthWeb ?? double.infinity
-              : widthMobile ?? double.infinity,
+          width: kIsWeb ? widthWeb ?? double.infinity : widthMobile ?? double.infinity,
           height: height ?? 35,
           child: Material(
             color: backgroundColor ?? Theme.of(context).primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius ?? 8),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(borderRadius ?? 8)),
             child: InkWell(
               onTap: enabled ? onPressed as void Function()? : null,
               splashColor: Colors.white.withOpacity(.3),
@@ -51,18 +47,11 @@ class AdaptiveButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   icon != null
-                      ? Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: icon,
-                        )
+                      ? Padding(padding: const EdgeInsets.only(right: 8), child: icon)
                       : const SizedBox.shrink(),
                   Text(
                     text,
-                    style: textStyle ??
-                        TextStyle(
-                          fontSize: 14,
-                          color: textColor ?? Colors.white,
-                        ),
+                    style: textStyle ?? TextStyle(fontSize: 14, color: textColor ?? Colors.white),
                   ),
                 ],
               ),
@@ -74,16 +63,12 @@ class AdaptiveButton extends StatelessWidget {
                 opacity: 0.5,
                 child: Container(
                   height: height ?? 35,
-                  width: kIsWeb
-                      ? widthWeb ?? double.infinity
-                      : widthMobile ?? double.infinity,
+                  width: kIsWeb ? widthWeb ?? double.infinity : widthMobile ?? double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(borderRadius ?? 8),
                   ),
-                  child: const Center(
-                    child: CircularProgressIndicator(color: Colors.grey),
-                  ),
+                  child: const Center(child: CircularProgressIndicator(color: Colors.grey)),
                 ),
               )
             : const SizedBox.shrink(),

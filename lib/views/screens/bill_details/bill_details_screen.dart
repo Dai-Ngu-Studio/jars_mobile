@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/views/screens/bill_details/bill_details_body.dart';
 
 class BillDetailsScreen extends StatelessWidget {
   const BillDetailsScreen({Key? key}) : super(key: key);
 
-  static String routeName = '/bill-details';
+  static const String routeName = '/bill-details';
 
   @override
   Widget build(BuildContext context) {
-    BillDetailsScreenArguments args = ModalRoute.of(context)!.settings.arguments
-        as BillDetailsScreenArguments;
+    BillDetailsScreenArguments args =
+        ModalRoute.of(context)!.settings.arguments as BillDetailsScreenArguments;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -24,9 +24,7 @@ class BillDetailsScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: BillDetailsBody(
-        billId: args.billId,
-      ),
+      body: BillDetailsBody(billId: args.billId),
     );
   }
 }
@@ -34,7 +32,5 @@ class BillDetailsScreen extends StatelessWidget {
 class BillDetailsScreenArguments {
   final int billId;
 
-  BillDetailsScreenArguments({
-    required this.billId,
-  });
+  BillDetailsScreenArguments({required this.billId});
 }

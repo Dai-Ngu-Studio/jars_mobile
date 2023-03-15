@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/views/screens/add_transaction/add_transaction_body.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   const AddTransactionScreen({Key? key}) : super(key: key);
 
-  static String routeName = '/add-transaction';
+  static const String routeName = '/add-transaction';
 
   @override
   State<AddTransactionScreen> createState() => _AddTransactionScreenState();
@@ -14,9 +14,8 @@ class AddTransactionScreen extends StatefulWidget {
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
   @override
   Widget build(BuildContext context) {
-    AddTransactionScreenArguments args = ModalRoute.of(context)!
-        .settings
-        .arguments as AddTransactionScreenArguments;
+    AddTransactionScreenArguments args =
+        ModalRoute.of(context)!.settings.arguments as AddTransactionScreenArguments;
 
     return Scaffold(
       backgroundColor: kBackgroundColor,

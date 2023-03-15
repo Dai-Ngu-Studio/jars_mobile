@@ -4,13 +4,13 @@ import 'package:jars_mobile/data/models/account.dart';
 import 'package:jars_mobile/data/remote/network/api_end_point.dart';
 import 'package:jars_mobile/data/remote/network/base_api_service.dart';
 import 'package:jars_mobile/data/remote/network/network_api_service.dart';
-import 'package:jars_mobile/data/repository/account_repository.dart';
+import 'package:jars_mobile/data/repository/interface/account_repository.dart';
 
 class AccountRepositoryImpl implements AccountRepository {
   final BaseApiService _apiService = NetworkApiService();
 
   @override
-  Future<void> login({required String idToken, String? fcmToken}) async {
+  Future<Account> login({required String idToken, String? fcmToken}) async {
     try {
       dynamic response = await _apiService.postResponse(
         ApiEndPoint().account,
@@ -22,15 +22,11 @@ class AccountRepositoryImpl implements AccountRepository {
       );
 
       log('AccountRepositoryImpl :: login :: response: $response');
-    } catch (e) {
-      throw Exception(e.toString());
-    }
-  }
 
-  @override
-  Future<Account> getAccount({required token}) async {
-    // TODO: implement updateAccount
-    throw UnimplementedError();
+      return Account.fromJson(response);
+    } catch (_) {
+      rethrow;
+    }
   }
 
   @override

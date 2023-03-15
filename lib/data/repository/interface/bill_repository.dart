@@ -10,10 +10,7 @@ abstract class BillRepository {
     required List<dynamic> billDetails,
   });
 
-  Future getBills({
-    required String idToken,
-    required int page,
-  });
+  Future getBills({required String idToken, required int page});
 
   Future updateBill({
     required String idToken,

@@ -4,8 +4,7 @@ import 'package:jars_mobile/data/models/bill_details.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
 
 class CreateBillDetailsBody extends StatelessWidget {
-  const CreateBillDetailsBody({Key? key, required this.onPressed})
-      : super(key: key);
+  const CreateBillDetailsBody({Key? key, required this.onPressed}) : super(key: key);
 
   final Function onPressed;
 
@@ -28,9 +27,7 @@ class CreateBillDetailsBody extends StatelessWidget {
                   controller: _nameController,
                   decoration: InputDecoration(
                     hintText: 'Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
               ),
@@ -41,9 +38,7 @@ class CreateBillDetailsBody extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     hintText: 'Price',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
               ),
@@ -54,9 +49,7 @@ class CreateBillDetailsBody extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     hintText: 'Quantity',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
               ),
@@ -66,8 +59,7 @@ class CreateBillDetailsBody extends StatelessWidget {
             text: "Save",
             enabled: true,
             onPressed: () {
-              if (_nameController.text.trim() == "" ||
-                  _priceController.text == "") {
+              if (_nameController.text.trim() == "" || _priceController.text == "") {
                 Fluttertoast.showToast(
                   msg: "Please fill in all fields",
                   toastLength: Toast.LENGTH_SHORT,

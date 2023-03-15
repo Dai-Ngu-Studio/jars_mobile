@@ -5,8 +5,7 @@ import 'package:jars_mobile/utils/utilities.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
 
 class ReportBarChart extends StatefulWidget {
-  const ReportBarChart({Key? key, required this.transactionList})
-      : super(key: key);
+  const ReportBarChart({Key? key, required this.transactionList}) : super(key: key);
 
   final List transactionList;
 
@@ -22,11 +21,7 @@ class ReportBarChartState extends State<ReportBarChart> {
       children: [
         Text(
           "From week ${(Utilities.getWeekNumberOfYear(DateTime.now()) - 4)} to ${Utilities.getWeekNumberOfYear(DateTime.now())} 2022",
-          style: const TextStyle(
-            fontSize: 12,
-            color: Colors.black38,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 12, color: Colors.black38, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 24),
         Row(
@@ -66,9 +61,7 @@ class ReportBarChartState extends State<ReportBarChart> {
                       axisLineColor: Colors.grey,
                       measureLabelPaddingToAxisLine: 16,
                       barColor: (barData, index, id) {
-                        return id == 'income'
-                            ? Colors.greenAccent
-                            : Colors.redAccent;
+                        return id == 'income' ? Colors.greenAccent : Colors.redAccent;
                       },
                       barValue: (barData, index) {
                         return NumberFormat.compact().format(

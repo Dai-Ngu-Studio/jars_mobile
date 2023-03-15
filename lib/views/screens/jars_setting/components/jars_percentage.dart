@@ -33,8 +33,7 @@ class JarsPercentage extends StatefulWidget {
   State<JarsPercentage> createState() => _JarsPercentageState();
 }
 
-class _JarsPercentageState extends State<JarsPercentage>
-    with TickerProviderStateMixin {
+class _JarsPercentageState extends State<JarsPercentage> with TickerProviderStateMixin {
   final _necessitiesController = TextEditingController();
   final _educationController = TextEditingController();
   final _savingController = TextEditingController();
@@ -58,8 +57,7 @@ class _JarsPercentageState extends State<JarsPercentage>
       vsync: this,
     );
 
-    _necessitiesController.text =
-        widget.necessitiesWallet.percentage.toString();
+    _necessitiesController.text = widget.necessitiesWallet.percentage.toString();
     _educationController.text = widget.educationWallet.percentage.toString();
     _savingController.text = widget.savingWallet.percentage.toString();
     _playController.text = widget.playWallet.percentage.toString();
@@ -134,18 +132,9 @@ class _JarsPercentageState extends State<JarsPercentage>
         return FadeTransition(
           opacity: widget.animation!,
           child: Transform(
-            transform: Matrix4.translationValues(
-              0.0,
-              30 * (1.0 - widget.animation!.value),
-              0.0,
-            ),
+            transform: Matrix4.translationValues(0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 24,
-                right: 24,
-                top: 16,
-                bottom: 18,
-              ),
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -182,9 +171,7 @@ class _JarsPercentageState extends State<JarsPercentage>
                               TextSpan(
                                 text: '$total%',
                                 style: TextStyle(
-                                  color: totalPercentage != 100
-                                      ? Colors.red
-                                      : Colors.black,
+                                  color: totalPercentage != 100 ? Colors.red : Colors.black,
                                 ),
                               ),
                             ],
@@ -224,22 +211,17 @@ class _JarsPercentageState extends State<JarsPercentage>
                               setState(() {
                                 total = 0;
                                 for (int i = 0; i < listData.length; i++) {
-                                  total += int.parse(
-                                    listData[i]['controller'].text,
-                                  );
+                                  total += int.parse(listData[i]['controller'].text);
                                 }
                                 widget.onPressed(
                                   wallet: listData[index]['jar'],
-                                  percentage: int.parse(
-                                    listData[index]['controller'].text,
-                                  ),
+                                  percentage: int.parse(listData[index]['controller'].text),
                                 );
                               });
                             },
                           );
                         },
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
                           mainAxisExtent: 80,
                         ),

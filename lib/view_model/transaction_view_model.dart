@@ -41,29 +41,17 @@ class TransactionViewModel extends ChangeNotifier {
     await _transactionRepo
         .getTransactions(idToken: idToken)
         .then((value) => _setTransactions(ApiResponse.completed(value)))
-        .onError(
-          (error, stackTrace) => _setTransactions(
-            ApiResponse.error(error.toString()),
-          ),
-        );
+        .onError((error, stackTrace) => _setTransactions(ApiResponse.error(error.toString())));
   }
 
-  Future<Transactions> getTransaction({
-    required String idToken,
-    required int transactionId,
-  }) async {
+  Future<Transactions> getTransaction({required String idToken, required int transactionId}) async {
     _setTransactions(ApiResponse.loading());
     return await _transactionRepo
-        .getTransaction(
-          idToken: idToken,
-          transactionId: transactionId,
-        )
+        .getTransaction(idToken: idToken, transactionId: transactionId)
         .whenComplete(() => _setTransactions(ApiResponse.completed(null)))
-        .catchError(
-      (error, stackTrace) {
-        _setTransactions(ApiResponse.error(error.toString()));
-      },
-    );
+        .catchError((error, stackTrace) {
+      _setTransactions(ApiResponse.error(error.toString()));
+    });
   }
 
   Future<bool> addExpense({

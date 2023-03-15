@@ -28,18 +28,11 @@ class JarsPercentageBox extends StatelessWidget {
         return FadeTransition(
           opacity: animation!,
           child: Transform(
-            transform: Matrix4.translationValues(
-              0.0,
-              50 * (1.0 - animation!.value),
-              0.0,
-            ),
+            transform: Matrix4.translationValues(0.0, 50 * (1.0 - animation!.value), 0.0),
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 10,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -47,17 +40,13 @@ class JarsPercentageBox extends StatelessWidget {
                         children: [
                           SvgPicture.asset(
                             jarImage,
-                            width: MediaQuery.of(context).size.width < 350
-                                ? 25
-                                : 30,
+                            width: MediaQuery.of(context).size.width < 350 ? 25 : 30,
                           ),
                           const SizedBox(width: 10),
                           Text(
                             jarName,
                             style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width < 350
-                                  ? 12
-                                  : 14,
+                              fontSize: MediaQuery.of(context).size.width < 350 ? 12 : 14,
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
                             ),

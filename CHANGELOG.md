@@ -1,2 +1,2 @@
-* Implement API  
-* Add intro screen  
+* Implement API
+* Add intro screen

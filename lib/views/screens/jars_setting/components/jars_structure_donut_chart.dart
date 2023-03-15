@@ -1,6 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/data/models/wallet.dart';
 import 'package:jars_mobile/gen/assets.gen.dart';
 import 'package:jars_mobile/views/widgets/indicator.dart';
@@ -46,18 +46,9 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         return FadeTransition(
           opacity: widget.animation!,
           child: Transform(
-            transform: Matrix4.translationValues(
-              0.0,
-              30 * (1.0 - widget.animation!.value),
-              0.0,
-            ),
+            transform: Matrix4.translationValues(0.0, 30 * (1.0 - widget.animation!.value), 0.0),
             child: Padding(
-              padding: const EdgeInsets.only(
-                left: 24,
-                right: 24,
-                top: 16,
-                bottom: 18,
-              ),
+              padding: const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 18),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -78,19 +69,13 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        top: 36,
-                        bottom: 16,
-                      ),
+                      padding: const EdgeInsets.only(left: 16, right: 16, top: 36, bottom: 16),
                       child: AspectRatio(
-                        aspectRatio:
-                            MediaQuery.of(context).size.width < 350 ? 1.3 : 1.7,
+                        aspectRatio: MediaQuery.of(context).size.width < 350 ? 1.3 : 1.7,
                         child: PieChart(
                           PieChartData(
-                            pieTouchData: PieTouchData(touchCallback:
-                                (FlTouchEvent event, pieTouchResponse) {
+                            pieTouchData:
+                                PieTouchData(touchCallback: (FlTouchEvent event, pieTouchResponse) {
                               setState(() {
                                 if (!event.isInterestedForInteractions ||
                                     pieTouchResponse == null ||
@@ -98,35 +83,21 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
                                   touchedIndex = -1;
                                   return;
                                 }
-                                touchedIndex = pieTouchResponse
-                                    .touchedSection!.touchedSectionIndex;
+                                touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
                               });
                             }),
                             borderData: FlBorderData(show: false),
                             sectionsSpace: 0,
                             startDegreeOffset: -90,
-                            centerSpaceRadius:
-                                MediaQuery.of(context).size.width < 350
-                                    ? 30
-                                    : 40,
-                            sections: showingSections(
-                              animation: widget.animation!,
-                            ),
+                            centerSpaceRadius: MediaQuery.of(context).size.width < 350 ? 30 : 40,
+                            sections: showingSections(animation: widget.animation!),
                           ),
                         ),
                       ),
                     ),
-                    const Divider(
-                      thickness: 1,
-                      height: 16,
-                      indent: 24,
-                      endIndent: 24,
-                    ),
+                    const Divider(thickness: 1, height: 16, indent: 24, endIndent: 24),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 8,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,10 +128,7 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -233,8 +201,7 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 1:
           return PieChartSectionData(
             color: kEducationColor,
-            value: int.parse(widget.educationWallet.percentage.toString()) *
-                animation!.value,
+            value: int.parse(widget.educationWallet.percentage.toString()) * animation!.value,
             title:
                 '${(int.parse(widget.educationWallet.percentage.toString()) * animation.value).toInt()}',
             radius: radius,
@@ -256,8 +223,7 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 2:
           return PieChartSectionData(
             color: kSavingColor,
-            value: int.parse(widget.savingWallet.percentage.toString()) *
-                animation!.value,
+            value: int.parse(widget.savingWallet.percentage.toString()) * animation!.value,
             title:
                 '${(int.parse(widget.savingWallet.percentage.toString()) * animation.value).toInt()}',
             radius: radius,
@@ -279,8 +245,7 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 3:
           return PieChartSectionData(
             color: kPlayColor,
-            value: int.parse(widget.playWallet.percentage.toString()) *
-                animation!.value,
+            value: int.parse(widget.playWallet.percentage.toString()) * animation!.value,
             title:
                 '${(int.parse(widget.playWallet.percentage.toString()) * animation.value).toInt()}',
             radius: radius,
@@ -302,8 +267,7 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 4:
           return PieChartSectionData(
             color: kInvestmentColor,
-            value: int.parse(widget.investmentWallet.percentage.toString()) *
-                animation!.value,
+            value: int.parse(widget.investmentWallet.percentage.toString()) * animation!.value,
             title:
                 '${(int.parse(widget.investmentWallet.percentage.toString()) * animation.value).toInt()}',
             radius: radius,
@@ -325,8 +289,7 @@ class _JarsStructureDonutChartState extends State<JarsStructureDonutChart> {
         case 5:
           return PieChartSectionData(
             color: kGiveColor,
-            value: int.parse(widget.giveWallet.percentage.toString()) *
-                animation!.value,
+            value: int.parse(widget.giveWallet.percentage.toString()) * animation!.value,
             title:
                 '${(int.parse(widget.giveWallet.percentage.toString()) * animation.value).toInt()}',
             radius: radius,

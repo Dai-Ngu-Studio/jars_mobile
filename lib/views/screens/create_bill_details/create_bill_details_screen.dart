@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jars_mobile/constant.dart';
+import 'package:jars_mobile/constants/colors.dart';
 import 'package:jars_mobile/views/screens/create_bill_details/create_bill_body.dart';
 
 class CreateBillDetailsScreen extends StatelessWidget {
@@ -9,19 +9,15 @@ class CreateBillDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CreateBillDetailsScreenArguments args = ModalRoute.of(context)!
-        .settings
-        .arguments as CreateBillDetailsScreenArguments;
+    CreateBillDetailsScreenArguments args =
+        ModalRoute.of(context)!.settings.arguments as CreateBillDetailsScreenArguments;
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
         toolbarHeight: 40,
         centerTitle: true,
-        title: const Text(
-          'Create Bills Details',
-          style: TextStyle(fontSize: 16),
-        ),
+        title: const Text('Create Bills Details', style: TextStyle(fontSize: 16)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, size: 20),
           onPressed: () => Navigator.of(context).pop(),

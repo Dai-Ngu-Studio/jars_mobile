@@ -11,9 +11,7 @@ class NetworkApiService extends BaseApiService {
     dynamic responseJson;
     try {
       final response = await http.get(
-        function == null
-            ? Uri.parse("$baseUrl$url")
-            : Uri.parse("$baseUrl$url/$function"),
+        function == null ? Uri.parse("$baseUrl$url") : Uri.parse("$baseUrl$url/$function"),
         headers: header,
       );
       responseJson = returnResponse(response);
@@ -24,18 +22,11 @@ class NetworkApiService extends BaseApiService {
   }
 
   @override
-  Future getResponseByID(
-    String url, {
-    String? function,
-    required header,
-    dynamic id,
-  }) async {
+  Future getResponseByID(String url, {String? function, required header, dynamic id}) async {
     dynamic responseJson;
     try {
       final response = await http.get(
-        function == null
-            ? Uri.parse("$baseUrl$url/$id")
-            : Uri.parse("$baseUrl$url/$function/$id"),
+        function == null ? Uri.parse("$baseUrl$url/$id") : Uri.parse("$baseUrl$url/$function/$id"),
         headers: header,
       );
       responseJson = returnResponse(response);
@@ -46,25 +37,22 @@ class NetworkApiService extends BaseApiService {
   }
 
   @override
-  Future postResponse(String url,
-      {String? function, required header, body}) async {
+  Future postResponse(String url, {String? function, required header, body}) async {
     dynamic responseJson;
     try {
-      function == null
-          ? print("NetworkApiService :: postResponse: $baseUrl$url")
-          : print("NetworkApiService :: postResponse: $baseUrl$url/$function");
-
       final response = await http.post(
-        function == null
-            ? Uri.parse("$baseUrl$url")
-            : Uri.parse("$baseUrl$url/$function"),
+        function == null ? Uri.parse("$baseUrl$url") : Uri.parse("$baseUrl$url/$function"),
         headers: header,
         body: body,
       );
 
       responseJson = returnResponse(response);
+    } on BadRequestException catch (_) {
+      rethrow;
     } on SocketException {
       throw FetchDataException('No Internet Connection');
+    } catch (_) {
+      rethrow;
     }
     return responseJson;
   }
@@ -73,8 +61,6 @@ class NetworkApiService extends BaseApiService {
   Future putResponse(String url, {required header, body}) async {
     dynamic responseJson;
     try {
-      print("NetworkApiService :: putResponse: $baseUrl$url");
-
       final response = await http.put(
         Uri.parse("$baseUrl$url"),
         headers: header,
@@ -92,8 +78,6 @@ class NetworkApiService extends BaseApiService {
   Future deleteResponse(String url, {required header, body}) async {
     dynamic responseJson;
     try {
-      print("NetworkApiService :: putResponse: $baseUrl$url");
-
       final response = await http.put(
         Uri.parse("$baseUrl$url"),
         headers: header,
@@ -110,11 +94,12 @@ class NetworkApiService extends BaseApiService {
   dynamic returnResponse(http.Response response) {
     switch (response.statusCode) {
       case 201:
+
       case 200:
         dynamic responseJson = jsonDecode(response.body);
         return responseJson;
       case 400:
-        throw BadRequestException(response.toString());
+        throw BadRequestException(response.body.toString());
       case 401:
 
       case 403:

@@ -38,11 +38,7 @@ class TransactionHistoryBox extends StatelessWidget {
               return FadeTransition(
                 opacity: animation!,
                 child: Transform(
-                  transform: Matrix4.translationValues(
-                    0.0,
-                    50 * (1.0 - animation!.value),
-                    0.0,
-                  ),
+                  transform: Matrix4.translationValues(0.0, 50 * (1.0 - animation!.value), 0.0),
                   child: Column(
                     children: [
                       Padding(
@@ -55,22 +51,18 @@ class TransactionHistoryBox extends StatelessWidget {
                               children: [
                                 SvgPicture.asset(
                                   Utilities.getJarImageByName(
-                                    getJarNameByJarId(
-                                        jarID: transaction.walletId!)!,
+                                    getJarNameByJarId(jarID: transaction.walletId!)!,
                                   ),
                                   width: 30,
                                 ),
                                 const SizedBox(width: 10),
                                 SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
+                                  width: MediaQuery.of(context).size.width * 0.5,
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        getJarNameByJarId(
-                                            jarID: transaction.walletId!)!,
+                                        getJarNameByJarId(jarID: transaction.walletId!)!,
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14,
@@ -99,23 +91,19 @@ class TransactionHistoryBox extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  transaction.amount!.isNegative
-                                      ? amount
-                                      : "+$amount",
+                                  transaction.amount!.isNegative ? amount : "+$amount",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 12,
                                     letterSpacing: -0.2,
-                                    color: transaction.amount!.isNegative
-                                        ? Colors.red
-                                        : Colors.green,
+                                    color:
+                                        transaction.amount!.isNegative ? Colors.red : Colors.green,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   DateFormat('dd/MM/yyyy').format(
-                                    DateTime.parse(transaction.transactionDate!)
-                                        .toLocal(),
+                                    DateTime.parse(transaction.transactionDate!).toLocal(),
                                   ),
                                   style: const TextStyle(
                                     fontSize: 12,

@@ -4,8 +4,7 @@ import 'package:jars_mobile/gen/assets.gen.dart';
 class UseAppTimeView extends StatelessWidget {
   final AnimationController animationController;
 
-  const UseAppTimeView({Key? key, required this.animationController})
-      : super(key: key);
+  const UseAppTimeView({Key? key, required this.animationController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +17,7 @@ class UseAppTimeView extends StatelessWidget {
         curve: const Interval(0.0, 0.2, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _secondHalfAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(-1, 0),
@@ -27,6 +27,7 @@ class UseAppTimeView extends StatelessWidget {
         curve: const Interval(0.2, 0.4, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _textAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(-2, 0),
@@ -36,6 +37,7 @@ class UseAppTimeView extends StatelessWidget {
         curve: const Interval(0.2, 0.4, curve: Curves.fastOutSlowIn),
       ),
     );
+
     final _imageAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
       end: const Offset(-4, 0),
@@ -55,6 +57,7 @@ class UseAppTimeView extends StatelessWidget {
         curve: const Interval(0.0, 0.2, curve: Curves.fastOutSlowIn),
       ),
     );
+
     return SlideTransition(
       position: _firstHalfAnimation,
       child: SlideTransition(
@@ -92,10 +95,7 @@ class UseAppTimeView extends StatelessWidget {
               SlideTransition(
                 position: _imageAnimation,
                 child: Container(
-                  constraints: const BoxConstraints(
-                    maxWidth: 350,
-                    maxHeight: 250,
-                  ),
+                  constraints: const BoxConstraints(maxWidth: 350, maxHeight: 250),
                   child: Assets.svgs.useAppTime.svg(
                     width: MediaQuery.of(context).size.width < 350
                         ? 200

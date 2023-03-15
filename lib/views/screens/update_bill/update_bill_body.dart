@@ -9,14 +9,11 @@ import 'package:jars_mobile/view_model/bill_view_model.dart';
 import 'package:jars_mobile/view_model/wallet_view_model.dart';
 import 'package:jars_mobile/views/screens/bill_details/bill_details_screen.dart';
 import 'package:jars_mobile/views/widgets/adaptive_button.dart';
-import 'package:jars_mobile/views/widgets/error_snackbar.dart';
+import 'package:jars_mobile/views/widgets/show_snackbar.dart';
 import 'package:jars_mobile/views/widgets/loading.dart';
 
 class UpdateBillBody extends StatefulWidget {
-  const UpdateBillBody({
-    Key? key,
-    required this.billId,
-  }) : super(key: key);
+  const UpdateBillBody({Key? key, required this.billId}) : super(key: key);
 
   final int billId;
 
@@ -30,7 +27,6 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
   final _firebaseAuth = FirebaseAuth.instance;
   final _amountController = TextEditingController();
 
-  Bill? _bill;
   List? wallets;
   String? walletName;
   int? walletId;
@@ -39,19 +35,12 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
   @override
   void initState() {
     FirebaseAuth.instance.currentUser!.getIdToken().then((idToken) async {
-      var wallets = await _walletVM.getWallets(
-        idToken: idToken,
-      );
-      var bill = await _billVM.getBill(
-        idToken: idToken,
-        billId: widget.billId,
-      );
+      var wallets = await _walletVM.getWallets(idToken: idToken);
       setState(() {
         this.wallets = wallets;
         walletName = (this.wallets!.first as Wallet).name;
         walletId = (this.wallets!.first as Wallet).id;
         walletAmount = (this.wallets!.first as Wallet).walletAmount;
-        _bill = bill;
       });
     });
     super.initState();
@@ -73,20 +62,15 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
   Widget getUpdateBillUI() {
     return FutureBuilder(
       future: getData(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<Map<String, dynamic>> snapshot,
-      ) {
+      builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
         if (snapshot.hasError) {
-          return const Center(
-            child: Text("Something went wrong! Please try again later."),
-          );
+          return const Center(child: Text("Something went wrong! Please try again later."));
         }
         switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
           case ConnectionState.active:
-            return LoadingWidget();
+            return const LoadingWidget();
           case ConnectionState.done:
             return Expanded(
               child: Container(
@@ -114,22 +98,15 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                               Expanded(
                                 child: Row(
                                   children: [
-                                    const Text(
-                                      "Total: ",
-                                      style: TextStyle(fontSize: 16),
-                                    ),
+                                    const Text("Total: ", style: TextStyle(fontSize: 16)),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 10.0),
+                                      padding: const EdgeInsets.only(left: 10.0),
                                       child: Text(
                                         NumberFormat.currency(
                                           locale: 'vi_VN',
                                           decimalDigits: 0,
                                           symbol: '',
-                                        )
-                                            .format(
-                                                snapshot.data!["bill"].amount)
-                                            .toString(),
+                                        ).format(snapshot.data!["bill"].amount).toString(),
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -140,10 +117,7 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 6,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                 decoration: BoxDecoration(
                                   color: Colors.grey.shade300,
                                   borderRadius: BorderRadius.circular(8),
@@ -159,23 +133,15 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                               Expanded(
                                 child: Row(
                                   children: [
-                                    const Text(
-                                      "Remaining: ",
-                                      style: TextStyle(fontSize: 16),
-                                    ),
+                                    const Text("Remaining: ", style: TextStyle(fontSize: 16)),
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 10.0),
+                                      padding: const EdgeInsets.only(left: 10.0),
                                       child: Text(
                                         NumberFormat.currency(
                                           locale: 'vi_VN',
                                           decimalDigits: 0,
                                           symbol: '',
-                                        )
-                                            .format(
-                                              snapshot.data!["bill"].leftAmount,
-                                            )
-                                            .toString(),
+                                        ).format(snapshot.data!["bill"].leftAmount).toString(),
                                         style: const TextStyle(
                                           fontSize: 20,
                                           color: Colors.blue,
@@ -187,10 +153,7 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 6,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                 decoration: BoxDecoration(
                                   color: Colors.grey.shade300,
                                   borderRadius: BorderRadius.circular(8),
@@ -208,14 +171,11 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                               ),
                               Expanded(
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       DateFormat("dd/MM/yyyy HH:mm").format(
-                                        DateTime.parse(
-                                          snapshot.data!["bill"].date,
-                                        ).toLocal(),
+                                        DateTime.parse(snapshot.data!["bill"].date).toLocal(),
                                       ),
                                       style: const TextStyle(
                                         fontSize: 16,
@@ -247,13 +207,11 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                           : Column(
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10.0),
+                                        padding: const EdgeInsets.only(left: 10.0),
                                         child: TextField(
                                           controller: _amountController,
                                           keyboardType: TextInputType.number,
@@ -287,30 +245,23 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                                 ),
                                 const Divider(thickness: 1, height: 16),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 12.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 12.0),
                                   child: InkWell(
                                     onTap: selectWallets,
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 14),
+                                              padding: const EdgeInsets.only(left: 14),
                                               child: SvgPicture.asset(
-                                                Utilities.getJarImageByName(
-                                                  walletName!,
-                                                ),
+                                                Utilities.getJarImageByName(walletName!),
                                                 height: 24,
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(
-                                                left: 22,
-                                              ),
+                                              padding: const EdgeInsets.only(left: 22),
                                               child: Text(
                                                 walletName ?? "Necessities",
                                                 style: const TextStyle(
@@ -321,8 +272,7 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                                             ),
                                           ],
                                         ),
-                                        const Icon(Icons.arrow_forward_ios,
-                                            size: 18),
+                                        const Icon(Icons.arrow_forward_ios, size: 18),
                                       ],
                                     ),
                                   ),
@@ -351,14 +301,12 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
     var idToken = await _firebaseAuth.currentUser!.getIdToken();
     int? payingAmount = int.tryParse(_amountController.text);
     if (payingAmount == null) {
-      showErrorSnackbar(
-          context: context, message: "Paying amount should be numberic.");
+      showSnackbar(context: context, message: "Paying amount should be numberic.");
       return;
     }
     num? leftAmount = bill!.leftAmount!.toInt() - payingAmount;
     if (payingAmount > walletAmount!.toInt()) {
-      showErrorSnackbar(
-          context: context, message: 'Insufficient money in wallet.');
+      showSnackbar(context: context, message: 'Insufficient money in wallet.');
       return;
     }
     if (leftAmount < 0) {
@@ -369,8 +317,7 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
       ).format(
         bill.leftAmount!,
       );
-      showErrorSnackbar(
-          context: context, message: 'Paying $actualPayingAmount instead.');
+      showSnackbar(context: context, message: 'Paying $actualPayingAmount instead.');
     }
     await _billVM.updateBill(
       idToken: idToken,
@@ -401,10 +348,7 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
             children: [
               const Text(
                 "Select a jar",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 16),
               Expanded(
@@ -417,8 +361,7 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                         setState(() {
                           walletName = (wallets![index] as Wallet).name;
                           walletId = (wallets![index] as Wallet).id;
-                          walletAmount =
-                              (wallets![index] as Wallet).walletAmount;
+                          walletAmount = (wallets![index] as Wallet).walletAmount;
                         });
                         Navigator.pop(context);
                       },
@@ -431,15 +374,12 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SvgPicture.asset(
-                                  Utilities.getJarImageByName(
-                                      (wallets![index] as Wallet).name!),
+                                  Utilities.getJarImageByName((wallets![index] as Wallet).name!),
                                 ),
                                 const SizedBox(width: 16),
                                 Text(
                                   (wallets![index] as Wallet).name!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  style: const TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
@@ -448,21 +388,14 @@ class _UpdateBillBodyState extends State<UpdateBillBody> {
                               children: [
                                 const Text(
                                   'BALANCE',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 10,
-                                  ),
+                                  style: TextStyle(color: Colors.grey, fontSize: 10),
                                 ),
                                 Text(
                                   NumberFormat.currency(
                                     locale: 'vi_VN',
                                     symbol: 'đ',
-                                  ).format(
-                                    (wallets![index] as Wallet).walletAmount!,
-                                  ),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  ).format((wallets![index] as Wallet).walletAmount!),
+                                  style: const TextStyle(fontWeight: FontWeight.w600),
                                 ),
                               ],
                             )
