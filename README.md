@@ -2,7 +2,7 @@
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=102)](#license)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](#license)
-[![contributors](https://img.shields.io/badge/contributors-2-1d9583)](#contributors)
+[![contributors](https://img.shields.io/badge/contributors-3-1d9583)](#contributors)
 
 [![framework](https://img.shields.io/badge/Flutter-v2.8.1-46D1FD)](https://flutter.dev/)
 [![language](https://img.shields.io/badge/Dart-v2.15.1-04599D)](https://dart.dev/)
